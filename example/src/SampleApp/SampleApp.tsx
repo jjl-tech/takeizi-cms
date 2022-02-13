@@ -1,7 +1,3 @@
-import React from "react";
-
-import { getAnalytics } from "firebase/analytics";
-import { User as FirebaseUser } from "firebase/auth";
 import {
     Authenticator,
     buildCollection,
@@ -12,14 +8,21 @@ import {
     NavigationBuilder,
     NavigationBuilderProps
 } from "@camberi/firecms";
-
-import { IconButton, Tooltip } from "@mui/material";
 import { GitHub } from "@mui/icons-material";
-
+import { IconButton, Tooltip } from "@mui/material";
+import { getAnalytics } from "firebase/analytics";
+import { User as FirebaseUser } from "firebase/auth";
+import React from "react";
+import "typeface-rubik";
+import "typeface-space-mono";
 import { firebaseConfig } from "../firebase_config";
 import { ExampleCMSView } from "./ExampleCMSView";
 import logo from "./images/demo_logo.png";
-import { textSearchController } from "./text_search";
+import {
+    blogSchema,
+    sampleAdditionalExportColumn
+} from "./schemas/blog_schema";
+import { customSchemaOverrideHandler } from "./schemas/custom_schema_resolver";
 import {
     localeSchema,
     productAdditionalColumn,
@@ -27,18 +30,15 @@ import {
     productExtraActionBuilder,
     productSchema
 } from "./schemas/products_schema";
-
-import { usersSchema } from "./schemas/users_schema";
-import {
-    blogSchema,
-    sampleAdditionalExportColumn
-} from "./schemas/blog_schema";
 import { testCallbacks, testEntitySchema } from "./schemas/test_schema";
-import { customSchemaOverrideHandler } from "./schemas/custom_schema_resolver";
-
-import "typeface-rubik";
-import "typeface-space-mono";
+import { usersSchema } from "./schemas/users_schema";
+import { textSearchController } from "./text_search";
 import { Locale, Product } from "./types";
+
+
+
+
+
 
 function SampleApp() {
 
@@ -84,7 +84,7 @@ function SampleApp() {
             {
                 id: "sample_additional",
                 title: "Sample additional",
-                builder: ({entity}) => `Generated column: ${entity.values.first_name}`,
+                builder: ({ entity }) => `Generated column: ${entity.values.first_name}`,
                 dependencies: ["first_name"]
             }
         ],
@@ -117,13 +117,13 @@ function SampleApp() {
             {
                 id: "full_name",
                 title: "Full Name",
-                builder: ({entity}) => {
+                builder: ({ entity }) => {
                     let values = entity.values;
                     return typeof values.name === "string" ? values.name.toUpperCase() : "Nope";
                 },
                 dependencies: ["name"]
             }
-            ],
+        ],
         subcollections: [{
             path: "test_subcollection",
             schema: testEntitySchema,
@@ -140,7 +140,7 @@ function SampleApp() {
                 target="_blank"
                 component={"a"}
                 size="large">
-                <GitHub/>
+                <GitHub />
             </IconButton>
         </Tooltip>
     );
@@ -150,7 +150,7 @@ function SampleApp() {
         name: "Additional",
         group: "Content",
         description: "This is an example of an additional view that is defined by the user",
-        view: <ExampleCMSView path={"users"} collection={usersCollection}/>
+        view: <ExampleCMSView path={"users"} collection={usersCollection} />
     }];
 
 
@@ -160,11 +160,11 @@ function SampleApp() {
     };
 
     const myAuthenticator: Authenticator<FirebaseUser> = async ({
-                                                                    user,
-                                                                    authController
-                                                                }) => {
+        user,
+        authController
+    }) => {
 
-        if(user?.email?.includes("flanders")){
+        if (user?.email?.includes("flanders")) {
             throw Error("Stupid Flanders!");
         }
 
@@ -180,9 +180,9 @@ function SampleApp() {
     };
 
     const navigation: NavigationBuilder<FirebaseUser> = async ({
-                                                                   user,
-                                                                   authController
-                                                               }: NavigationBuilderProps) => {
+        user,
+        authController
+    }: NavigationBuilderProps) => {
         if (authController.extra)
             console.log("Custom data stored in the authController", authController.extra);
 
@@ -207,13 +207,6 @@ function SampleApp() {
         authentication={myAuthenticator}
         signInOptions={[
             'password',
-            // 'anonymous',
-            'google.com',
-            // 'facebook.com',
-            // 'github.com',
-            // 'twitter.com',
-            // 'microsoft.com',
-            // 'apple.com'
         ]}
         textSearchController={textSearchController}
         allowSkipLogin={true}

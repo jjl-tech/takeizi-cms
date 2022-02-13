@@ -1,5 +1,6 @@
-import React, { useEffect, useRef, useState } from "react";
-
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import EmailIcon from "@mui/icons-material/Email";
+import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import {
     Box,
     Button,
@@ -14,8 +15,9 @@ import {
 } from "@mui/material";
 import createStyles from "@mui/styles/createStyles";
 import makeStyles from "@mui/styles/makeStyles";
-
 import { FirebaseApp } from "firebase/app";
+import React, { useEffect, useRef, useState } from "react";
+import { ErrorView } from "../../core";
 import { FireCMSLogo } from "../../core/components/FireCMSLogo";
 import { useAuthController, useModeState } from "../../hooks";
 import {
@@ -31,10 +33,8 @@ import {
     microsoftIcon,
     twitterIcon
 } from "./social_icons";
-import { ErrorView } from "../../core";
-import EmailIcon from "@mui/icons-material/Email";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
+
+
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -64,12 +64,12 @@ export interface FirebaseLoginViewProps {
  * @category Firebase
  */
 export function FirebaseLoginView({
-                                      skipLoginButtonEnabled,
-                                      logo,
-                                      signInOptions,
-                                      firebaseApp,
-                                      authDelegate
-                                  }: FirebaseLoginViewProps) {
+    skipLoginButtonEnabled,
+    logo,
+    signInOptions,
+    firebaseApp,
+    authDelegate
+}: FirebaseLoginViewProps) {
     const classes = useStyles();
     const authController = useAuthController();
     const modeState = useModeState();
@@ -91,26 +91,26 @@ export function FirebaseLoginView({
                     <>
                         <Box p={1}>
                             <ErrorView
-                                error={"You need to enable the corresponding login provider in your Firebase project"}/>
+                                error={"You need to enable the corresponding login provider in your Firebase project"} />
                         </Box>
 
                         {firebaseApp &&
-                        <Box p={1}>
-                            <a href={`https://console.firebase.google.com/project/${firebaseApp.options.projectId}/authentication/providers`}
-                               rel="noopener noreferrer"
-                               target="_blank">
-                                <Button variant="text"
+                            <Box p={1}>
+                                <a href={`https://console.firebase.google.com/project/${firebaseApp.options.projectId}/authentication/providers`}
+                                    rel="noopener noreferrer"
+                                    target="_blank">
+                                    <Button variant="text"
                                         color="primary">
-                                    Open Firebase configuration
-                                </Button>
-                            </a>
-                        </Box>}
+                                        Open Firebase configuration
+                                    </Button>
+                                </a>
+                            </Box>}
                     </>;
             } else if (!ignoredCodes.includes(authDelegate.authError.code)) {
                 console.error(authDelegate.authError);
                 errorView =
                     <Box p={1}>
-                        <ErrorView error={authDelegate.authError.message}/>
+                        <ErrorView error={authDelegate.authError.message} />
                     </Box>;
             }
         }
@@ -120,11 +120,11 @@ export function FirebaseLoginView({
     let logoComponent;
     if (logo) {
         logoComponent = <img className={classes.logo}
-                             src={logo}
-                             alt={"Logo"}/>;
+            src={logo}
+            alt={"Logo"} />;
     } else {
         logoComponent = <div className={classes.logo}>
-            <FireCMSLogo/>
+            <FireCMSLogo />
         </div>;
     }
 
@@ -162,41 +162,40 @@ export function FirebaseLoginView({
                     maxWidth: 340
                 }}>
 
-                    <Box m={1}>
+                    <Box m={2}>
                         {logoComponent}
                     </Box>
 
                     {notAllowedMessage &&
-                    <Box p={2}>
-                        <ErrorView
-                            error={notAllowedMessage}/>
-                    </Box>}
+                        <Box p={2}>
+                            <ErrorView
+                                error={notAllowedMessage} />
+                        </Box>}
 
                     {buildErrorView()}
 
                     {!passwordLoginSelected && <>
-
                         {buildOauthLoginButtons(authDelegate, resolvedSignInOptions, modeState.mode)}
 
                         {resolvedSignInOptions.includes("password") &&
-                        <LoginButton
-                            text={"Email/password"}
-                            icon={<EmailIcon fontSize={"large"}/>}
-                            onClick={() => setPasswordLoginSelected(true)}/>}
+                            <LoginButton
+                                text={"E-mail e senha"}
+                                icon={<EmailIcon fontSize={"large"} />}
+                                onClick={() => setPasswordLoginSelected(true)} />}
 
 
                         {resolvedSignInOptions.includes("anonymous") &&
-                        <LoginButton
-                            text={"Log in anonymously"}
-                            icon={<PersonOutlineIcon fontSize={"large"}/>}
-                            onClick={authDelegate.anonymousLogin}/>}
+                            <LoginButton
+                                text={"Log in anonymously"}
+                                icon={<PersonOutlineIcon fontSize={"large"} />}
+                                onClick={authDelegate.anonymousLogin} />}
 
                         {skipLoginButtonEnabled &&
-                        <Box m={1}>
-                            <Button onClick={authDelegate.skipLogin}>
-                                Skip login
-                            </Button>
-                        </Box>
+                            <Box m={1}>
+                                <Button onClick={authDelegate.skipLogin}>
+                                    Skip login
+                                </Button>
+                            </Box>
                         }
 
                     </>}
@@ -204,7 +203,7 @@ export function FirebaseLoginView({
                     {passwordLoginSelected && <LoginForm
                         authDelegate={authDelegate}
                         onClose={() => setPasswordLoginSelected(false)}
-                        mode={modeState.mode}/>}
+                        mode={modeState.mode} />}
 
                 </Box>
             </Box>
@@ -213,15 +212,15 @@ export function FirebaseLoginView({
 }
 
 function LoginButton({
-                         icon,
-                         onClick,
-                         text
-                     }: { icon: React.ReactNode, onClick: () => void, text: string }) {
+    icon,
+    onClick,
+    text
+}: { icon: React.ReactNode, onClick: () => void, text: string }) {
     return (
         <Box m={0.5} width={"100%"}>
             <Button fullWidth
-                    variant="outlined"
-                    onClick={onClick}>
+                variant="outlined"
+                onClick={onClick}>
                 <Box sx={{
                     p: "1",
                     display: "flex",
@@ -251,10 +250,10 @@ function LoginButton({
 }
 
 function LoginForm({
-                       onClose,
-                       authDelegate,
-                       mode
-                   }: { onClose: () => void, authDelegate: FirebaseAuthDelegate, mode: "light" | "dark" }) {
+    onClose,
+    authDelegate,
+    mode
+}: { onClose: () => void, authDelegate: FirebaseAuthDelegate, mode: "light" | "dark" }) {
 
     const passwordRef = useRef<HTMLInputElement | null>(null);
 
@@ -325,9 +324,9 @@ function LoginForm({
     }
 
     const label = registrationMode
-? "No user found with that email. Pick a password to create a new account"
-        : (loginMode ? "Please enter your password" : "Please enter your email");
-    const button = registrationMode ? "Create account" : (loginMode ? "Login" : "Ok");
+        ? "Usuário não encontrado. Insira a senha para criar um novo usuário."
+        : (loginMode ? "Digite sua senha" : "Digite seu e-mail");
+    const button = registrationMode ? "Criar usuário" : (loginMode ? "Login" : "Ok");
 
     if (otherProvidersMode) {
         return (
@@ -335,7 +334,7 @@ function LoginForm({
                 <Grid item xs={12}>
                     <IconButton
                         onClick={onBackPressed}>
-                        <ArrowBackIcon sx={{ width: 20, height: 20 }}/>
+                        <ArrowBackIcon sx={{ width: 20, height: 20 }} />
                     </IconButton>
                 </Grid>
 
@@ -367,32 +366,32 @@ function LoginForm({
                     <Grid item xs={12}>
                         <IconButton
                             onClick={onBackPressed}>
-                            <ArrowBackIcon sx={{ width: 20, height: 20 }}/>
+                            <ArrowBackIcon sx={{ width: 20, height: 20 }} />
                         </IconButton>
                     </Grid>
 
                     <Grid item xs={12} sx={{ p: 1 }}>
                         <Typography align={"center"}
-                                    variant={"subtitle2"}>{label}</Typography>
+                            variant={"subtitle2"}>{label}</Typography>
                     </Grid>
 
                     <Grid item xs={12}
-                          sx={{ display: shouldShowEmail ? "inherit" : "none" }}>
+                        sx={{ display: shouldShowEmail ? "inherit" : "none" }}>
                         <TextField placeholder="Email" fullWidth autoFocus
-                                   value={email}
-                                   disabled={authDelegate.authLoading}
-                                   type="email"
-                                   onChange={(event) => setEmail(event.target.value)}/>
+                            value={email}
+                            disabled={authDelegate.authLoading}
+                            type="email"
+                            onChange={(event) => setEmail(event.target.value)} />
                     </Grid>
 
                     <Grid item xs={12}
-                          sx={{ display: loginMode || registrationMode ? "inherit" : "none" }}>
+                        sx={{ display: loginMode || registrationMode ? "inherit" : "none" }}>
                         <TextField placeholder="Password" fullWidth
-                                   value={password}
-                                   disabled={authDelegate.authLoading}
-                                   inputRef={passwordRef}
-                                   type="password"
-                                   onChange={(event) => setPassword(event.target.value)}/>
+                            value={password}
+                            disabled={authDelegate.authLoading}
+                            inputRef={passwordRef}
+                            type="password"
+                            onChange={(event) => setPassword(event.target.value)} />
                     </Grid>
 
                     <Grid item xs={12}>
@@ -404,8 +403,8 @@ function LoginForm({
                         }}>
 
                             {authDelegate.authLoading &&
-                            <CircularProgress sx={{ p: 1 }} size={16}
-                                              thickness={8}/>
+                                <CircularProgress sx={{ p: 1 }} size={16}
+                                    thickness={8} />
                             }
 
                             <Button type="submit">
@@ -425,31 +424,31 @@ function buildOauthLoginButtons(authDelegate: FirebaseAuthDelegate, providers: s
         {providers.includes("google.com") && <LoginButton
             text={"Sign in with Google"}
             icon={googleIcon(mode)}
-            onClick={authDelegate.googleLogin}/>}
+            onClick={authDelegate.googleLogin} />}
 
         {providers.includes("microsoft.com") && <LoginButton
             text={"Sign in with Microsoft"}
             icon={microsoftIcon(mode)}
-            onClick={authDelegate.microsoftLogin}/>}
+            onClick={authDelegate.microsoftLogin} />}
 
         {providers.includes("apple.com") && <LoginButton
             text={"Sign in with Apple"}
             icon={appleIcon(mode)}
-            onClick={authDelegate.appleLogin}/>}
+            onClick={authDelegate.appleLogin} />}
 
         {providers.includes("github.com") && <LoginButton
             text={"Sign in with Github"}
             icon={githubIcon(mode)}
-            onClick={authDelegate.githubLogin}/>}
+            onClick={authDelegate.githubLogin} />}
 
         {providers.includes("facebook.com") && <LoginButton
             text={"Sign in with Facebook"}
             icon={facebookIcon(mode)}
-            onClick={authDelegate.facebookLogin}/>}
+            onClick={authDelegate.facebookLogin} />}
 
         {providers.includes("twitter.com") && <LoginButton
             text={"Sign in with Twitter"}
             icon={twitterIcon(mode)}
-            onClick={authDelegate.twitterLogin}/>}
+            onClick={authDelegate.twitterLogin} />}
     </>
 }

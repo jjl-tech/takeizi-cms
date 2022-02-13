@@ -1,9 +1,7 @@
-import React from "react";
-
-import { GoogleAuthProvider } from "firebase/auth";
 import { CssBaseline, ThemeProvider } from "@mui/material";
+import { GoogleAuthProvider } from "firebase/auth";
+import React from "react";
 import { BrowserRouter } from "react-router-dom";
-
 import {
     CircularProgressCenter,
     createCMSDefaultTheme,
@@ -12,14 +10,16 @@ import {
     Scaffold,
     SideEntityDialogs
 } from "../core";
-
+import { FirebaseLoginView } from "./components/FirebaseLoginView";
 import { FirebaseCMSAppProps } from "./FirebaseCMSAppProps";
 import { useFirebaseAuthDelegate } from "./hooks/useFirebaseAuthDelegate";
-import { useFirestoreDataSource } from "./hooks/useFirestoreDataSource";
 import { useFirebaseStorageSource } from "./hooks/useFirebaseStorageSource";
+import { useFirestoreDataSource } from "./hooks/useFirestoreDataSource";
 import { useInitialiseFirebase } from "./hooks/useInitialiseFirebase";
-import { FirebaseLoginView } from "./components/FirebaseLoginView";
 import { FirebaseAuthDelegate } from "./models/auth";
+
+
+
 
 const DEFAULT_SIGN_IN_OPTIONS = [
     GoogleAuthProvider.PROVIDER_ID
@@ -43,26 +43,26 @@ const DEFAULT_SIGN_IN_OPTIONS = [
  * @category Firebase
  */
 export function FirebaseCMSApp({
-                                   name,
-                                   logo,
-                                   toolbarExtraWidget,
-                                   authentication,
-                                   schemaOverrideHandler,
-                                   navigation,
-                                   textSearchController,
-                                   allowSkipLogin,
-                                   signInOptions = DEFAULT_SIGN_IN_OPTIONS,
-                                   firebaseConfig,
-                                   onFirebaseInit,
-                                   primaryColor,
-                                   secondaryColor,
-                                   fontFamily,
-                                   dateTimeFormat,
-                                   locale,
-                                   HomePage,
-                                   basePath,
-                                   baseCollectionPath
-                               }: FirebaseCMSAppProps) {
+    name,
+    logo,
+    toolbarExtraWidget,
+    authentication,
+    schemaOverrideHandler,
+    navigation,
+    textSearchController,
+    allowSkipLogin,
+    signInOptions = DEFAULT_SIGN_IN_OPTIONS,
+    firebaseConfig,
+    onFirebaseInit,
+    primaryColor,
+    secondaryColor,
+    fontFamily,
+    dateTimeFormat,
+    locale,
+    HomePage,
+    basePath,
+    baseCollectionPath
+}: FirebaseCMSAppProps) {
 
     const {
         firebaseApp,
@@ -96,25 +96,25 @@ export function FirebaseCMSApp({
     }
 
     if (firebaseConfigLoading || !firebaseApp) {
-    return <>
-        <CssBaseline/>
-        <CircularProgressCenter/>
-    </>;
+        return <>
+            <CssBaseline />
+            <CircularProgressCenter />
+        </>;
     }
 
     return (
         <BrowserRouter basename={basePath}>
             <FireCMS navigation={navigation}
-                     authDelegate={authDelegate}
-                     authentication={authentication}
-                     schemaOverrideHandler={schemaOverrideHandler}
-                     dateTimeFormat={dateTimeFormat}
-                     dataSource={dataSource}
-                     storageSource={storageSource}
-                     entityLinkBuilder={({ entity }) => `https://console.firebase.google.com/project/${firebaseApp.options.projectId}/firestore/data/${entity.path}/${entity.id}`}
-                     locale={locale}
-                     basePath={basePath}
-                     baseCollectionPath={baseCollectionPath}>
+                authDelegate={authDelegate}
+                authentication={authentication}
+                schemaOverrideHandler={schemaOverrideHandler}
+                dateTimeFormat={dateTimeFormat}
+                dataSource={dataSource}
+                storageSource={storageSource}
+                entityLinkBuilder={({ entity }) => `https://console.firebase.google.com/project/${firebaseApp.options.projectId}/firestore/data/${entity.path}/${entity.id}`}
+                locale={locale}
+                basePath={basePath}
+                baseCollectionPath={baseCollectionPath}>
                 {({ context, mode, loading }) => {
 
                     const theme = createCMSDefaultTheme({
@@ -126,7 +126,7 @@ export function FirebaseCMSApp({
 
                     let component;
                     if (loading) {
-                        component = <CircularProgressCenter/>;
+                        component = <CircularProgressCenter />;
                     } else if (!context.authController.canAccessMainView) {
                         component = (
                             <FirebaseLoginView
@@ -134,22 +134,22 @@ export function FirebaseCMSApp({
                                 skipLoginButtonEnabled={allowSkipLogin}
                                 signInOptions={signInOptions ?? DEFAULT_SIGN_IN_OPTIONS}
                                 firebaseApp={firebaseApp}
-                                authDelegate={authDelegate}/>
+                                authDelegate={authDelegate} />
                         );
                     } else {
                         component = (
                             <Scaffold name={name}
-                                      logo={logo}
-                                      toolbarExtraWidget={toolbarExtraWidget}>
-                                <NavigationRoutes HomePage={HomePage}/>
-                                <SideEntityDialogs/>
+                                logo={logo}
+                                toolbarExtraWidget={toolbarExtraWidget}>
+                                <NavigationRoutes HomePage={HomePage} />
+                                <SideEntityDialogs />
                             </Scaffold>
                         );
                     }
 
                     return (
                         <ThemeProvider theme={theme}>
-                            <CssBaseline/>
+                            <CssBaseline />
                             {component}
                         </ThemeProvider>
                     );

@@ -1,7 +1,6 @@
+import react from '@vitejs/plugin-react';
 import path from "path";
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import ViteFonts from 'vite-plugin-fonts'
+import { defineConfig } from 'vite';
 
 
 // https://vitejs.dev/config/
@@ -17,11 +16,12 @@ export default defineConfig({
         plugins: ["@emotion/babel-plugin"],
       },
     }),
-    ViteFonts({
-      google: {
-        families: ['Rubik', 'Roboto', 'Helvetica']
-      },
-    })],
+    // ViteFonts({
+    //   google: {
+    //     families: ['Rubik', 'Roboto', 'Helvetica']
+    //   },
+    // })
+],
   resolve: {
     alias: {
       '@camberi/firecms': path.resolve(__dirname, '../src')
