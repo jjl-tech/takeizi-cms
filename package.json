@@ -1,6 +1,6 @@
 {
     "name": "takeizi-cms",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "description": "Awesome Firebase/Firestore-based headless open-source CMS",
     "author": "jjl-tech",
     "license": "MIT",
