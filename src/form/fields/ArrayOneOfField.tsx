@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from "react";
 import {
     FormControl,
     FormHelperText,
@@ -8,14 +7,15 @@ import {
     Select
 } from "@mui/material";
 import { FastField, FieldProps as FormikFieldProps } from "formik";
-
-
-import { ArrayContainer, FieldDescription, LabelWithIcon } from "../components";
-import { useClearRestoreValue } from "../../hooks";
-import { buildPropertyField } from "../form_factory";
-import { EnumValuesChip } from "../../preview/components/CustomChip";
+import React, { useEffect, useState } from "react";
 import { enumToObjectEntries } from "../../core/util/enums";
+import { useClearRestoreValue } from "../../hooks";
 import { EnumValues, FieldProps, FormContext, Property } from "../../models";
+import { EnumValuesChip } from "../../preview/components/CustomChip";
+import { ArrayContainer, FieldDescription, LabelWithIcon } from "../components";
+import { buildPropertyField } from "../form_factory";
+
+
 
 
 /**
@@ -27,20 +27,20 @@ import { EnumValues, FieldProps, FormContext, Property } from "../../models";
  * @category Form fields
  */
 export function ArrayOneOfField<T extends Array<any>>({
-                                                          name,
-                                                          value,
-                                                          error,
-                                                          showError,
-                                                          isSubmitting,
-                                                          setValue,
-                                                          tableMode,
-                                                          property,
-                                                          includeDescription,
-                                                          underlyingValueHasChanged,
-                                                          context,
-                                                          disabled,
-                                                          shouldAlwaysRerender
-                                                      }: FieldProps<T>) {
+    name,
+    value,
+    error,
+    showError,
+    isSubmitting,
+    setValue,
+    tableMode,
+    property,
+    includeDescription,
+    underlyingValueHasChanged,
+    context,
+    disabled,
+    shouldAlwaysRerender
+}: FieldProps<T>) {
 
     if (!property.oneOf)
         throw Error("ArrayOneOfField misconfiguration. Property `oneOf` not set");
@@ -63,7 +63,7 @@ export function ArrayOneOfField<T extends Array<any>>({
             valueField={property.oneOf!.valueField ?? "value"}
             properties={property.oneOf!.properties}
             autoFocus={internalId === lastAddedId}
-            context={context}/>;
+            context={context} />;
     };
 
     return (
@@ -71,33 +71,32 @@ export function ArrayOneOfField<T extends Array<any>>({
         <FormControl fullWidth error={showError}>
 
             {!tableMode && <FormHelperText filled
-                                           required={property.validation?.required}>
-                <LabelWithIcon property={property}/>
+                required={property.validation?.required}>
+                <LabelWithIcon property={property} />
             </FormHelperText>}
 
             <Paper variant={"outlined"}
-                   sx={(theme) => ({
-                       elevation: 0,
-                       padding: theme.spacing(2),
-                       [theme.breakpoints.up("md")]: {
-                           padding: theme.spacing(2)
-                       }
-                   })}>
+                sx={(theme) => ({
+                    elevation: 0,
+                    padding: theme.spacing(2),
+                    [theme.breakpoints.up("md")]: {
+                        padding: theme.spacing(2)
+                    }
+                })}>
                 <ArrayContainer value={value}
-                                name={name}
-                                buildEntry={buildEntry}
-                                onInternalIdAdded={setLastAddedId}
-                                disabled={isSubmitting || Boolean(property.disabled)}
-                                includeAddButton={!property.disabled}/>
+                    name={name}
+                    buildEntry={buildEntry}
+                    onInternalIdAdded={setLastAddedId}
+                    disabled={isSubmitting || Boolean(property.disabled)}
+                    includeAddButton={!property.disabled} />
             </Paper>
 
             {includeDescription &&
-            <FieldDescription property={property}/>}
+                <FieldDescription property={property} />}
 
             {showError &&
-            typeof error === "string" &&
-            <FormHelperText>{error}</FormHelperText>}
-
+                typeof error === "string" &&
+                <FormHelperText>{error}</FormHelperText>}
         </FormControl>
     );
 }
@@ -131,15 +130,15 @@ interface ArrayOneOfEntryProps {
 }
 
 function ArrayOneOfEntry({
-                             name,
-                             index,
-                             value,
-                             typeField,
-                             valueField,
-                             properties,
-                             autoFocus,
-                             context
-                         }: ArrayOneOfEntryProps) {
+    name,
+    index,
+    value,
+    typeField,
+    valueField,
+    properties,
+    autoFocus,
+    context
+}: ArrayOneOfEntryProps) {
 
 
     const type = value && value[typeField];
@@ -172,52 +171,52 @@ function ArrayOneOfEntry({
                 name={typeFieldName}
             >
                 {(fieldProps: FormikFieldProps) =>
-                    (
-                        <FormControl fullWidth>
-                            <InputLabel
-                                id={`${name}_${index}_select_label`}>
-                                <span>Type</span>
-                            </InputLabel>
-                            <Select
-                                fullWidth
-                                sx={{ marginBottom: 2 }}
-                                labelId={`${name}_${index}_select_label`}
-                                value={fieldProps.field.value !== undefined && fieldProps.field.value !== null ? fieldProps.field.value : ""}
-                                onChange={(evt: any) => {
-                                    const eventValue = evt.target.value;
-                                    fieldProps.form.setFieldTouched(typeFieldName);
-                                    setTypeInternal(eventValue);
-                                    fieldProps.form.setFieldValue(typeFieldName, eventValue);
-                                    fieldProps.form.setFieldValue(valueFieldName, null);
-                                }}
-                                renderValue={(enumKey: any) =>
-                                    <EnumValuesChip
-                                        enumKey={enumKey}
-                                        enumValues={enumValues}
-                                        small={true}/>
-                                }>
-                                {enumToObjectEntries(enumValues)
-                                    .map(([enumKey, labelOrConfig]) => {
-                                        return (
-                                            <MenuItem
-                                                key={`select_${name}_${index}_${enumKey}`}
-                                                value={enumKey}>
-                                                <EnumValuesChip
-                                                    enumKey={enumKey}
-                                                    enumValues={enumValues}
-                                                    small={true}/>
-                                            </MenuItem>
-                                        );
-                                    })}
-                            </Select>
-                        </FormControl>
-                    )
+                (
+                    <FormControl fullWidth>
+                        <InputLabel
+                            id={`${name}_${index}_select_label`}>
+                            <span>Type</span>
+                        </InputLabel>
+                        <Select
+                            fullWidth
+                            sx={{ marginBottom: 2 }}
+                            labelId={`${name}_${index}_select_label`}
+                            value={fieldProps.field.value !== undefined && fieldProps.field.value !== null ? fieldProps.field.value : ""}
+                            onChange={(evt: any) => {
+                                const eventValue = evt.target.value;
+                                fieldProps.form.setFieldTouched(typeFieldName);
+                                setTypeInternal(eventValue);
+                                fieldProps.form.setFieldValue(typeFieldName, eventValue);
+                                fieldProps.form.setFieldValue(valueFieldName, null);
+                            }}
+                            renderValue={(enumKey: any) =>
+                                <EnumValuesChip
+                                    enumKey={enumKey}
+                                    enumValues={enumValues}
+                                    small={true} />
+                            }>
+                            {enumToObjectEntries(enumValues)
+                                .map(([enumKey, labelOrConfig]) => {
+                                    return (
+                                        <MenuItem
+                                            key={`select_${name}_${index}_${enumKey}`}
+                                            value={enumKey}>
+                                            <EnumValuesChip
+                                                enumKey={enumKey}
+                                                enumValues={enumValues}
+                                                small={true} />
+                                        </MenuItem>
+                                    );
+                                })}
+                        </Select>
+                    </FormControl>
+                )
                 }
             </FastField>
 
             {property && (
                 <FormControl fullWidth
-                             key={`form_control_${name}_${typeInternal}`}>
+                    key={`form_control_${name}_${typeInternal}`}>
                     {buildPropertyField({
                         name: valueFieldName,
                         property: property,
@@ -226,9 +225,6 @@ function ArrayOneOfEntry({
                     })}
                 </FormControl>
             )}
-
         </Paper>
     );
 }
-
-

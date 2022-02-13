@@ -10,13 +10,13 @@ import {
 } from "../../models";
 
 export function useBuildAuthController<UserType>({
-                                           authDelegate,
-                                           authentication,
-                                           dateTimeFormat,
-                                           locale,
-                                           dataSource,
-                                           storageSource
-                                       }: {
+    authDelegate,
+    authentication,
+    dateTimeFormat,
+    locale,
+    dataSource,
+    storageSource
+}: {
     authDelegate: AuthDelegate,
     authentication?: boolean | Authenticator<UserType>,
     dateTimeFormat?: string;

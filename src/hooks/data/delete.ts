@@ -59,8 +59,6 @@ export async function deleteEntityWithCallbacks<M, UserType>({
                                                              }
 ): Promise<boolean> {
 
-    console.debug("Deleting entity", entity.path, entity.id);
-
     const entityDeleteProps: EntityOnDeleteProps<M> = {
         entity,
         schema,

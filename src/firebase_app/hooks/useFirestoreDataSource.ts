@@ -1,29 +1,4 @@
-import {
-    DataSource,
-    DeleteEntityProps,
-    Entity,
-    EntityReference,
-    EntitySchema,
-    EntitySchemaResolver,
-    EntityValues,
-    FetchCollectionProps,
-    FetchEntityProps,
-    FilterValues,
-    GeoPoint,
-    ListenCollectionProps,
-    ListenEntityProps,
-    Properties,
-    Property,
-    ResolvedEntitySchema,
-    SaveEntityProps,
-    WhereFilterOp
-} from "../../models";
-import {
-    computeSchema,
-    sanitizeData,
-    traverseValues,
-    updateAutoValues
-} from "../../core/utils";
+import { FirebaseApp } from "firebase/app";
 import {
     collection,
     CollectionReference,
@@ -47,9 +22,34 @@ import {
     Timestamp,
     where as whereClause
 } from "firebase/firestore";
-import { FirebaseApp } from "firebase/app";
-import { FirestoreTextSearchController } from "../models/text_search";
 import { useEffect, useRef } from "react";
+import {
+    computeSchema,
+    sanitizeData,
+    traverseValues,
+    updateAutoValues
+} from "../../core/utils";
+import {
+    DataSource,
+    DeleteEntityProps,
+    Entity,
+    EntityReference,
+    EntitySchema,
+    EntitySchemaResolver,
+    EntityValues,
+    FetchCollectionProps,
+    FetchEntityProps,
+    FilterValues,
+    GeoPoint,
+    ListenCollectionProps,
+    ListenEntityProps,
+    Properties,
+    Property,
+    ResolvedEntitySchema,
+    SaveEntityProps,
+    WhereFilterOp
+} from "../../models";
+import { FirestoreTextSearchController } from "../models/text_search";
 
 /**
  * @category Firebase
@@ -215,7 +215,6 @@ export function useFirestoreDataSource({
                 return performTextSearch(path, searchString, schema);
             }
 
-            console.debug("Fetching collection", path, limit, filter, startAfter, orderBy, order);
             const query = buildQuery(path, filter, orderBy, order, startAfter, limit);
 
             const resolvedSchema = computeSchema({
@@ -257,8 +256,6 @@ export function useFirestoreDataSource({
                 onError
             }: ListenCollectionProps<M>
         ): () => void {
-
-            console.debug("Listening collection", path, limit, filter, startAfter, orderBy, order);
 
             const query = buildQuery(path, filter, orderBy, order, startAfter, limit);
 
@@ -323,7 +320,6 @@ export function useFirestoreDataSource({
                 onError
             }: ListenEntityProps<M>): () => void {
             if (!firestore) throw Error("useFirestoreDataSource Firestore not initialised");
-            // console.debug("Listening entity", path, entityId);
             return onSnapshot(
                 doc(firestore, path, entityId),
                 {
@@ -379,8 +375,6 @@ export function useFirestoreDataSource({
                     geopointConverter: (value: GeoPoint) => new FirestoreGeoPoint(value.latitude, value.longitude)
                 });
 
-            console.debug("Saving entity", path, entityId, updatedFirestoreValues);
-
             let documentReference: DocumentReference;
             if (entityId)
                 documentReference = doc(collectionReference, entityId);
@@ -428,8 +422,6 @@ export function useFirestoreDataSource({
         ): Promise<boolean> {
 
             if (!firestore) throw Error("useFirestoreDataSource Firestore not initialised");
-
-            console.debug("Check unique field entity", path, name, value, entityId);
 
             if (property.dataType === "array") {
                 console.error("checkUniqueField received an array");

@@ -1,5 +1,5 @@
-import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
+import * as functions from "firebase-functions";
 import DocumentReference = admin.firestore.DocumentReference;
 
 /**
@@ -15,7 +15,6 @@ export const setProductAvailableLocales = functions
             .doc(context.params.productId);
         return availableLocalesForProduct(productRef)
             .then((availableLocales: string[]) => {
-                console.debug("Available locales", availableLocales);
                 return productRef.update({
                     available_locales: availableLocales
                 });

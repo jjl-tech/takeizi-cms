@@ -1,4 +1,3 @@
-import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import {
     FormControl,
     IconButton,
@@ -15,15 +14,12 @@ import makeStyles from "@mui/styles/makeStyles";
 import { ErrorMessage } from "formik";
 import React from "react";
 import {
-    useClipboard,
-    useFireCMSContext,
-    useSnackbarController
+    useClipboard, useSnackbarController
 } from "../../hooks";
 import {
     Entity,
     EntitySchema,
-    EntityStatus,
-    FireCMSContext
+    EntityStatus
 } from "../../models";
 
 
@@ -91,11 +87,10 @@ export function CustomIdField<M, UserType>
     const { copy } = useClipboard({
         onSuccess: (text) => snackbarContext.open({
             type: "success",
-            message: `Copied ${text}`
+            message: `Copiado ${text}`
         })
     });
 
-    const appConfig: FireCMSContext<UserType> | undefined = useFireCMSContext();
     const inputProps = {
         className: classes.input,
         endAdornment: entity
@@ -104,7 +99,7 @@ export function CustomIdField<M, UserType>
                     <IconButton onClick={(e) => copy(entity.id)}
                         aria-label="copy-id"
                         size="large">
-                        <Tooltip title={"Copy"}>
+                        <Tooltip title={"Copiar"}>
                             <svg
                                 className={"MuiSvgIcon-root MuiSvgIcon-fontSizeSmall"}
                                 fill={"currentColor"}
@@ -114,19 +109,6 @@ export function CustomIdField<M, UserType>
                             </svg>
                         </Tooltip>
                     </IconButton>
-
-                    {appConfig?.entityLinkBuilder &&
-                        <a href={appConfig.entityLinkBuilder({ entity })}
-                            rel="noopener noreferrer"
-                            target="_blank">
-                            <IconButton onClick={(e) => e.stopPropagation()}
-                                aria-label="go-to-datasource" size="large">
-                                <Tooltip title={"Open in the console"}>
-                                    <OpenInNewIcon fontSize={"small"} />
-                                </Tooltip>
-                            </IconButton>
-                        </a>}
-
                 </InputAdornment>
             )
             : undefined

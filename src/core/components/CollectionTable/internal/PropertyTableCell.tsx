@@ -1,3 +1,7 @@
+import React, { useCallback, useEffect, useState } from "react";
+import isEqual from "react-fast-compare";
+import { AnySchema } from "yup";
+import { useClearRestoreValue } from "../../../../hooks";
 import {
     ArrayProperty,
     CMSType,
@@ -9,24 +13,20 @@ import {
     StringProperty,
     TimestampProperty
 } from "../../../../models";
-import React, { useCallback, useEffect, useState } from "react";
-import { TableInput } from "./fields/TableInput";
-import { TableSelect } from "./fields/TableSelect";
-import { NumberTableInput } from "./fields/TableNumberInput";
-import { TableSwitch } from "./fields/TableSwitch";
-import { TableDateField } from "./fields/TableDateField";
-import { ErrorBoundary } from "../../../internal/ErrorBoundary";
 import { PreviewComponent } from "../../../../preview";
-import { CellStyleProps } from "../../Table/styles";
-import { TableReferenceField } from "./fields/TableReferenceField";
-
 import { getPreviewSizeFrom } from "../../../../preview/util";
-import { useClearRestoreValue } from "../../../../hooks";
-import isEqual from "react-fast-compare";
+import { ErrorBoundary } from "../../../internal/ErrorBoundary";
 import { isReadOnly } from "../../../utils";
+import { CellStyleProps } from "../../Table/styles";
 import { TableCell } from "../../Table/TableCell";
-import { AnySchema } from "yup";
+import { TableDateField } from "./fields/TableDateField";
+import { TableInput } from "./fields/TableInput";
+import { NumberTableInput } from "./fields/TableNumberInput";
+import { TableReferenceField } from "./fields/TableReferenceField";
+import { TableSelect } from "./fields/TableSelect";
 import { TableStorageUpload } from "./fields/TableStorageUpload";
+import { TableSwitch } from "./fields/TableSwitch";
+
 
 
 export interface PropertyTableCellProps<T extends CMSType> {
@@ -58,24 +58,24 @@ export interface OnCellChangeParams<T> {
 }
 
 const PropertyTableCellInternal = <T extends CMSType>({
-                                                                                            selected,
-                                                                                            focused,
-                                                                                            name,
-                                                                                            setPreventOutsideClick,
-                                                                                            setFocused,
-                                                                                            onValueChange,
-                                                                                            select,
-                                                                                            openPopup,
-                                                                                            value,
-                                                                                            property,
-                                                                                            validation,
-                                                                                            size,
-                                                                                            align,
-                                                                                            width,
-                                                                                            height,
-                                                                                            entityId,
-                                                                                            entityValues
-                                                                                        }: PropertyTableCellProps<T> & CellStyleProps) => {
+    selected,
+    focused,
+    name,
+    setPreventOutsideClick,
+    setFocused,
+    onValueChange,
+    select,
+    openPopup,
+    value,
+    property,
+    validation,
+    size,
+    align,
+    width,
+    height,
+    entityId,
+    entityValues
+}: PropertyTableCellProps<T> & CellStyleProps) => {
 
     const [internalValue, setInternalValue] = useState<any | null>(value);
 
@@ -158,17 +158,17 @@ const PropertyTableCellInternal = <T extends CMSType>({
             (property.dataType === "array" && (property as ArrayProperty).of?.dataType === "string" && ((property as ArrayProperty).of as StringProperty)?.config?.storageMeta);
         if (isAStorageProperty) {
             innerComponent = <TableStorageUpload error={error}
-                                                 disabled={disabled}
-                                                 focused={focused}
-                                                 property={property as StringProperty | ArrayProperty<string[]>}
-                                                 entityId={entityId}
-                                                 entityValues={entityValues}
-                                                 internalValue={internalValue}
-                                                 previewSize={getPreviewSizeFrom(size)}
-                                                 updateValue={updateValue}
-                                                 name={name as string}
-                                                 onBlur={onBlur}
-                                                 setPreventOutsideClick={setPreventOutsideClick}
+                disabled={disabled}
+                focused={focused}
+                property={property as StringProperty | ArrayProperty<string[]>}
+                entityId={entityId}
+                entityValues={entityValues}
+                internalValue={internalValue}
+                previewSize={getPreviewSizeFrom(size)}
+                updateValue={updateValue}
+                name={name as string}
+                onBlur={onBlur}
+                setPreventOutsideClick={setPreventOutsideClick}
             />;
             showExpandIcon = true;
             fullHeight = true;
@@ -177,17 +177,17 @@ const PropertyTableCellInternal = <T extends CMSType>({
             const numberProperty = property as NumberProperty;
             if (numberProperty.config?.enumValues) {
                 innerComponent = <TableSelect name={name as string}
-                                              multiple={false}
-                                              disabled={disabled}
-                                              focused={focused}
-                                              valueType={"number"}
-                                              small={getPreviewSizeFrom(size) !== "regular"}
-                                              enumValues={numberProperty.config.enumValues}
-                                              error={error}
-                                              onBlur={onBlur}
-                                              internalValue={internalValue as string | number}
-                                              updateValue={updateValue}
-                                              setPreventOutsideClick={setPreventOutsideClick}
+                    multiple={false}
+                    disabled={disabled}
+                    focused={focused}
+                    valueType={"number"}
+                    small={getPreviewSizeFrom(size) !== "regular"}
+                    enumValues={numberProperty.config.enumValues}
+                    error={error}
+                    onBlur={onBlur}
+                    internalValue={internalValue as string | number}
+                    updateValue={updateValue}
+                    setPreventOutsideClick={setPreventOutsideClick}
                 />;
             } else {
                 innerComponent = <NumberTableInput
@@ -205,56 +205,56 @@ const PropertyTableCellInternal = <T extends CMSType>({
             const stringProperty = property as StringProperty;
             if (stringProperty.config?.enumValues) {
                 innerComponent = <TableSelect name={name as string}
-                                              multiple={false}
-                                              focused={focused}
-                                              disabled={disabled}
-                                              valueType={"string"}
-                                              small={getPreviewSizeFrom(size) !== "regular"}
-                                              enumValues={stringProperty.config.enumValues}
-                                              error={error}
-                                              onBlur={onBlur}
-                                              internalValue={internalValue as string | number}
-                                              updateValue={updateValue}
-                                              setPreventOutsideClick={setPreventOutsideClick}
+                    multiple={false}
+                    focused={focused}
+                    disabled={disabled}
+                    valueType={"string"}
+                    small={getPreviewSizeFrom(size) !== "regular"}
+                    enumValues={stringProperty.config.enumValues}
+                    error={error}
+                    onBlur={onBlur}
+                    internalValue={internalValue as string | number}
+                    updateValue={updateValue}
+                    setPreventOutsideClick={setPreventOutsideClick}
                 />;
             } else if (!stringProperty.config?.storageMeta && !stringProperty.config?.markdown) {
                 const multiline = !!stringProperty.config?.multiline;
                 innerComponent = <TableInput error={error}
-                                             disabled={disabled}
-                                             multiline={multiline}
-                                             focused={focused}
-                                             value={internalValue as string}
-                                             updateValue={updateValue}
+                    disabled={disabled}
+                    multiline={multiline}
+                    focused={focused}
+                    value={internalValue as string}
+                    updateValue={updateValue}
                 />;
                 allowScroll = true;
             }
         } else if (property.dataType === "boolean") {
             innerComponent = <TableSwitch error={error}
-                                          disabled={disabled}
-                                          focused={focused}
-                                          internalValue={internalValue as boolean}
-                                          updateValue={updateValue}
+                disabled={disabled}
+                focused={focused}
+                internalValue={internalValue as boolean}
+                updateValue={updateValue}
             />;
         } else if (property.dataType === "timestamp") {
             innerComponent = <TableDateField name={name as string}
-                                             error={error}
-                                             disabled={disabled}
-                                             focused={focused}
-                                             internalValue={internalValue as Date}
-                                             updateValue={updateValue}
-                                             property={property as TimestampProperty}
-                                             setPreventOutsideClick={setPreventOutsideClick}
+                error={error}
+                disabled={disabled}
+                focused={focused}
+                internalValue={internalValue as Date}
+                updateValue={updateValue}
+                property={property as TimestampProperty}
+                setPreventOutsideClick={setPreventOutsideClick}
             />;
             allowScroll = true;
         } else if (property.dataType === "reference") {
             if (typeof property.path === "string") {
                 innerComponent = <TableReferenceField name={name as string}
-                                                      internalValue={internalValue as EntityReference}
-                                                      updateValue={updateValue}
-                                                      disabled={disabled}
-                                                      size={size}
-                                                      property={property as ReferenceProperty}
-                                                      setPreventOutsideClick={setPreventOutsideClick}
+                    internalValue={internalValue as EntityReference}
+                    updateValue={updateValue}
+                    disabled={disabled}
+                    size={size}
+                    property={property as ReferenceProperty}
+                    setPreventOutsideClick={setPreventOutsideClick}
                 />;
             }
             allowScroll = true;
@@ -264,17 +264,17 @@ const PropertyTableCellInternal = <T extends CMSType>({
                 if (arrayProperty.of.dataType === "string" || arrayProperty.of.dataType === "number") {
                     if (selected && arrayProperty.of.config?.enumValues) {
                         innerComponent = <TableSelect name={name as string}
-                                                      multiple={true}
-                                                      disabled={disabled}
-                                                      focused={focused}
-                                                      small={getPreviewSizeFrom(size) !== "regular"}
-                                                      valueType={arrayProperty.of.dataType}
-                                                      enumValues={arrayProperty.of.config.enumValues}
-                                                      error={error}
-                                                      onBlur={onBlur}
-                                                      internalValue={internalValue as string | number}
-                                                      updateValue={updateValue}
-                                                      setPreventOutsideClick={setPreventOutsideClick}
+                            multiple={true}
+                            disabled={disabled}
+                            focused={focused}
+                            small={getPreviewSizeFrom(size) !== "regular"}
+                            valueType={arrayProperty.of.dataType}
+                            enumValues={arrayProperty.of.config.enumValues}
+                            error={error}
+                            onBlur={onBlur}
+                            internalValue={internalValue as string | number}
+                            updateValue={updateValue}
+                            setPreventOutsideClick={setPreventOutsideClick}
                         />;
                         allowScroll = true;
                     }
@@ -282,12 +282,12 @@ const PropertyTableCellInternal = <T extends CMSType>({
                     if (typeof arrayProperty.of.path === "string") {
                         innerComponent =
                             <TableReferenceField name={name as string}
-                                                 disabled={disabled}
-                                                 internalValue={internalValue as EntityReference[]}
-                                                 updateValue={updateValue}
-                                                 size={size}
-                                                 property={property as ArrayProperty}
-                                                 setPreventOutsideClick={setPreventOutsideClick}
+                                disabled={disabled}
+                                internalValue={internalValue as EntityReference[]}
+                                updateValue={updateValue}
+                                size={size}
+                                property={property as ArrayProperty}
+                                setPreventOutsideClick={setPreventOutsideClick}
                             />;
                     }
                     allowScroll = false;

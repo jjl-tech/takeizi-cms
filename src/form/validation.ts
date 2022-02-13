@@ -124,7 +124,7 @@ function getYupStringSchema({
     const validation = property.validation;
     if (property.config?.enumValues) {
         if (validation?.required)
-            schema = schema.required(validation?.requiredMessage ? validation.requiredMessage : "Obrigatório");
+            schema = schema.required(validation?.requiredMessage ? validation.requiredMessage : "Campo obrigatório");
         schema = schema.oneOf(
             enumToObjectEntries(property.config?.enumValues)
                 .map(([key, _]) => key)
@@ -132,7 +132,7 @@ function getYupStringSchema({
     }
     if (validation) {
         schema = validation.required
-            ? schema.required(validation?.requiredMessage ? validation.requiredMessage : "Obrigatório").nullable(true)
+            ? schema.required(validation?.requiredMessage ? validation.requiredMessage : "Campo obrigatório").nullable(true)
             : schema.notRequired().nullable(true);
         if (validation.unique && customFieldValidator && name)
             schema = schema.test("unique", "This value already exists and should be unique",
@@ -167,7 +167,7 @@ function getYupNumberSchema({
     let schema: NumberSchema<any> = yup.number().typeError("Deve ser um número");
     if (validation) {
         schema = validation.required
-            ? schema.required(validation.requiredMessage ? validation.requiredMessage : "Obrigatório").nullable(true)
+            ? schema.required(validation.requiredMessage ? validation.requiredMessage : "Campo obrigatório").nullable(true)
             : schema.notRequired().nullable(true);
         if (validation.unique && customFieldValidator && name)
             schema = schema.test("unique",
@@ -229,7 +229,7 @@ function getYupDateSchema({
     const validation = property.validation;
     if (validation) {
         schema = validation.required
-            ? schema.required(validation?.requiredMessage ? validation.requiredMessage : "Obrigatório").nullable(true)
+            ? schema.required(validation?.requiredMessage ? validation.requiredMessage : "Campo obrigatório").nullable(true)
             : schema.notRequired().nullable(true);
         if (validation.unique && customFieldValidator && name)
             schema = schema.test("unique",
@@ -258,7 +258,7 @@ function getYupReferenceSchema({
     const validation = property.validation;
     if (validation) {
         schema = validation.required
-            ? schema.required(validation?.requiredMessage ? validation.requiredMessage : "Obrigatório").nullable(true)
+            ? schema.required(validation?.requiredMessage ? validation.requiredMessage : "Campo obrigatório").nullable(true)
             : schema.notRequired().nullable(true);
         if (validation.unique && customFieldValidator && name)
             schema = schema.test("unique",
@@ -285,7 +285,7 @@ function getYupBooleanSchema({
     const validation = property.validation;
     if (validation) {
         schema = validation.required
-            ? schema.required(validation?.requiredMessage ? validation.requiredMessage : "Obrigatório").nullable(true)
+            ? schema.required(validation?.requiredMessage ? validation.requiredMessage : "Campo obrigatório").nullable(true)
             : schema.notRequired().nullable(true);
         if (validation.unique && customFieldValidator && name)
             schema = schema.test("unique",
@@ -342,7 +342,7 @@ function getYupArraySchema({
 
     if (validation) {
         schema = validation.required
-            ? schema.required(validation?.requiredMessage ? validation.requiredMessage : "Obrigatório").nullable(true)
+            ? schema.required(validation?.requiredMessage ? validation.requiredMessage : "Campo obrigatório").nullable(true)
             : schema.notRequired().nullable(true);
         if (validation.min || validation.min === 0) schema = schema.min(validation.min, `${property.title} should be min ${validation.min} entries long`);
         if (validation.max) schema = schema.max(validation.max, `${property.title} should be max ${validation.max} entries long`);

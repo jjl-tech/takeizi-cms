@@ -1,12 +1,14 @@
-import React, { useMemo } from "react";
 import {
     Box,
     Button,
     FormControl,
     FormHelperText,
-    Paper,
-    Theme
+    Paper
 } from "@mui/material";
+import React, { useMemo } from "react";
+import { ErrorView, ReferenceDialog } from "../../core";
+import { getReferenceFrom } from "../../core/utils";
+import { useClearRestoreValue, useNavigation } from "../../hooks";
 import {
     Entity,
     EntityCollectionResolver,
@@ -16,10 +18,7 @@ import {
 } from "../../models";
 import { ReferencePreview } from "../../preview";
 import { ArrayContainer, FieldDescription, LabelWithIcon } from "../components";
-import { ErrorView, ReferenceDialog } from "../../core";
 
-import { useClearRestoreValue, useNavigation } from "../../hooks";
-import { getReferenceFrom } from "../../core/utils";
 
 
 type ArrayOfReferencesFieldProps = FieldProps<EntityReference[]>;
@@ -32,16 +31,16 @@ type ArrayOfReferencesFieldProps = FieldProps<EntityReference[]>;
  * @category Form fields
  */
 export function ArrayOfReferencesField({
-                                           name,
-                                           value,
-                                           error,
-                                           showError,
-                                           isSubmitting,
-                                           tableMode,
-                                           property,
-                                           includeDescription,
-                                           setValue
-                                       }: ArrayOfReferencesFieldProps) {
+    name,
+    value,
+    error,
+    showError,
+    isSubmitting,
+    tableMode,
+    property,
+    includeDescription,
+    setValue
+}: ArrayOfReferencesFieldProps) {
 
     const ofProperty: Property = property.of as Property;
     if (ofProperty.dataType !== "reference") {
@@ -93,7 +92,7 @@ export function ArrayOfReferencesField({
                     property={ofProperty}
                     onHover={onHover}
                     size={"regular"}
-                    onClick={onEntryClick}/>
+                    onClick={onEntryClick} />
             </div>
         );
     };
@@ -104,37 +103,37 @@ export function ArrayOfReferencesField({
             <FormControl fullWidth error={showError}>
 
                 {!tableMode && <FormHelperText filled
-                                               required={property.validation?.required}>
-                    <LabelWithIcon property={property}/>
+                    required={property.validation?.required}>
+                    <LabelWithIcon property={property} />
                 </FormHelperText>}
 
                 <Paper variant={"outlined"}
-                       sx={(theme) => ({
-                           elevation: 0,
-                           padding: theme.spacing(2),
-                           [theme.breakpoints.up("md")]: {
-                               padding: theme.spacing(2)
-                           }
-                       })}>
+                    sx={(theme) => ({
+                        elevation: 0,
+                        padding: theme.spacing(2),
+                        [theme.breakpoints.up("md")]: {
+                            padding: theme.spacing(2)
+                        }
+                    })}>
 
                     {!collectionResolver && <ErrorView
-                        error={"The specified collection does not exist. Check console"}/>}
+                        error={"The specified collection does not exist. Check console"} />}
 
                     {collectionResolver && <>
 
                         <ArrayContainer value={value}
-                                        name={name}
-                                        buildEntry={buildEntry}
-                                        disabled={isSubmitting}/>
+                            name={name}
+                            buildEntry={buildEntry}
+                            disabled={isSubmitting} />
 
                         <Box p={1}
-                             justifyContent="center"
-                             textAlign={"left"}>
+                            justifyContent="center"
+                            textAlign={"left"}>
                             <Button variant="outlined"
-                                    color="primary"
-                                    disabled={isSubmitting}
-                                    onClick={onEntryClick}>
-                                Edit {property.title}
+                                color="primary"
+                                disabled={isSubmitting}
+                                onClick={onEntryClick}>
+                                Selecionar {property.title}
                             </Button>
                         </Box>
                     </>}
@@ -142,21 +141,21 @@ export function ArrayOfReferencesField({
                 </Paper>
 
                 {includeDescription &&
-                <FieldDescription property={property}/>}
+                    <FieldDescription property={property} />}
 
                 {showError &&
-                typeof error === "string" &&
-                <FormHelperText>{error}</FormHelperText>}
+                    typeof error === "string" &&
+                    <FormHelperText>{error}</FormHelperText>}
 
             </FormControl>
 
             {collectionResolver && ofProperty.path && <ReferenceDialog open={open}
-                                                    multiselect={true}
-                                                    collectionResolver={collectionResolver}
-                                                    path={ofProperty.path}
-                                                    onClose={onClose}
-                                                    onMultipleEntitiesSelected={onMultipleEntitiesSelected}
-                                                    selectedEntityIds={selectedIds}
+                multiselect={true}
+                collectionResolver={collectionResolver}
+                path={ofProperty.path}
+                onClose={onClose}
+                onMultipleEntitiesSelected={onMultipleEntitiesSelected}
+                selectedEntityIds={selectedIds}
             />}
         </>
     );

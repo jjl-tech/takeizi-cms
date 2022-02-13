@@ -28,7 +28,6 @@ export function buildPropertyFrom<T extends CMSType, M extends { [Key: string]: 
     if (typeof propertyOrBuilder === "function") {
         result = propertyOrBuilder({ values, previousValues, entityId, path });
         if (!result) {
-            console.debug("Property builder not returning `Property` so it is not rendered", path, entityId, propertyOrBuilder);
             return null;
         }
     } else {

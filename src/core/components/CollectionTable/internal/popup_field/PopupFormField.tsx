@@ -245,7 +245,7 @@ export function PopupFormField<M extends { [Key: string]: any }>({
             <Formik
                 initialValues={entity.values}
                 validationSchema={validationSchema}
-                validate={(values) => console.debug("Validating", values)}
+                validate={(values) => {}}
                 onSubmit={(values, actions) => {
                     saveValue(values)
                         .then(() => onClose())

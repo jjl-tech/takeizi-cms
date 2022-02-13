@@ -130,17 +130,17 @@ export interface EntityViewProps<M, UserType> {
 
 
 export function EntityView<M extends { [Key: string]: any }, UserType>({
-                                                                           path,
-                                                                           entityId,
-                                                                           callbacks,
-                                                                           selectedSubpath,
-                                                                           copy,
-                                                                           permissions,
-                                                                           schema: schemaOrResolver,
-                                                                           subcollections,
-                                                                           onModifiedValues,
-                                                                           width
-                                                                       }: EntityViewProps<M, UserType>) {
+    path,
+    entityId,
+    callbacks,
+    selectedSubpath,
+    copy,
+    permissions,
+    schema: schemaOrResolver,
+    subcollections,
+    onModifiedValues,
+    width
+}: EntityViewProps<M, UserType>) {
 
     const resolvedWidth: string | undefined = typeof width === "number" ? `${width}px` : width;
     const classes = useStylesSide({ containerWidth: resolvedWidth ?? CONTAINER_WIDTH });
@@ -170,7 +170,7 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
         useCache: false
     });
 
-    const resolvedSchema:ResolvedEntitySchema<M> = useMemo(() => computeSchema({
+    const resolvedSchema: ResolvedEntitySchema<M> = useMemo(() => computeSchema({
         schemaOrResolver,
         path,
         entityId,
@@ -251,7 +251,7 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
 
         snackbarContext.open({
             type: "success",
-            message: `${resolvedSchema.name}: Saved correctly`
+            message: "Cadastrado com sucesso!"
         });
 
         setStatus("existing");
@@ -266,7 +266,7 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
 
         snackbarContext.open({
             type: "error",
-            title: `${resolvedSchema.name}: Error saving`,
+            title: "Erro ao salvar",
             message: e?.message
         });
 
@@ -275,12 +275,12 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
     }, []);
 
     const onEntitySave = useCallback(async ({
-                                                schema,
-                                                path,
-                                                entityId,
-                                                values,
-                                                previousValues
-                                            }: {
+        schema,
+        path,
+        entityId,
+        values,
+        previousValues
+    }: {
         schema: EntitySchema<M>,
         path: string,
         entityId: string | undefined,
@@ -314,8 +314,8 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
     }, [sideEntityController, tabsPosition]);
 
     const body = !readOnly
-? (
-            <Suspense fallback={<CircularProgressCenter size={50}/>}>
+        ? (
+            <Suspense fallback={<CircularProgressCenter size={50} />}>
                 <EntityForm
                     key={`form_${path}_${entity?.id ?? "new"}`}
                     status={status}
@@ -325,17 +325,17 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
                     onDiscard={onDiscard}
                     onValuesChanged={setModifiedValues}
                     onModified={onModifiedValues}
-                    entity={entity}/>
+                    entity={entity} />
             </Suspense>
-    )
-: (
-        <Suspense fallback={<CircularProgressCenter size={50}/>}>
-            <EntityPreview
-                entity={entity}
-                path={path}
-                schema={resolvedSchema}/>
-        </Suspense>
-    );
+        )
+        : (
+            <Suspense fallback={<CircularProgressCenter size={50} />}>
+                <EntityPreview
+                    entity={entity}
+                    path={path}
+                    schema={resolvedSchema} />
+            </Suspense>
+        );
 
     const customViewsView: JSX.Element[] | undefined = customViews && customViews.map(
         (customView, colIndex) => {
@@ -372,15 +372,15 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
                     flexGrow={1}
                     hidden={tabsPosition !== colIndex + customViewsCount}>
                     {entity && absolutePath
-                        ? <Suspense fallback={<CircularProgressCenter/>}>
+                        ? <Suspense fallback={<CircularProgressCenter />}>
                             <EntityCollectionView
                                 path={absolutePath}
-                                collection={subcollection}/>
+                                collection={subcollection} />
                         </Suspense>
                         : <Box m={3}
-                             display={"flex"}
-                             alignItems={"center"}
-                             justifyContent={"center"}>
+                            display={"flex"}
+                            alignItems={"center"}
+                            justifyContent={"center"}>
                             <Box>
                                 You need to save your entity before
                                 adding additional collections
@@ -430,8 +430,8 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
         >
 
             <IconButton onClick={(e) => sideEntityController.close()}
-                        size="large">
-                <CloseIcon/>
+                size="large">
+                <CloseIcon />
             </IconButton>
 
             <Tabs
@@ -448,13 +448,13 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
                     wrapped={true}
                     onClick={() => {
                         onSideTabClick(-1);
-                    }}/>
+                    }} />
             </Tabs>
 
-            <Box flexGrow={1}/>
+            <Box flexGrow={1} />
 
             {dataLoading &&
-            <CircularProgress size={16} thickness={8}/>}
+                <CircularProgress size={16} thickness={8} />}
 
             <Tabs
                 value={tabsPosition >= 0 ? tabsPosition : false}
@@ -476,7 +476,7 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
                             }}
                             wrapped={true}
                             key={`entity_detail_custom_tab_${view.name}`}
-                            label={view.name}/>
+                            label={view.name} />
                 )}
 
                 {subcollections && subcollections.map(
@@ -487,7 +487,7 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
                             }}
                             wrapped={true}
                             key={`entity_detail_collection_tab_${subcollection.name}`}
-                            label={subcollection.name}/>
+                            label={subcollection.name} />
                 )}
 
             </Tabs>
@@ -499,12 +499,12 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
         className={clsx(classes.container, { [classes.containerWide]: tabsPosition !== -1 })}>
         {
             dataLoading
-                ? <CircularProgressCenter/>
+                ? <CircularProgressCenter />
                 : <>
 
                     {header}
 
-                    <Divider/>
+                    <Divider />
 
                     <div className={classes.tabsContainer}>
 

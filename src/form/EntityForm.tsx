@@ -274,7 +274,7 @@ export function EntityForm<M>({
             initialValues={initialValues}
             onSubmit={saveValues}
             validationSchema={validationSchema}
-            validate={(values) => console.debug("Validating", values)}
+            validate={(values) => {}}
             onReset={() => onDiscard && onDiscard()}
         >
             {({
@@ -365,7 +365,6 @@ function FormInternal<M>({
         Object.entries(underlyingChanges).forEach(([key, value]) => {
             const formValue = (values as any)[key];
             if (!isEqual(value, formValue) && !(touched as any)[key]) {
-                console.debug("Updated value from the datasource:", key, value);
                 setFieldValue(key, value !== undefined ? value : null);
             }
         });

@@ -1,7 +1,7 @@
+import ErrorIcon from "@mui/icons-material/Error";
 import { Box, Typography } from "@mui/material";
 import React, { ErrorInfo } from "react";
 
-import ErrorIcon from "@mui/icons-material/Error";
 
 
 export class ErrorBoundary extends React.Component<{}, { hasError: boolean }> {
@@ -35,7 +35,7 @@ export class ErrorBoundary extends React.Component<{}, { hasError: boolean }> {
                         <Box marginLeft={1}>Error</Box>
                     </Box>
                     <Typography variant={"caption"}>
-                        See the error in the console
+                        Verifique o erro no console
                     </Typography>
                 </Box>
             );

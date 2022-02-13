@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
+import ClearIcon from "@mui/icons-material/Clear";
+import DateTimePicker from "@mui/lab/DateTimePicker";
 import {
     Box,
     FormControl,
@@ -7,10 +9,8 @@ import {
     MenuItem,
     Select as MuiSelect
 } from "@mui/material";
-import ClearIcon from "@mui/icons-material/Clear";
 import Tooltip from "@mui/material/Tooltip/Tooltip";
-import DateTimePicker from "@mui/lab/DateTimePicker";
-import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
+import React, { useState } from "react";
 import { TableWhereFilterOp } from "../TableProps";
 
 interface DateTimeFilterFieldProps {
@@ -125,7 +125,7 @@ export function DateTimeFilterField({
                 <IconButton
                     onClick={(e) => updateFilter(operation, undefined)}
                     size={"small"}>
-                    <Tooltip title={`Clear ${title}`}>
+                    <Tooltip title={`Limpar ${title}`}>
                         <ClearIcon fontSize={"small"}/>
                     </Tooltip>
                 </IconButton>

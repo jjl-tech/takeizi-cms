@@ -533,8 +533,6 @@ export function StorageUpload({
         entry: StorageFieldItem,
         metadata?: any) => {
 
-        console.debug("onFileUploadComplete", uploadedPath, entry);
-
         let uploadPathOrDownloadUrl = uploadedPath;
         if (storageMeta.storeUrl) {
             uploadPathOrDownloadUrl = await storage.getDownloadURL(uploadedPath);
@@ -641,7 +639,6 @@ export function StorageUploadProgress({
 
         storage.uploadFile({ file, fileName, path: storagePath, metadata })
             .then(async ({ path }) => {
-                console.debug("Upload successful");
                 await onFileUploadComplete(path, entry, metadata);
                 if (mounted.current)
                     setLoading(false);

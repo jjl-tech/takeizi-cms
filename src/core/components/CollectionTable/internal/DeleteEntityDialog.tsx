@@ -1,11 +1,4 @@
 import {
-    Entity,
-    EntityCallbacks,
-    EntitySchema,
-    EntitySchemaResolver
-} from "../../../../models";
-import React, { useCallback, useMemo, useState } from "react";
-import {
     Button,
     CircularProgress,
     Dialog,
@@ -13,13 +6,20 @@ import {
     DialogContent,
     DialogTitle
 } from "@mui/material";
-import { EntityPreview } from "../../index";
+import React, { useCallback, useMemo, useState } from "react";
 import {
     deleteEntityWithCallbacks,
     useDataSource,
     useFireCMSContext,
     useSnackbarController
 } from "../../../../hooks";
+import {
+    Entity,
+    EntityCallbacks,
+    EntitySchema,
+    EntitySchemaResolver
+} from "../../../../models";
+import { EntityPreview } from "../../index";
 
 
 export interface DeleteEntityDialogProps<M extends { [Key: string]: any }> {
@@ -37,17 +37,17 @@ export interface DeleteEntityDialogProps<M extends { [Key: string]: any }> {
 }
 
 export function DeleteEntityDialog<M extends { [Key: string]: any }>({
-                                                                                   entityOrEntitiesToDelete,
-                                                                                   schemaResolver,
-                                                                                   onClose,
-                                                                                   open,
-                                                                                   callbacks,
-                                                                                   onEntityDelete,
-                                                                                   onMultipleEntitiesDelete,
-                                                                                   path,
-                                                                                   ...other
-                                                                               }
-                                                                         : DeleteEntityDialogProps<M>) {
+    entityOrEntitiesToDelete,
+    schemaResolver,
+    onClose,
+    open,
+    callbacks,
+    onEntityDelete,
+    onMultipleEntitiesDelete,
+    path,
+    ...other
+}
+    : DeleteEntityDialogProps<M>) {
 
     const dataSource = useDataSource();
     const snackbarContext = useSnackbarController();
@@ -80,7 +80,7 @@ export function DeleteEntityDialog<M extends { [Key: string]: any }>({
     const onDeleteFailure = useCallback((entity: Entity<any>, e: Error) => {
         snackbarContext.open({
             type: "error",
-            title: `${schema.name}: Error deleting`,
+            title: `${schema.name}: Erro ao deletar`,
             message: e?.message
         });
 
@@ -91,7 +91,7 @@ export function DeleteEntityDialog<M extends { [Key: string]: any }>({
     const onPreDeleteHookError = useCallback((entity: Entity<any>, e: Error) => {
         snackbarContext.open({
             type: "error",
-            title: `${schema.name}: Error before deleting`,
+            title: `${schema.name}: Erro ao deletar`,
             message: e?.message
         });
         console.error(e);
@@ -135,17 +135,17 @@ export function DeleteEntityDialog<M extends { [Key: string]: any }>({
                     if (results.every(Boolean)) {
                         snackbarContext.open({
                             type: "success",
-                            message: `${schema.name}: multiple deleted`
+                            message: "Deletado com sucesso"
                         });
                     } else if (results.some(Boolean)) {
                         snackbarContext.open({
                             type: "warning",
-                            message: `${schema.name}: Some of the entities have been deleted, but not all`
+                            message: "Alguns registros não foram deletados"
                         });
                     } else {
                         snackbarContext.open({
                             type: "error",
-                            message: `${schema.name}: Error deleting entities`
+                            message: "Erro ao deletar os dados"
                         });
                     }
                     onClose();
@@ -159,7 +159,7 @@ export function DeleteEntityDialog<M extends { [Key: string]: any }>({
                             onEntityDelete(path, entityOrEntities as Entity<M>);
                         snackbarContext.open({
                             type: "success",
-                            message: `${schema.name} deleted`
+                            message: "Deletado com sucesso"
                         });
                         onClose();
                     }
@@ -182,13 +182,14 @@ export function DeleteEntityDialog<M extends { [Key: string]: any }>({
             ? <EntityPreview
                 entity={entity}
                 schema={resolvedSchema}
-                path={path}/>
+                path={path} />
             : <></>;
     }
 
     const dialogTitle = multipleEntities
-        ? `${schema.name}: Confirm multiple delete?`
-        : `Would you like to delete this ${schema.name}?`;
+        ? `${schema.name}: Deletar vários registros`
+        : `Você tem certeza que deseja deletar este ${schema.name}?`;
+
 
     return (
         <Dialog
@@ -207,20 +208,20 @@ export function DeleteEntityDialog<M extends { [Key: string]: any }>({
             </DialogContent>}
 
             <DialogActions>
-
-                {loading && <CircularProgress size={16} thickness={8}/>}
+                {loading && <CircularProgress size={16} thickness={8} />}
 
                 <Button onClick={handleCancel}
-                        disabled={loading}
-                        color="primary">
-                    Cancel
+                    disabled={loading}
+                    color="primary">
+                    Cancelar
                 </Button>
                 <Button
                     autoFocus
+                    variant="outlined"
                     disabled={loading}
                     onClick={handleOk}
                     color="primary">
-                    Ok
+                    Ok, deletar
                 </Button>
             </DialogActions>
 

@@ -20,8 +20,6 @@ export type FirestoreTextSearchController = (props: { path: string, searchString
  * @category Firebase
  */
 export function performAlgoliaTextSearch(index: SearchIndex, query: string): Promise<readonly string[]> {
-
-    console.log("Performing Algolia query", index, query);
     return index
         .search(query)
         .then(({ hits }: any) => {

@@ -1,8 +1,7 @@
-import React, { useCallback, useRef, useState } from "react";
-
-import clsx from "clsx";
+import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
+import ArrowDropDownCircleIcon from "@mui/icons-material/ArrowDropDownCircle";
+import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import {
-    alpha,
     Badge,
     Box,
     Button,
@@ -15,20 +14,19 @@ import {
 } from "@mui/material";
 import createStyles from "@mui/styles/createStyles";
 import makeStyles from "@mui/styles/makeStyles";
-import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
-import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
-import ArrowDropDownCircleIcon from "@mui/icons-material/ArrowDropDownCircle";
-
+import React, { useCallback, useRef, useState } from "react";
+import { ErrorBoundary } from "../../internal/ErrorBoundary";
+import { BooleanFilterField } from "./filters/BooleanFilterField";
+import { DateTimeFilterField } from "./filters/DateTimeFilterfield";
+import { StringNumberFilterField } from "./filters/StringNumberFilterField";
 import {
     TableColumn,
     TableColumnFilter,
     TableSort,
     TableWhereFilterOp
 } from "./TableProps";
-import { StringNumberFilterField } from "./filters/StringNumberFilterField";
-import { BooleanFilterField } from "./filters/BooleanFilterField";
-import { DateTimeFilterField } from "./filters/DateTimeFilterfield";
-import { ErrorBoundary } from "../../internal/ErrorBoundary";
+
+
 
 export const useStyles = makeStyles<Theme, { onHover?: boolean, align?: "right" | "left" | "center" }>(theme => createStyles({
     header: ({ onHover }) => ({
@@ -84,12 +82,12 @@ type TableHeaderProps<M extends { [Key: string]: any }> = {
 };
 
 function TableHeaderInternal<M extends { [Key: string]: any }>({
-                                                                   sort,
-                                                                   onColumnSort,
-                                                                   onFilterUpdate,
-                                                                   filter,
-                                                                   column
-                                                               }: TableHeaderProps<M>) {
+    sort,
+    onColumnSort,
+    onFilterUpdate,
+    filter,
+    column
+}: TableHeaderProps<M>) {
 
     const [onHover, setOnHover] = useState(false);
     const ref = useRef<HTMLDivElement>(null);
@@ -135,39 +133,39 @@ function TableHeaderInternal<M extends { [Key: string]: any }>({
                 </Grid>
 
                 {column.sortable && (sort || onHover || open) &&
-                <Grid item>
-                    <Badge color="secondary"
-                           variant="dot"
-                           overlap="circular"
-                           invisible={!sort}>
-                        <IconButton
-                            size={"small"}
-                            className={classes.headerIconButton}
-                            onClick={() => {
-                                onColumnSort(column.key as Extract<keyof M, string>);
-                            }}
-                        >
-                            {!sort && <ArrowDownwardIcon fontSize={"small"}/>}
-                            {sort === "desc" &&
-                            <ArrowUpwardIcon fontSize={"small"}/>}
-                            {sort === "asc" &&
-                            <ArrowDownwardIcon fontSize={"small"}/>}
-                        </IconButton>
-                    </Badge>
-                </Grid>
+                    <Grid item>
+                        <Badge color="secondary"
+                            variant="dot"
+                            overlap="circular"
+                            invisible={!sort}>
+                            <IconButton
+                                size={"small"}
+                                className={classes.headerIconButton}
+                                onClick={() => {
+                                    onColumnSort(column.key as Extract<keyof M, string>);
+                                }}
+                            >
+                                {!sort && <ArrowDownwardIcon fontSize={"small"} />}
+                                {sort === "desc" &&
+                                    <ArrowUpwardIcon fontSize={"small"} />}
+                                {sort === "asc" &&
+                                    <ArrowDownwardIcon fontSize={"small"} />}
+                            </IconButton>
+                        </Badge>
+                    </Grid>
                 }
 
                 {column.filter && <Grid item>
                     <Badge color="secondary"
-                           variant="dot"
-                           overlap="circular"
-                           invisible={!filter}>
+                        variant="dot"
+                        overlap="circular"
+                        invisible={!filter}>
                         <IconButton
                             className={classes.headerIconButton}
                             size={"small"}
                             onClick={handleSettingsClick}>
                             <ArrowDropDownCircleIcon fontSize={"small"}
-                                                     color={onHover || open ? undefined : "disabled"}/>
+                                color={onHover || open ? undefined : "disabled"} />
                         </IconButton>
 
                     </Badge>
@@ -190,8 +188,8 @@ function TableHeaderInternal<M extends { [Key: string]: any }>({
                 }}
             >
                 <FilterForm column={column}
-                            filter={filter}
-                            onFilterUpdate={update}/>
+                    filter={filter}
+                    onFilterUpdate={update} />
             </Popover>}
 
         </ErrorBoundary>
@@ -206,10 +204,10 @@ interface FilterFormProps<M> {
 
 
 function FilterForm<M>({
-                           column,
-                           onFilterUpdate,
-                           filter
-                       }: FilterFormProps<M>) {
+    column,
+    onFilterUpdate,
+    filter
+}: FilterFormProps<M>) {
 
 
     const id = column.key;
@@ -228,10 +226,10 @@ function FilterForm<M>({
     const filterIsSet = !!filter;
 
     function createFilterField(id: string,
-                               filterConfig: TableColumnFilter,
-                               filterValue: [TableWhereFilterOp, any] | undefined,
-                               setFilterValue: (filterValue?: [TableWhereFilterOp, any]) => void,
-                               isArray: boolean = false
+        filterConfig: TableColumnFilter,
+        filterValue: [TableWhereFilterOp, any] | undefined,
+        setFilterValue: (filterValue?: [TableWhereFilterOp, any]) => void,
+        isArray: boolean = false
     ): JSX.Element {
 
         if (filterConfig.dataType === "number" || filterConfig.dataType === "string") {
@@ -239,25 +237,25 @@ function FilterForm<M>({
             const title = filterConfig.title;
             const enumValues = filterConfig.enumValues;
             return <StringNumberFilterField value={filterValue}
-                                            setValue={setFilterValue}
-                                            name={id as string}
-                                            dataType={dataType}
-                                            isArray={isArray}
-                                            enumValues={enumValues}
-                                            title={title}/>;
+                setValue={setFilterValue}
+                name={id as string}
+                dataType={dataType}
+                isArray={isArray}
+                enumValues={enumValues}
+                title={title} />;
         } else if (filterConfig.dataType === "boolean") {
             const title = filterConfig.title;
             return <BooleanFilterField value={filterValue}
-                                       setValue={setFilterValue}
-                                       name={id as string}
-                                       title={title}/>;
+                setValue={setFilterValue}
+                name={id as string}
+                title={title} />;
         } else if (filterConfig.dataType === "timestamp") {
             const title = filterConfig.title;
             return <DateTimeFilterField value={filterValue}
-                                        setValue={setFilterValue}
-                                        name={id as string}
-                                        isArray={isArray}
-                                        title={title}/>;
+                setValue={setFilterValue}
+                name={id as string}
+                isArray={isArray}
+                title={title} />;
         }
 
         return (
@@ -265,38 +263,35 @@ function FilterForm<M>({
         );
     }
 
-
     return (
         <>
-
             <Box p={2} className={classes.headerTypography}>
                 {column.label ?? id}
             </Box>
 
-            <Divider/>
+            <Divider />
 
             {column.filter && <Box p={2}>
                 {createFilterField(id, column.filter, filterInternal, setFilterInternal, false)}
             </Box>}
 
             <Box display="flex"
-                 justifyContent="flex-end"
-                 m={2}>
+                justifyContent="flex-end"
+                m={2}>
                 <Box mr={1}>
                     <Button
                         disabled={!filterIsSet}
                         color="primary"
                         type="reset"
                         aria-label="filter clear"
-                        onClick={reset}>Clear</Button>
+                        onClick={reset}>Limpar</Button>
                 </Box>
                 <Button
                     variant="outlined"
                     color="primary"
-                    onClick={submit}>Filter</Button>
+                    onClick={submit}>Filtrar</Button>
             </Box>
         </>
     );
-
 }
 

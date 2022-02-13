@@ -1,3 +1,4 @@
+import ClearIcon from "@mui/icons-material/Clear";
 import {
     Box,
     FormControl,
@@ -6,9 +7,8 @@ import {
     OutlinedInput,
     Select as MuiSelect
 } from "@mui/material";
-import ClearIcon from "@mui/icons-material/Clear";
-import React, { useState } from "react";
 import Tooltip from "@mui/material/Tooltip/Tooltip";
+import React, { useState } from "react";
 import { EnumValuesChip } from "../../../../preview/components/CustomChip";
 import { TableEnumValues, TableWhereFilterOp } from "../TableProps";
 
@@ -166,7 +166,7 @@ export function StringNumberFilterField({
                 <IconButton
                     onClick={(e) => updateFilter(operation, undefined)}
                     size={"small"}>
-                    <Tooltip title={`Clear ${title}`}>
+                    <Tooltip title={`Limpar ${title}`}>
                         <ClearIcon fontSize={"small"}/>
                     </Tooltip>
                 </IconButton>

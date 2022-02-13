@@ -1,5 +1,3 @@
-import React, { useEffect, useState } from "react";
-import { CollectionSize, Entity, EntityCollectionResolver } from "../../models";
 import {
     Button,
     Dialog,
@@ -9,10 +7,12 @@ import {
 } from "@mui/material";
 import createStyles from "@mui/styles/createStyles";
 import makeStyles from "@mui/styles/makeStyles";
-
+import React, { useEffect, useState } from "react";
+import { useDataSource } from "../../hooks";
+import { CollectionSize, Entity, EntityCollectionResolver } from "../../models";
 import { CollectionTable } from "./CollectionTable";
 import { CollectionRowActions } from "./CollectionTable/internal/CollectionRowActions";
-import { useDataSource } from "../../hooks";
+
 
 
 export const useStyles = makeStyles(theme => createStyles({
@@ -164,9 +164,9 @@ export function ReferenceDialog(
     };
 
     const tableRowActionsBuilder = ({
-                                        entity,
-                                        size
-                                    }: { entity: Entity<any>, size: CollectionSize }) => {
+        entity,
+        size
+    }: { entity: Entity<any>, size: CollectionSize }) => {
 
         const isSelected = selectedEntityIds && selectedEntityIds.indexOf(entity.id) > -1;
         return <CollectionRowActions
@@ -181,14 +181,14 @@ export function ReferenceDialog(
 
     const toolbarActionsBuilder = () => (
         <Button onClick={onClear}
-                color="primary">
-            Clear
+            color="warning">
+            Limpar
         </Button>
     );
 
     const title = (
         <Typography variant={"h6"}>
-            {`Select ${schema.name}`}
+            {`Selecione ${schema.name}`}
         </Typography>);
 
     return (
@@ -205,28 +205,28 @@ export function ReferenceDialog(
             <div className={classes.dialogBody}>
 
                 {selectedEntities &&
-                <CollectionTable path={path}
-                                 collection={collection}
-                                 schemaResolver={schemaResolver}
-                                 inlineEditing={false}
-                                 toolbarActionsBuilder={toolbarActionsBuilder}
-                                 onEntityClick={onEntityClick}
-                                 tableRowActionsBuilder={tableRowActionsBuilder}
-                                 title={title}
-                                 entitiesDisplayedFirst={selectedEntities}
-                />}
+                    <CollectionTable path={path}
+                        collection={collection}
+                        schemaResolver={schemaResolver}
+                        inlineEditing={false}
+                        toolbarActionsBuilder={toolbarActionsBuilder}
+                        onEntityClick={onEntityClick}
+                        tableRowActionsBuilder={tableRowActionsBuilder}
+                        title={title}
+                        entitiesDisplayedFirst={selectedEntities}
+                    />}
             </div>
 
-            <Divider/>
+            <Divider />
 
             <DialogActions>
                 <Button onClick={(event) => {
                     event.stopPropagation();
                     onClose();
                 }}
-                        color="primary"
-                        variant="contained">
-                    Close
+                    color="primary"
+                    variant="contained">
+                    Fechar
                 </Button>
             </DialogActions>
 

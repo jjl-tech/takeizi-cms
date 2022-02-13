@@ -1,5 +1,6 @@
-import React, { useMemo } from "react";
-
+import ClearIcon from "@mui/icons-material/Clear";
+import ErrorIcon from "@mui/icons-material/Error";
+import KeyboardTabIcon from "@mui/icons-material/KeyboardTab";
 import {
     Box,
     Button,
@@ -10,14 +11,19 @@ import {
     Tooltip,
     Typography
 } from "@mui/material";
-
 import createStyles from "@mui/styles/createStyles";
 import makeStyles from "@mui/styles/makeStyles";
-
-import ErrorIcon from "@mui/icons-material/Error";
-import ClearIcon from "@mui/icons-material/Clear";
-import KeyboardTabIcon from "@mui/icons-material/KeyboardTab";
-
+import React, { useMemo } from "react";
+import { ErrorView, ReferenceDialog } from "../../core";
+import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
+import { getReferenceFrom } from "../../core/utils";
+import { FieldDescription } from "../../form";
+import {
+    useClearRestoreValue,
+    useEntityFetch,
+    useNavigation,
+    useSideEntityController
+} from "../../hooks";
 import {
     AnyProperty,
     Entity,
@@ -26,18 +32,12 @@ import {
     EntitySchemaResolver,
     FieldProps
 } from "../../models";
-import { FieldDescription } from "../../form";
-import { ErrorView, ReferenceDialog } from "../../core";
-import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
 import { PreviewComponent, SkeletonComponent } from "../../preview";
 import { LabelWithIcon } from "../components";
-import {
-    useClearRestoreValue,
-    useEntityFetch,
-    useNavigation,
-    useSideEntityController
-} from "../../hooks";
-import { getReferenceFrom } from "../../core/utils";
+
+
+
+
 
 export const useStyles = makeStyles((theme: Theme) => createStyles({
     root: {
@@ -306,7 +306,7 @@ export function ReferenceField<M extends { [Key: string]: any }>({
                         </Box>}
 
                         {!missingEntity && entity && value && <Box>
-                            <Tooltip title={`See details for ${entity.id}`}>
+                            <Tooltip title={`Veja os detalhes de ${entity.id}`}>
                                 <span>
                                 <IconButton
                                     onClick={seeEntityDetails}
@@ -318,7 +318,7 @@ export function ReferenceField<M extends { [Key: string]: any }>({
                         </Box>}
 
                         {value && <Box>
-                            <Tooltip title="Clear">
+                            <Tooltip title="Limpar">
                                 <span>
                                 <IconButton
                                     disabled={disabled}

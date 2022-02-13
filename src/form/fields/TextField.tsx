@@ -1,4 +1,3 @@
-import React from "react";
 import {
     Box,
     FilledInput,
@@ -10,17 +9,18 @@ import {
     Theme,
     Typography
 } from "@mui/material";
-
-import { FieldProps, MediaType, StringProperty } from "../../models";
-import { PreviewComponent } from "../../preview";
-import { FieldDescription } from "../../form";
-import { LabelWithIcon } from "../components";
-import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
-import { useClearRestoreValue } from "../../hooks";
-
-
 import createStyles from "@mui/styles/createStyles";
 import makeStyles from "@mui/styles/makeStyles";
+import React from "react";
+import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
+import { FieldDescription } from "../../form";
+import { useClearRestoreValue } from "../../hooks";
+import { FieldProps, MediaType, StringProperty } from "../../models";
+import { PreviewComponent } from "../../preview";
+import { LabelWithIcon } from "../components";
+
+
+
 
 const formStyles = makeStyles((theme: Theme) => createStyles({
     inputLabel: {
@@ -44,18 +44,18 @@ interface TextFieldProps<T extends string | number> extends FieldProps<T> {
  * @category Form fields
  */
 export function TextField<T extends string | number>({
-                                                         name,
-                                                         value,
-                                                         setValue,
-                                                         error,
-                                                         showError,
-                                                         disabled,
-                                                         autoFocus,
-                                                         property,
-                                                         includeDescription,
-                                                         allowInfinity,
-                                                         shouldAlwaysRerender
-                                                     }: TextFieldProps<T>) {
+    name,
+    value,
+    setValue,
+    error,
+    showError,
+    disabled,
+    autoFocus,
+    property,
+    includeDescription,
+    allowInfinity,
+    shouldAlwaysRerender
+}: TextFieldProps<T>) {
 
     const classes = formStyles();
 
@@ -132,7 +132,7 @@ export function TextField<T extends string | number>({
                         root: classes.inputLabel,
                         shrink: classes.shrinkInputLabel
                     }}>
-                    <LabelWithIcon property={property}/>
+                    <LabelWithIcon property={property} />
                 </InputLabel>
 
                 {filledInput}
@@ -143,44 +143,44 @@ export function TextField<T extends string | number>({
                         {showError && <FormHelperText>{error}</FormHelperText>}
 
                         {includeDescription &&
-                        <FieldDescription property={property}/>}
+                            <FieldDescription property={property} />}
                     </Box>
 
                     {allowInfinity &&
-                    <FormControlLabel
-                        checked={valueIsInfinity}
-                        style={{ marginRight: 0 }}
-                        labelPlacement={"start"}
-                        control={
-                            <Switch
-                                size={"small"}
-                                type={"checkbox"}
-                                onChange={(evt) => {
-                                    updateValue(
-                                        evt.target.checked ? Infinity as T : undefined);
-                                }}/>
-                        }
-                        disabled={disabled}
-                        label={
-                            <Typography variant={"caption"}>
-                                Set value to Infinity
-                            </Typography>
-                        }
-                    />
+                        <FormControlLabel
+                            checked={valueIsInfinity}
+                            style={{ marginRight: 0 }}
+                            labelPlacement={"start"}
+                            control={
+                                <Switch
+                                    size={"small"}
+                                    type={"checkbox"}
+                                    onChange={(evt) => {
+                                        updateValue(
+                                            evt.target.checked ? Infinity as T : undefined);
+                                    }} />
+                            }
+                            disabled={disabled}
+                            label={
+                                <Typography variant={"caption"}>
+                                    Set value to Infinity
+                                </Typography>
+                            }
+                        />
                     }
                 </Box>
 
             </FormControl>
 
             {mediaType && internalValue &&
-            <ErrorBoundary>
-                <Box m={1}>
-                    <PreviewComponent name={name}
-                                      value={internalValue}
-                                      property={property}
-                                      size={"regular"}/>
-                </Box>
-            </ErrorBoundary>
+                <ErrorBoundary>
+                    <Box m={1}>
+                        <PreviewComponent name={name}
+                            value={internalValue}
+                            property={property}
+                            size={"regular"} />
+                    </Box>
+                </ErrorBoundary>
             }
         </>
     );

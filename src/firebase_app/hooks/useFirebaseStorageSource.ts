@@ -6,8 +6,8 @@ import {
     ref,
     uploadBytes
 } from "firebase/storage";
-import { StorageSource, UploadFileProps } from "../../models";
 import { useEffect, useState } from "react";
+import { StorageSource, UploadFileProps } from "../../models";
 
 /**
  * @category Firebase
@@ -36,7 +36,6 @@ export function useFirebaseStorageSource({ firebaseApp }: FirebaseStorageSourceP
             : Promise<any> {
             if (!storage) throw Error("useFirebaseStorageSource Firebase not initialised");
             const usedFilename = fileName ?? file.name;
-            console.debug("Uploading file", usedFilename, file, path, metadata);
             return uploadBytes(ref(storage, `${path}/${usedFilename}`), file, metadata).then(snapshot => ({
                 path: snapshot.ref.fullPath
             }));

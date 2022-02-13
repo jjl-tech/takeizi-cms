@@ -1,100 +1,100 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
+import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 import { IconButton, Theme, Tooltip } from "@mui/material";
 import createStyles from "@mui/styles/createStyles";
 import makeStyles from "@mui/styles/makeStyles";
-
-import Measure, { ContentRect } from "react-measure";
-import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
-import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 import clsx from "clsx";
-import { CellStyleProps } from "./styles";
-import { getRowHeight } from "./common";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import isEqual from "react-fast-compare";
+import Measure, { ContentRect } from "react-measure";
+import { getRowHeight } from "./common";
+import { CellStyleProps } from "./styles";
+
 
 export const useCellStyles = makeStyles<Theme, CellStyleProps & { disabled: boolean, removePadding?: boolean }>(theme => createStyles({
-        tableCell: {
-            position: "relative",
-            height: "100%",
-            width: "100%",
-            border: "2px solid transparent",
-            borderRadius: 4,
-            overflow: "hidden",
-            contain: "strict",
-            display: "flex",
-            padding: ({ size, removePadding }) => {
-                if (removePadding) return 0;
-                switch (size) {
-                    case "l":
-                    case "xl":
-                        return theme.spacing(2);
-                    case "m":
-                        return theme.spacing(1);
-                    case "s":
-                        return theme.spacing(0.5);
-                    default:
-                        return theme.spacing(0.25);
-                }
-            },
-            "&:hover": {
-                backgroundColor: ({ disabled }: any) => disabled ? undefined : (theme.palette.mode === "dark" ? theme.palette.background.paper : theme.palette.background.default)
-            },
-            justifyContent: ({ align }) => {
-                switch (align) {
-                    case "right":
-                        return "flex-end";
-                    case "center":
-                        return "center";
-                    case "left":
-                    default:
-                        return "flex-start";
-                }
+    tableCell: {
+        position: "relative",
+        height: "100%",
+        width: "100%",
+        border: "2px solid transparent",
+        borderRadius: 4,
+        overflow: "hidden",
+        contain: "strict",
+        display: "flex",
+        padding: ({ size, removePadding }) => {
+            if (removePadding) return 0;
+            switch (size) {
+                case "l":
+                case "xl":
+                    return theme.spacing(2);
+                case "m":
+                    return theme.spacing(1);
+                case "s":
+                    return theme.spacing(0.5);
+                default:
+                    return theme.spacing(0.25);
             }
         },
-        fullWidth: {
-            width: "100%"
+        "&:hover": {
+            backgroundColor: ({ disabled }: any) => disabled ? undefined : (theme.palette.mode === "dark" ? theme.palette.background.paper : theme.palette.background.default)
         },
-        fullHeight: {
-            height: "100%"
-        },
-        error: {
-            border: `2px solid ${theme.palette.error.light} !important`
-        },
-        selected: {
-            backgroundColor: theme.palette.mode === "dark" ? theme.palette.background.paper : theme.palette.background.default,
-            border: "2px solid #5E9ED6",
-            transition: "border-color 300ms ease-in-out"
-        },
-        saved: {
-            border: `2px solid ${theme.palette.success.light}`
-        },
-        disabled: {
-            alpha: 0.8
-        },
-        iconsTop: {
-            position: "absolute",
-            top: 2,
-            right: 2
-        },
-        arrow: {
-            color: theme.palette.error.light
-        },
-        tooltip: {
-            margin: "0 8px",
-            backgroundColor: theme.palette.error.light
-        },
-        centered: {
-            alignItems: "center"
-        },
-        faded: {
-            "-webkit-mask-image": "linear-gradient(to bottom, black 60%, transparent 100%)",
-            maskImage: "linear-gradient(to bottom, black 60%, transparent 100%)",
-            alignItems: "start"
-        },
-        scrollable: {
-            overflow: "auto",
-            alignItems: "start"
+        justifyContent: ({ align }) => {
+            switch (align) {
+                case "right":
+                    return "flex-end";
+                case "center":
+                    return "center";
+                case "left":
+                default:
+                    return "flex-start";
+            }
         }
-    })
+    },
+    fullWidth: {
+        width: "100%"
+    },
+    fullHeight: {
+        height: "100%"
+    },
+    error: {
+        border: `2px solid ${theme.palette.error.light} !important`
+    },
+    selected: {
+        backgroundColor: theme.palette.mode === "dark" ? theme.palette.background.paper : theme.palette.background.default,
+        border: "2px solid #5E9ED6",
+        transition: "border-color 300ms ease-in-out"
+    },
+    saved: {
+        border: `2px solid ${theme.palette.success.light}`
+    },
+    disabled: {
+        alpha: 0.8
+    },
+    iconsTop: {
+        position: "absolute",
+        top: 2,
+        right: 2
+    },
+    arrow: {
+        color: theme.palette.error.light
+    },
+    tooltip: {
+        margin: "0 8px",
+        backgroundColor: theme.palette.error.light
+    },
+    centered: {
+        alignItems: "center"
+    },
+    faded: {
+        "-webkit-mask-image": "linear-gradient(to bottom, black 60%, transparent 100%)",
+        maskImage: "linear-gradient(to bottom, black 60%, transparent 100%)",
+        alignItems: "start"
+    },
+    scrollable: {
+        overflow: "auto",
+        alignItems: "start"
+    }
+})
 );
 
 
@@ -120,22 +120,22 @@ interface TableCellProps {
 }
 
 const TableCellInternal = ({
-                                     children,
-                                     selected,
-                                     focused,
-                                     disabled,
-                                     disabledTooltip,
-                                     size,
-                                     saved,
-                                     error,
-                                     align,
-                                     allowScroll,
-                                     openPopup,
-                                     removePadding,
-                                     fullHeight,
-                                     select,
-                                     showExpandIcon = true
-                                 }: TableCellProps & CellStyleProps) => {
+    children,
+    selected,
+    focused,
+    disabled,
+    disabledTooltip,
+    size,
+    saved,
+    error,
+    align,
+    allowScroll,
+    openPopup,
+    removePadding,
+    fullHeight,
+    select,
+    showExpandIcon = true
+}: TableCellProps & CellStyleProps) => {
 
     const ref = React.createRef<HTMLDivElement>();
 
@@ -219,7 +219,7 @@ const TableCellInternal = ({
     >
         {({ measureRef }) => (
             <div ref={measureRef}
-                 className={clsx(cellClasses.fullWidth, { [cellClasses.fullHeight]: fullHeight })}>
+                className={clsx(cellClasses.fullWidth, { [cellClasses.fullHeight]: fullHeight })}>
                 {children}
             </div>
         )}
@@ -234,9 +234,6 @@ const TableCellInternal = ({
             onMouseEnter={() => setOnHover(true)}
             onMouseMove={() => setOnHover(true)}
             onMouseLeave={() => setOnHover(false)}
-            // style={{
-            //     background: "#" + Math.floor(Math.random() * 16777215).toString(16)
-            // }}
             className={clsx(
                 cellClasses.tableCell,
                 {
@@ -257,58 +254,58 @@ const TableCellInternal = ({
             </div>
 
             {disabled && onHover && disabledTooltip &&
-            <div style={{
-                position: "absolute",
-                top: 4,
-                right: 4,
-                fontSize: "14px"
-            }}>
-                <Tooltip title={disabledTooltip}>
-                    <RemoveCircleIcon color={"disabled"}
-                                      fontSize={"inherit"}/>
-                </Tooltip>
-            </div>}
+                <div style={{
+                    position: "absolute",
+                    top: 4,
+                    right: 4,
+                    fontSize: "14px"
+                }}>
+                    <Tooltip title={disabledTooltip}>
+                        <RemoveCircleIcon color={"disabled"}
+                            fontSize={"inherit"} />
+                    </Tooltip>
+                </div>}
 
             {(error || showExpandIcon) &&
-            <div className={cellClasses.iconsTop}>
+                <div className={cellClasses.iconsTop}>
 
-                {selected && !disabled && showExpandIcon &&
-                <IconButton
-                    ref={iconRef}
-                    color={"inherit"}
-                    size={"small"}
-                    onClick={doOpenPopup}>
-                    <svg
-                        className={"MuiSvgIcon-root MuiSvgIcon-fontSizeSmall"}
-                        fill={"#666"}
-                        width="20"
-                        height="20"
-                        viewBox="0 0 24 24">
-                        <path className="cls-2"
-                              d="M20,5a1,1,0,0,0-1-1L14,4h0a1,1,0,0,0,0,2h2.57L13.29,9.29a1,1,0,0,0,0,1.42,1,1,0,0,0,1.42,0L18,7.42V10a1,1,0,0,0,1,1h0a1,1,0,0,0,1-1Z"/>
-                        <path className="cls-2"
-                              d="M10.71,13.29a1,1,0,0,0-1.42,0L6,16.57V14a1,1,0,0,0-1-1H5a1,1,0,0,0-1,1l0,5a1,1,0,0,0,1,1h5a1,1,0,0,0,0-2H7.42l3.29-3.29A1,1,0,0,0,10.71,13.29Z"/>
-                    </svg>
-                </IconButton>
-                }
+                    {selected && !disabled && showExpandIcon &&
+                        <IconButton
+                            ref={iconRef}
+                            color={"inherit"}
+                            size={"small"}
+                            onClick={doOpenPopup}>
+                            <svg
+                                className={"MuiSvgIcon-root MuiSvgIcon-fontSizeSmall"}
+                                fill={"#666"}
+                                width="20"
+                                height="20"
+                                viewBox="0 0 24 24">
+                                <path className="cls-2"
+                                    d="M20,5a1,1,0,0,0-1-1L14,4h0a1,1,0,0,0,0,2h2.57L13.29,9.29a1,1,0,0,0,0,1.42,1,1,0,0,0,1.42,0L18,7.42V10a1,1,0,0,0,1,1h0a1,1,0,0,0,1-1Z" />
+                                <path className="cls-2"
+                                    d="M10.71,13.29a1,1,0,0,0-1.42,0L6,16.57V14a1,1,0,0,0-1-1H5a1,1,0,0,0-1,1l0,5a1,1,0,0,0,1,1h5a1,1,0,0,0,0-2H7.42l3.29-3.29A1,1,0,0,0,10.71,13.29Z" />
+                            </svg>
+                        </IconButton>
+                    }
 
-                {error && <Tooltip
-                    classes={{
-                        arrow: cellClasses.arrow,
-                        tooltip: cellClasses.tooltip
-                    }}
-                    arrow
-                    placement={"left"}
-                    title={error.message}>
-                    <ErrorOutlineIcon
-                        fontSize={"inherit"}
-                        color={"error"}
-                    />
-                </Tooltip>
-                }
+                    {error && <Tooltip
+                        classes={{
+                            arrow: cellClasses.arrow,
+                            tooltip: cellClasses.tooltip
+                        }}
+                        arrow
+                        placement={"left"}
+                        title={error.message}>
+                        <ErrorOutlineIcon
+                            fontSize={"inherit"}
+                            color={"error"}
+                        />
+                    </Tooltip>
+                    }
 
 
-            </div>
+                </div>
             }
 
         </div>

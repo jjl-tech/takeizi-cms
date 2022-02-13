@@ -1,6 +1,4 @@
-import * as React from "react";
-import { useMemo } from "react";
-
+import KeyboardTabIcon from "@mui/icons-material/KeyboardTab";
 import {
     Box,
     darken,
@@ -11,18 +9,20 @@ import {
     Tooltip,
     Typography
 } from "@mui/material";
-import { AnyProperty, EntityReference } from "../../models";
-
-import KeyboardTabIcon from "@mui/icons-material/KeyboardTab";
-import { PreviewComponent, PreviewComponentProps } from "../internal";
-
-import { SkeletonComponent } from "./SkeletonComponent";
+import * as React from "react";
+import { useMemo } from "react";
 import { ErrorView } from "../../core";
 import {
     useEntityFetch,
     useNavigation,
     useSideEntityController
 } from "../../hooks";
+import { AnyProperty, EntityReference } from "../../models";
+import { PreviewComponent, PreviewComponentProps } from "../internal";
+import { SkeletonComponent } from "./SkeletonComponent";
+
+
+
 
 export type ReferencePreviewProps =
     PreviewComponentProps<EntityReference>
@@ -98,7 +98,7 @@ function ReferencePreviewComponent<M extends { [Key: string]: any }>(
     let body: JSX.Element;
 
     function buildError(error: string, tooltip?: string) {
-        return <ErrorView error={error} tooltip={tooltip}/>;
+        return <ErrorView error={error} tooltip={tooltip} />;
     }
 
     if (!value) {
@@ -130,11 +130,11 @@ function ReferencePreviewComponent<M extends { [Key: string]: any }>(
                                 textOverflow: size !== "regular" ? "ellipsis" : undefined
                             }}>
                                 <Typography variant={"caption"}
-                                            className={"mono"}>
+                                    className={"mono"}>
                                     {value.id}
                                 </Typography>
                             </Box>
-                            : <Skeleton variant="text"/>)}
+                            : <Skeleton variant="text" />)}
 
 
                     {listProperties && listProperties.map((key) => {
@@ -145,12 +145,12 @@ function ReferencePreviewComponent<M extends { [Key: string]: any }>(
                             <div key={"ref_prev_" + (key as string)}>
                                 {entity
                                     ? <PreviewComponent name={key as string}
-                                                        value={entity.values[key as string]}
-                                                        property={childProperty as AnyProperty}
-                                                        size={"tiny"}/>
+                                        value={entity.values[key as string]}
+                                        property={childProperty as AnyProperty}
+                                        size={"tiny"} />
                                     : <SkeletonComponent
                                         property={childProperty as AnyProperty}
-                                        size={"tiny"}/>
+                                        size={"tiny"} />
                                 }
                             </div>
                         );
@@ -161,7 +161,7 @@ function ReferencePreviewComponent<M extends { [Key: string]: any }>(
                     margin: "auto"
                 }}>
                     {entity &&
-                        <Tooltip title={`See details for ${entity.id}`}>
+                        <Tooltip title={`Veja os detalhes de ${entity.id}`}>
                             <IconButton
                                 size={size === "tiny" ? "small" : "medium"}
                                 onClick={(e) => {
@@ -173,7 +173,7 @@ function ReferencePreviewComponent<M extends { [Key: string]: any }>(
                                         overrideSchemaRegistry: false
                                     });
                                 }}>
-                                <KeyboardTabIcon fontSize={"small"}/>
+                                <KeyboardTabIcon fontSize={"small"} />
                             </IconButton>
                         </Tooltip>}
                 </Box>
@@ -206,7 +206,7 @@ function ReferencePreviewComponent<M extends { [Key: string]: any }>(
                 ...clickableStyles
             });
         }}
-               onClick={onClick}>
+            onClick={onClick}>
 
             {body}
 
