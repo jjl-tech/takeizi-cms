@@ -1,3 +1,14 @@
+import * as yup from "yup";
+import {
+    AnySchema,
+    ArraySchema,
+    BooleanSchema,
+    DateSchema,
+    NumberSchema,
+    ObjectSchema,
+    StringSchema
+} from "yup";
+import { enumToObjectEntries } from "../core/util/enums";
 import {
     ArrayProperty,
     BooleanProperty,
@@ -10,17 +21,6 @@ import {
     StringProperty,
     TimestampProperty
 } from "../models";
-import * as yup from "yup";
-import {
-    AnySchema,
-    ArraySchema,
-    BooleanSchema,
-    DateSchema,
-    NumberSchema,
-    ObjectSchema,
-    StringSchema
-} from "yup";
-import { enumToObjectEntries } from "../core/util/enums";
 
 // Add custom unique function for array values
 declare module "yup" {
@@ -29,7 +29,7 @@ declare module "yup" {
         uniqueInArray(mapper: (a: T) => T, message: string): ArraySchema<T>;
     }
 }
-yup.addMethod(yup.array, "uniqueInArray", function(
+yup.addMethod(yup.array, "uniqueInArray", function (
     mapper = (a: any) => a,
     message: string
 ) {
@@ -54,7 +54,7 @@ interface PropertyContext<PT extends Property> {
 }
 
 export function getYupEntitySchema<M>(properties: Properties<M>,
-                                      customFieldValidator?: CustomFieldValidator): ObjectSchema<any> {
+    customFieldValidator?: CustomFieldValidator): ObjectSchema<any> {
     const objectSchema: any = {};
     Object.entries(properties).forEach(([name, property]) => {
         objectSchema[name] = mapPropertyToYup({
@@ -96,11 +96,11 @@ export function mapPropertyToYup(propertyContext: PropertyContext<any>): AnySche
 }
 
 export function getYupMapObjectSchema({
-                                                                            property,
-                                                                            parentProperty,
-                                                                            customFieldValidator,
-                                                                            name
-                                                                        }: PropertyContext<MapProperty>): ObjectSchema<any> {
+    property,
+    parentProperty,
+    customFieldValidator,
+    name
+}: PropertyContext<MapProperty>): ObjectSchema<any> {
     const objectSchema: any = {};
     if (property.properties)
         Object.entries(property.properties).forEach(([childName, childProperty]: [string, Property]) => {
@@ -115,16 +115,16 @@ export function getYupMapObjectSchema({
 }
 
 function getYupStringSchema({
-                                property,
-                                parentProperty,
-                                customFieldValidator,
-                                name
-                            }: PropertyContext<StringProperty>): StringSchema {
+    property,
+    parentProperty,
+    customFieldValidator,
+    name
+}: PropertyContext<StringProperty>): StringSchema {
     let schema: StringSchema<any> = yup.string();
     const validation = property.validation;
     if (property.config?.enumValues) {
         if (validation?.required)
-            schema = schema.required(validation?.requiredMessage ? validation.requiredMessage : "Required");
+            schema = schema.required(validation?.requiredMessage ? validation.requiredMessage : "Obrigatório");
         schema = schema.oneOf(
             enumToObjectEntries(property.config?.enumValues)
                 .map(([key, _]) => key)
@@ -132,7 +132,7 @@ function getYupStringSchema({
     }
     if (validation) {
         schema = validation.required
-            ? schema.required(validation?.requiredMessage ? validation.requiredMessage : "Required").nullable(true)
+            ? schema.required(validation?.requiredMessage ? validation.requiredMessage : "Obrigatório").nullable(true)
             : schema.notRequired().nullable(true);
         if (validation.unique && customFieldValidator && name)
             schema = schema.test("unique", "This value already exists and should be unique",
@@ -146,8 +146,8 @@ function getYupStringSchema({
         if (validation.min || validation.min === 0) schema = schema.min(validation.min, `${property.title} must be min ${validation.min} characters long`);
         if (validation.max || validation.max === 0) schema = schema.max(validation.max, `${property.title} must be max ${validation.max} characters long`);
         if (validation.matches) schema = schema.matches(validation.matches, validation.matchesMessage);
-        if (validation.email) schema = schema.email(`${property.title} must be an email`);
-        if (validation.url) schema = schema.url(`${property.title} must be a url`);
+        if (validation.email) schema = schema.email(`${property.title} deve ser um e-mail válido`);
+        if (validation.url) schema = schema.url(`${property.title} deve ser um URL válido`);
         if (validation.trim) schema = schema.trim();
         if (validation.lowercase) schema = schema.lowercase();
         if (validation.uppercase) schema = schema.uppercase();
@@ -158,33 +158,33 @@ function getYupStringSchema({
 }
 
 function getYupNumberSchema({
-                                property,
-                                parentProperty,
-                                customFieldValidator,
-                                name
-                            }: PropertyContext<NumberProperty>): NumberSchema {
+    property,
+    parentProperty,
+    customFieldValidator,
+    name
+}: PropertyContext<NumberProperty>): NumberSchema {
     const validation = property.validation;
-    let schema: NumberSchema<any> = yup.number().typeError("Must be a number");
+    let schema: NumberSchema<any> = yup.number().typeError("Deve ser um número");
     if (validation) {
         schema = validation.required
-            ? schema.required(validation.requiredMessage ? validation.requiredMessage : "Required").nullable(true)
+            ? schema.required(validation.requiredMessage ? validation.requiredMessage : "Obrigatório").nullable(true)
             : schema.notRequired().nullable(true);
         if (validation.unique && customFieldValidator && name)
             schema = schema.test("unique",
-                "This value already exists and should be unique",
+                "Este valor já existe e deve ser único",
                 (value) => customFieldValidator({
                     name,
                     property,
                     parentProperty,
                     value
                 }));
-        if (validation.min || validation.min === 0) schema = schema.min(validation.min, `${property.title} must be higher or equal to ${validation.min}`);
-        if (validation.max || validation.max === 0) schema = schema.max(validation.max, `${property.title} must be lower or equal to ${validation.max}`);
-        if (validation.lessThan || validation.lessThan === 0) schema = schema.lessThan(validation.lessThan, `${property.title} must be higher than ${validation.lessThan}`);
-        if (validation.moreThan || validation.moreThan === 0) schema = schema.moreThan(validation.moreThan, `${property.title} must be lower than ${validation.moreThan}`);
-        if (validation.positive) schema = schema.positive(`${property.title} must be positive`);
-        if (validation.negative) schema = schema.negative(`${property.title} must be negative`);
-        if (validation.integer) schema = schema.integer(`${property.title} must be an integer`);
+        if (validation.min || validation.min === 0) schema = schema.min(validation.min, `${property.title} deve ser maior ou igual a ${validation.min}`);
+        if (validation.max || validation.max === 0) schema = schema.max(validation.max, `${property.title} deve ser menor ou igual a ${validation.max}`);
+        if (validation.lessThan || validation.lessThan === 0) schema = schema.lessThan(validation.lessThan, `${property.title} deve ser maior que ${validation.lessThan}`);
+        if (validation.moreThan || validation.moreThan === 0) schema = schema.moreThan(validation.moreThan, `${property.title} deve ser menor que ${validation.moreThan}`);
+        if (validation.positive) schema = schema.positive(`${property.title} deve ser um número positivo`);
+        if (validation.negative) schema = schema.negative(`${property.title} deve ser um número negativo`);
+        if (validation.integer) schema = schema.integer(`${property.title} deve ser um número inteiro`);
     } else {
         schema = schema.notRequired().nullable(true);
     }
@@ -192,11 +192,11 @@ function getYupNumberSchema({
 }
 
 function getYupGeoPointSchema({
-                                  property,
-                                  parentProperty,
-                                  customFieldValidator,
-                                  name
-                              }: PropertyContext<GeopointProperty>): AnySchema {
+    property,
+    parentProperty,
+    customFieldValidator,
+    name
+}: PropertyContext<GeopointProperty>): AnySchema {
     let schema: ObjectSchema<any> = yup.object();
     const validation = property.validation;
     if (validation?.unique && customFieldValidator && name)
@@ -217,11 +217,11 @@ function getYupGeoPointSchema({
 }
 
 function getYupDateSchema({
-                              property,
-                              parentProperty,
-                              customFieldValidator,
-                              name
-                          }: PropertyContext<TimestampProperty>): AnySchema | DateSchema {
+    property,
+    parentProperty,
+    customFieldValidator,
+    name
+}: PropertyContext<TimestampProperty>): AnySchema | DateSchema {
     if (property.autoValue) {
         return yup.object().nullable(true);
     }
@@ -229,11 +229,11 @@ function getYupDateSchema({
     const validation = property.validation;
     if (validation) {
         schema = validation.required
-            ? schema.required(validation?.requiredMessage ? validation.requiredMessage : "Required").nullable(true)
+            ? schema.required(validation?.requiredMessage ? validation.requiredMessage : "Obrigatório").nullable(true)
             : schema.notRequired().nullable(true);
         if (validation.unique && customFieldValidator && name)
             schema = schema.test("unique",
-                "This value already exists and should be unique",
+                "Este valor já existe e deve ser único",
                 (value) => customFieldValidator({
                     name,
                     property,
@@ -249,20 +249,20 @@ function getYupDateSchema({
 }
 
 function getYupReferenceSchema({
-                                                                     property,
-                                                                     parentProperty,
-                                                                     customFieldValidator,
-                                                                     name
-                                                                 }: PropertyContext<ReferenceProperty>): AnySchema {
+    property,
+    parentProperty,
+    customFieldValidator,
+    name
+}: PropertyContext<ReferenceProperty>): AnySchema {
     let schema: ObjectSchema<any> = yup.object();
     const validation = property.validation;
     if (validation) {
         schema = validation.required
-            ? schema.required(validation?.requiredMessage ? validation.requiredMessage : "Required").nullable(true)
+            ? schema.required(validation?.requiredMessage ? validation.requiredMessage : "Obrigatório").nullable(true)
             : schema.notRequired().nullable(true);
         if (validation.unique && customFieldValidator && name)
             schema = schema.test("unique",
-                "This value already exists and should be unique",
+                "Este valor já existe e deve ser único",
                 (value) => customFieldValidator({
                     name,
                     property,
@@ -276,20 +276,20 @@ function getYupReferenceSchema({
 }
 
 function getYupBooleanSchema({
-                                 property,
-                                 parentProperty,
-                                 customFieldValidator,
-                                 name
-                             }: PropertyContext<BooleanProperty>): BooleanSchema {
+    property,
+    parentProperty,
+    customFieldValidator,
+    name
+}: PropertyContext<BooleanProperty>): BooleanSchema {
     let schema: BooleanSchema<any> = yup.boolean();
     const validation = property.validation;
     if (validation) {
         schema = validation.required
-            ? schema.required(validation?.requiredMessage ? validation.requiredMessage : "Required").nullable(true)
+            ? schema.required(validation?.requiredMessage ? validation.requiredMessage : "Obrigatório").nullable(true)
             : schema.notRequired().nullable(true);
         if (validation.unique && customFieldValidator && name)
             schema = schema.test("unique",
-                "This value already exists and should be unique",
+                "Este valor já existe e deve ser único",
                 (value) => customFieldValidator({
                     name,
                     property,
@@ -313,11 +313,11 @@ function hasUniqueInArrayModifier(property: Property): boolean | [string, Proper
 }
 
 function getYupArraySchema({
-                                  property,
-                                  parentProperty,
-                                  customFieldValidator,
-                                  name
-                              }: PropertyContext<ArrayProperty>): ArraySchema<any> {
+    property,
+    parentProperty,
+    customFieldValidator,
+    name
+}: PropertyContext<ArrayProperty>): ArraySchema<any> {
 
     let schema: ArraySchema<any> = yup.array();
 
@@ -332,8 +332,8 @@ function getYupArraySchema({
                 schema = schema.uniqueInArray(v => v, `${property.title} should have unique values within the array`);
             } else if (Array.isArray(arrayUniqueFields)) {
                 arrayUniqueFields.forEach(([name, childProperty]) => {
-                        schema = schema.uniqueInArray(v => v && v[name], `${property.title} → ${childProperty.title ?? name}: should have unique values within the array`);
-                    }
+                    schema = schema.uniqueInArray(v => v && v[name], `${property.title} → ${childProperty.title ?? name}: should have unique values within the array`);
+                }
                 );
             }
         }
@@ -342,7 +342,7 @@ function getYupArraySchema({
 
     if (validation) {
         schema = validation.required
-            ? schema.required(validation?.requiredMessage ? validation.requiredMessage : "Required").nullable(true)
+            ? schema.required(validation?.requiredMessage ? validation.requiredMessage : "Obrigatório").nullable(true)
             : schema.notRequired().nullable(true);
         if (validation.min || validation.min === 0) schema = schema.min(validation.min, `${property.title} should be min ${validation.min} entries long`);
         if (validation.max) schema = schema.max(validation.max, `${property.title} should be max ${validation.max} entries long`);

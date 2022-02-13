@@ -1,6 +1,4 @@
-import { CollectionSize, Entity } from "../../../../models";
-
-import React, { MouseEvent, useCallback } from "react";
+import { Delete, FileCopy, MoreVert } from "@mui/icons-material";
 import {
     alpha,
     Checkbox,
@@ -14,9 +12,11 @@ import {
     Tooltip,
     Typography
 } from "@mui/material";
-import { Delete, FileCopy, KeyboardTab, MoreVert } from "@mui/icons-material";
 import createStyles from "@mui/styles/createStyles";
 import makeStyles from "@mui/styles/makeStyles";
+import React, { MouseEvent, useCallback } from "react";
+import { CollectionSize, Entity } from "../../../../models";
+
 
 export const useTableStyles = makeStyles<Theme>(theme => createStyles({
     tableContainer: {
@@ -25,7 +25,7 @@ export const useTableStyles = makeStyles<Theme>(theme => createStyles({
         flexGrow: 1
     },
     headerTypography: {
-        fontSize: "0.750rem",
+        fontSize: "0.850rem",
         fontWeight: 600,
         textTransform: "uppercase"
     },
@@ -68,7 +68,6 @@ export const useTableStyles = makeStyles<Theme>(theme => createStyles({
         minWidth: 138
     },
     cellButtonsId: {
-        width: 138,
         textAlign: "center",
         textOverflow: "ellipsis",
         overflow: "hidden"
@@ -91,25 +90,25 @@ export const useTableStyles = makeStyles<Theme>(theme => createStyles({
  * @category Collection components
  */
 export function CollectionRowActions<M extends { [Key: string]: any }>({
-                                                                           entity,
-                                                                           isSelected,
-                                                                           selectionEnabled,
-                                                                           size,
-                                                                           toggleEntitySelection,
-                                                                           onCopyClicked,
-                                                                           onEditClicked,
-                                                                           onDeleteClicked
-                                                                       }:
-                                                                           {
-                                                                               entity: Entity<M>,
-                                                                               size: CollectionSize,
-                                                                               isSelected?: boolean,
-                                                                               selectionEnabled?: boolean,
-                                                                               toggleEntitySelection?: (selectedEntity: Entity<M>) => void
-                                                                               onEditClicked?: (selectedEntity: Entity<M>) => void,
-                                                                               onCopyClicked?: (selectedEntity: Entity<M>) => void,
-                                                                               onDeleteClicked?: (selectedEntity: Entity<M>) => void,
-                                                                           }) {
+    entity,
+    isSelected,
+    selectionEnabled,
+    size,
+    toggleEntitySelection,
+    onCopyClicked,
+    onEditClicked,
+    onDeleteClicked
+}:
+    {
+        entity: Entity<M>,
+        size: CollectionSize,
+        isSelected?: boolean,
+        selectionEnabled?: boolean,
+        toggleEntitySelection?: (selectedEntity: Entity<M>) => void
+        onEditClicked?: (selectedEntity: Entity<M>) => void,
+        onCopyClicked?: (selectedEntity: Entity<M>) => void,
+        onDeleteClicked?: (selectedEntity: Entity<M>) => void,
+    }) {
 
     const editEnabled = Boolean(onEditClicked);
     const copyEnabled = Boolean(onCopyClicked);
@@ -152,60 +151,56 @@ export function CollectionRowActions<M extends { [Key: string]: any }>({
         <div className={classes.cellButtonsWrap}>
 
             {(editEnabled || deleteEnabled || selectionEnabled) &&
-            <div className={classes.cellButtons}
-            >
-                {editEnabled &&
-                <Tooltip title={`Edit ${entity.id}`}>
-                    <IconButton
-                        onClick={(event: MouseEvent) => {
-                            event.stopPropagation();
-                            if (onEditClicked)
-                                onEditClicked(entity);
-                        }}
-                        size="large">
-                        <KeyboardTab/>
-                    </IconButton>
-                </Tooltip>
-                }
-
-                {selectionEnabled &&
-                <Tooltip title={`Select ${entity.id}`}>
-                    <Checkbox
-                        checked={isSelected}
-                        onChange={onCheckboxChange}
-                    />
-                </Tooltip>}
-
-                {(copyEnabled || deleteEnabled) &&
-                <IconButton onClick={openMenu} size="large">
-                    <MoreVert/>
-                </IconButton>
-                }
-
-                {(copyEnabled || deleteEnabled) && <Menu
-                    anchorEl={anchorEl}
-                    open={Boolean(anchorEl)}
-                    onClose={closeMenu}
-                    elevation={2}
+                <div className={classes.cellButtons}
                 >
-                    {deleteEnabled && <MenuItem onClick={onDeleteClick}>
-                        <ListItemIcon>
-                            <Delete/>
-                        </ListItemIcon>
-                        <ListItemText primary={"Delete"}/>
-                    </MenuItem>}
+                    {editEnabled &&
+                        <Tooltip title={`Editar ${entity.id}`}>
+                            <IconButton
+                                onClick={(event: MouseEvent) => {
+                                    event.stopPropagation();
+                                    if (onEditClicked)
+                                        onEditClicked(entity);
+                                }}
+                                size="large">
+                            </IconButton>
+                        </Tooltip>
+                    }
 
-                    {copyEnabled && <MenuItem onClick={onCopyClick}>
-                        <ListItemIcon>
-                            <FileCopy/>
-                        </ListItemIcon>
-                        <ListItemText primary="Copy"/>
-                    </MenuItem>}
+                    {selectionEnabled &&
+                        <Tooltip title={`Selecionar ${entity.id}`}>
+                            <Checkbox
+                                checked={isSelected}
+                                onChange={onCheckboxChange}
+                            />
+                        </Tooltip>}
 
-                </Menu>}
+                    {(copyEnabled || deleteEnabled) &&
+                        <IconButton onClick={openMenu} size="large">
+                            <MoreVert />
+                        </IconButton>
+                    }
 
+                    {(copyEnabled || deleteEnabled) && <Menu
+                        anchorEl={anchorEl}
+                        open={Boolean(anchorEl)}
+                        onClose={closeMenu}
+                        elevation={5}
+                    >
+                        {deleteEnabled && <MenuItem onClick={onDeleteClick}>
+                            <ListItemIcon>
+                                <Delete />
+                            </ListItemIcon>
+                            <ListItemText primary={"Deletar"} />
+                        </MenuItem>}
 
-            </div>}
+                        {copyEnabled && <MenuItem onClick={onCopyClick}>
+                            <ListItemIcon>
+                                <FileCopy />
+                            </ListItemIcon>
+                            <ListItemText primary="Copiar" />
+                        </MenuItem>}
+                    </Menu>}
+                </div>}
 
             {size !== "xs" && (
                 <div className={classes.cellButtonsId}>
@@ -215,7 +210,7 @@ export function CollectionRowActions<M extends { [Key: string]: any }>({
                             className={"mono"}
                             variant={"caption"}
                             color={"textSecondary"}> {entity.id} </Typography>
-                        : <Skeleton variant="text"/>
+                        : <Skeleton variant="text" />
                     }
                 </div>
             )}

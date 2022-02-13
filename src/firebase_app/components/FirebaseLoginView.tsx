@@ -40,8 +40,8 @@ const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         logo: {
             padding: theme.spacing(3),
-            width: 260,
-            height: 260
+            height: 200,
+            objectFit: "contain"
         }
     })
 );

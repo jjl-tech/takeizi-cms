@@ -1,5 +1,5 @@
-import React from "react";
 import { Box, Typography } from "@mui/material";
+import React from "react";
 
 export function NotFoundPage() {
 
@@ -10,10 +10,10 @@ export function NotFoundPage() {
             height={"100%"}>
             <Box m="auto">
                 <Typography variant={"h4"} align={"center"} gutterBottom={true}>
-                    Page not found
+                    Página não encontrada
                 </Typography>
                 <Typography align={"center"}>
-                    This page does not exist or you may not have access to it
+                    Esta página não existe ou foi removida.
                 </Typography>
             </Box>
         </Box>

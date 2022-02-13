@@ -1,7 +1,4 @@
-import * as React from "react";
-import { useCallback } from "react";
-
-import isEqual from "react-fast-compare";
+import ClearIcon from "@mui/icons-material/Clear";
 import {
     Box,
     FormControl,
@@ -12,9 +9,21 @@ import {
     Theme,
     Typography
 } from "@mui/material";
-
 import makeStyles from "@mui/styles/makeStyles";
-
+import clsx from "clsx";
+import * as React from "react";
+import { useCallback } from "react";
+import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+import { useDropzone } from "react-dropzone";
+import isEqual from "react-fast-compare";
+import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
+import { isReadOnly } from "../../core/utils";
+import { FieldDescription } from "../../form";
+import {
+    useClearRestoreValue,
+    useSnackbarController,
+    useStorageSource
+} from "../../hooks";
 import {
     ArrayProperty,
     FieldProps,
@@ -22,21 +31,9 @@ import {
     StorageMeta,
     StringProperty
 } from "../../models";
-import { useDropzone } from "react-dropzone";
-import ClearIcon from "@mui/icons-material/Clear";
 import { PreviewComponent, PreviewSize } from "../../preview";
-import { FieldDescription } from "../../form";
 import { LabelWithIcon } from "../components";
-import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
 
-import clsx from "clsx";
-import {
-    useClearRestoreValue,
-    useSnackbarController,
-    useStorageSource
-} from "../../hooks";
-import { isReadOnly } from "../../core/utils";
-import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 
 const useStyles = makeStyles((theme: Theme) => ({
     dropZone: {
@@ -111,18 +108,18 @@ type StorageUploadFieldProps = FieldProps<string | string[]>;
  * @category Form fields
  */
 export function StorageUploadField({
-                                       name,
-                                       value,
-                                       setValue,
-                                       error,
-                                       showError,
-                                       autoFocus,
-                                       tableMode,
-                                       property,
-                                       includeDescription,
-                                       context,
-                                       isSubmitting
-                                   }: StorageUploadFieldProps) {
+    name,
+    value,
+    setValue,
+    error,
+    showError,
+    autoFocus,
+    tableMode,
+    property,
+    includeDescription,
+    context,
+    isSubmitting
+}: StorageUploadFieldProps) {
 
     const multipleFilesSupported = property.dataType === "array";
     const disabled = isReadOnly(property) || !!property.disabled || isSubmitting;
@@ -138,10 +135,10 @@ export function StorageUploadField({
     });
 
     const storageMeta: StorageMeta | undefined = property.dataType === "string"
-? property.config?.storageMeta
+        ? property.config?.storageMeta
         : property.dataType === "array" &&
-        (property.of as Property).dataType === "string"
-? (property.of as StringProperty).config?.storageMeta
+            (property.of as Property).dataType === "string"
+            ? (property.of as StringProperty).config?.storageMeta
             : undefined;
 
     if (!storageMeta)
@@ -190,37 +187,36 @@ export function StorageUploadField({
     };
 
     return (
+        <FormControl fullWidth
+            required={property.validation?.required}
+            error={showError}>
 
-            <FormControl fullWidth
-                         required={property.validation?.required}
-                         error={showError}>
-
-                {!tableMode &&
+            {!tableMode &&
                 <FormHelperText filled
-                                required={property.validation?.required}>
-                    <LabelWithIcon property={property}/>
+                    required={property.validation?.required}>
+                    <LabelWithIcon property={property} />
                 </FormHelperText>}
 
-                <StorageUpload
-                    value={internalValue}
-                    name={name}
-                    disabled={disabled}
-                    autoFocus={autoFocus}
-                    property={property}
-                    onChange={(newValue) => {
-                        setValue(newValue);
-                    }}
-                    fileNameBuilder={fileNameBuilder}
-                    storagePathBuilder={storagePathBuilder}
-                    storageMeta={storageMeta}
-                    multipleFilesSupported={multipleFilesSupported}/>
+            <StorageUpload
+                value={internalValue}
+                name={name}
+                disabled={disabled}
+                autoFocus={autoFocus}
+                property={property}
+                onChange={(newValue) => {
+                    setValue(newValue);
+                }}
+                fileNameBuilder={fileNameBuilder}
+                storagePathBuilder={storagePathBuilder}
+                storageMeta={storageMeta}
+                multipleFilesSupported={multipleFilesSupported} />
 
-                {includeDescription &&
-                <FieldDescription property={property as any}/>}
+            {includeDescription &&
+                <FieldDescription property={property as any} />}
 
-                {showError && <FormHelperText>{error}</FormHelperText>}
+            {showError && <FormHelperText>{error}</FormHelperText>}
 
-            </FormControl>
+        </FormControl>
     );
 }
 
@@ -254,23 +250,23 @@ interface StorageUploadProps {
 }
 
 function FileDropComponent({
-                               storageMeta,
-                               disabled,
-                               isDraggingOver,
-                               onExternalDrop,
-                               multipleFilesSupported,
-                               droppableProvided,
-                               autoFocus,
-                               internalValue,
-                               property,
-                               onClear,
-                               metadata,
-                               storagePathBuilder,
-                               onFileUploadComplete,
-                               size,
-                               name,
-                               helpText
-                           }: {
+    storageMeta,
+    disabled,
+    isDraggingOver,
+    onExternalDrop,
+    multipleFilesSupported,
+    droppableProvided,
+    autoFocus,
+    internalValue,
+    property,
+    onClear,
+    metadata,
+    storagePathBuilder,
+    onFileUploadComplete,
+    size,
+    name,
+    helpText
+}: {
     storageMeta: StorageMeta,
     disabled: boolean,
     isDraggingOver: boolean,
@@ -297,11 +293,11 @@ function FileDropComponent({
         isDragAccept,
         isDragReject
     } = useDropzone({
-            accept: storageMeta.acceptedFiles,
-            disabled: disabled || isDraggingOver,
-            noDragEventsBubbling: true,
-            onDrop: onExternalDrop
-        }
+        accept: storageMeta.acceptedFiles,
+        disabled: disabled || isDraggingOver,
+        noDragEventsBubbling: true,
+        onDrop: onExternalDrop
+    }
     );
 
     return (
@@ -351,7 +347,7 @@ function FileDropComponent({
                                 disabled={disabled}
                                 value={entry.storagePathOrDownloadUrl}
                                 onClear={onClear}
-                                size={entry.size}/>
+                                size={entry.size} />
                         );
                     } else if (entry.file) {
                         child = (
@@ -403,11 +399,12 @@ function FileDropComponent({
                     m: 2
                 }}>
                 <Typography align={"center"}
-                            variant={"body2"}
-                            sx={(theme) => ({
-                                color: "#838383",
-                                fontWeight: theme.typography.fontWeightMedium
-                            })}>
+                    variant={"body2"}
+                    sx={(theme) => ({
+                        color: "#838383",
+                        fontSize: 16,
+                        fontWeight: theme.typography.fontWeightMedium
+                    })}>
                     {helpText}
                 </Typography>
             </Box>
@@ -417,17 +414,17 @@ function FileDropComponent({
 }
 
 export function StorageUpload({
-                                  property,
-                                  name,
-                                  value,
-                                  onChange,
-                                  multipleFilesSupported,
-                                  disabled,
-                                  autoFocus,
-                                  storageMeta,
-                                  fileNameBuilder,
-                                  storagePathBuilder
-                              }: StorageUploadProps) {
+    property,
+    name,
+    value,
+    onChange,
+    multipleFilesSupported,
+    disabled,
+    autoFocus,
+    storageMeta,
+    fileNameBuilder,
+    storagePathBuilder
+}: StorageUploadProps) {
 
     const storage = useStorageSource();
 
@@ -450,13 +447,13 @@ export function StorageUpload({
         (multipleFilesSupported
             ? value as string[]
             : [value as string]).map(entry => (
-            {
-                id: getRandomId(),
-                storagePathOrDownloadUrl: entry,
-                metadata: metadata,
-                size: size
-            }
-        ));
+                {
+                    id: getRandomId(),
+                    storagePathOrDownloadUrl: entry,
+                    metadata: metadata,
+                    size: size
+                }
+            ));
 
     const [initialValue, setInitialValue] = React.useState<string | string[]>(value);
     const [internalValue, setInternalValue] = React.useState<StorageFieldItem[]>(internalInitialValue);
@@ -510,13 +507,13 @@ export function StorageUpload({
         let newInternalValue: StorageFieldItem[];
         if (multipleFilesSupported) {
             newInternalValue = [...internalValue,
-                ...(acceptedFiles.map(file => ({
-                    id: getRandomId(),
-                    file,
-                    fileName: fileNameBuilder(file),
-                    metadata,
-                    size: size
-                } as StorageFieldItem)))];
+            ...(acceptedFiles.map(file => ({
+                id: getRandomId(),
+                file,
+                fileName: fileNameBuilder(file),
+                metadata,
+                size: size
+            } as StorageFieldItem)))];
         } else {
             newInternalValue = [{
                 id: getRandomId(),
@@ -533,8 +530,8 @@ export function StorageUpload({
     };
 
     const onFileUploadComplete = async (uploadedPath: string,
-                                        entry: StorageFieldItem,
-                                        metadata?: any) => {
+        entry: StorageFieldItem,
+        metadata?: any) => {
 
         console.debug("onFileUploadComplete", uploadedPath, entry);
 
@@ -578,29 +575,29 @@ export function StorageUpload({
     };
 
     const helpText = multipleFilesSupported
-        ? "Drag 'n' drop some files here, or click to select files"
-        : "Drag 'n' drop a file here, or click to select one";
+        ? "Arraste aqui ou clique, para selecionar vários arquivos"
+        : "Arraste aqui, ou clique para selecionar um arquivo";
 
     return (
         <DragDropContext onDragEnd={onDragEnd}>
             <Droppable droppableId={`droppable_${name}`} direction="horizontal">
                 {(provided, snapshot) => {
                     return <FileDropComponent storageMeta={storageMeta}
-                                              disabled={disabled}
-                                              isDraggingOver={snapshot.isDraggingOver}
-                                              droppableProvided={provided}
-                                              onExternalDrop={onExternalDrop}
-                                              multipleFilesSupported={multipleFilesSupported}
-                                              autoFocus={autoFocus}
-                                              internalValue={internalValue}
-                                              property={property}
-                                              onClear={onClear}
-                                              metadata={metadata}
-                                              storagePathBuilder={storagePathBuilder}
-                                              onFileUploadComplete={onFileUploadComplete}
-                                              size={size}
-                                              name={name}
-                                              helpText={helpText}/>
+                        disabled={disabled}
+                        isDraggingOver={snapshot.isDraggingOver}
+                        droppableProvided={provided}
+                        onExternalDrop={onExternalDrop}
+                        multipleFilesSupported={multipleFilesSupported}
+                        autoFocus={autoFocus}
+                        internalValue={internalValue}
+                        property={property}
+                        onClear={onClear}
+                        metadata={metadata}
+                        storagePathBuilder={storagePathBuilder}
+                        onFileUploadComplete={onFileUploadComplete}
+                        size={size}
+                        name={name}
+                        helpText={helpText} />
                 }}
             </Droppable>
         </DragDropContext>
@@ -614,18 +611,18 @@ interface StorageUploadItemProps {
     metadata?: any,
     entry: StorageFieldItem,
     onFileUploadComplete: (value: string,
-                           entry: StorageFieldItem,
-                           metadata?: any) => Promise<void>;
+        entry: StorageFieldItem,
+        metadata?: any) => Promise<void>;
     size: PreviewSize;
 }
 
 export function StorageUploadProgress({
-                                          storagePath,
-                                          entry,
-                                          metadata,
-                                          onFileUploadComplete,
-                                          size
-                                      }: StorageUploadItemProps) {
+    storagePath,
+    entry,
+    metadata,
+    onFileUploadComplete,
+    size
+}: StorageUploadItemProps) {
 
 
     const storage = useStorageSource();
@@ -657,7 +654,7 @@ export function StorageUploadProgress({
                 }
                 snackbarContext.open({
                     type: "error",
-                    title: "Error uploading file",
+                    title: "Erro ao efetuar upload",
                     message: e.message
                 });
             });
@@ -676,15 +673,15 @@ export function StorageUploadProgress({
 
         <Box m={1}>
             <Paper elevation={0}
-                   className={size === "regular" ? classes.uploadItem : classes.uploadItemSmall}
-                   variant={"outlined"}>
+                className={size === "regular" ? classes.uploadItem : classes.uploadItemSmall}
+                variant={"outlined"}>
 
                 {loading && <Skeleton variant="rectangular" sx={{
                     width: "100%",
                     height: "100%"
-                }}/>}
+                }} />}
 
-                {error && <p>Error uploading file: {error}</p>}
+                {error && <p>Erro ao efetuar upload: {error}</p>}
 
             </Paper>
         </Box>
@@ -703,13 +700,13 @@ interface StorageItemPreviewProps {
 }
 
 export function StorageItemPreview({
-                                       name,
-                                       property,
-                                       value,
-                                       onClear,
-                                       disabled,
-                                       size
-                                   }: StorageItemPreviewProps) {
+    name,
+    property,
+    value,
+    onClear,
+    disabled,
+    size
+}: StorageItemPreviewProps) {
 
     const classes = useStyles();
     return (
@@ -722,30 +719,28 @@ export function StorageItemPreview({
 
                 {!disabled &&
 
-                <a
-                    className={classes.thumbnailCloseIcon}>
-                    <IconButton
-                        size={"small"}
-                        onClick={(event) => {
-                            event.stopPropagation();
-                            onClear(value);
-                        }}>
-                        <ClearIcon fontSize={"small"}/>
-                    </IconButton>
-                </a>
+                    <a
+                        className={classes.thumbnailCloseIcon}>
+                        <IconButton
+                            size={"small"}
+                            onClick={(event) => {
+                                event.stopPropagation();
+                                onClear(value);
+                            }}>
+                            <ClearIcon fontSize={"small"} />
+                        </IconButton>
+                    </a>
                 }
 
                 {value &&
-                <ErrorBoundary>
-                    <PreviewComponent name={name}
-                                      value={value}
-                                      property={property}
-                                      size={size}/>
-                </ErrorBoundary>
+                    <ErrorBoundary>
+                        <PreviewComponent name={name}
+                            value={value}
+                            property={property}
+                            size={size} />
+                    </ErrorBoundary>
                 }
-
             </Paper>
-
         </Box>
     );
 

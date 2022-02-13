@@ -1,12 +1,13 @@
 /* @jsxImportSource @emotion/react */
-import React from "react";
+import Brightness3Icon from "@mui/icons-material/Brightness3";
+import Brightness5Icon from "@mui/icons-material/Brightness5";
+import MenuIcon from "@mui/icons-material/Menu";
+import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import {
     AppBar,
     Avatar,
     Box,
-    Breadcrumbs,
-    Button,
-    Chip,
+    Breadcrumbs, Button, Chip,
     Hidden,
     IconButton,
     Link,
@@ -17,14 +18,11 @@ import {
 } from "@mui/material";
 import createStyles from "@mui/styles/createStyles";
 import makeStyles from "@mui/styles/makeStyles";
-import MenuIcon from "@mui/icons-material/Menu";
-import Brightness5Icon from "@mui/icons-material/Brightness5";
-import Brightness3Icon from "@mui/icons-material/Brightness3";
-import NavigateNextIcon from "@mui/icons-material/NavigateNext";
+import React from "react";
 import { Link as ReactLink } from "react-router-dom";
-import { ErrorBoundary } from "./ErrorBoundary";
 import { useAuthController, useModeState } from "../../hooks";
 import { useBreadcrumbsContext } from "../../hooks/useBreadcrumbsContext";
+import { ErrorBoundary } from "./ErrorBoundary";
 
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -35,9 +33,10 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         breadcrumb: {
             backgroundColor: theme.palette.grey[100],
-            height: theme.spacing(3),
+            height: theme.spacing(4),
+            fontSize: 17,
             color: theme.palette.grey[800],
-            fontWeight: theme.typography.fontWeightMedium,
+            fontWeight: 600,
             "&:hover, &:focus": {
                 cursor: "pointer",
                 backgroundColor: theme.palette.grey[300]
@@ -50,7 +49,6 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
-
 interface CMSAppBarProps {
     title: string;
     handleDrawerToggle: () => void,
@@ -62,10 +60,10 @@ interface CMSAppBarProps {
 
 
 export function FireCMSAppBar({
-                                  title,
-                                  handleDrawerToggle,
-                                  toolbarExtraWidget
-                              }: CMSAppBarProps) {
+    title,
+    handleDrawerToggle,
+    toolbarExtraWidget
+}: CMSAppBarProps) {
 
     const classes = useStyles();
 
@@ -89,12 +87,12 @@ export function FireCMSAppBar({
                 <Toolbar>
                     <IconButton
                         color="inherit"
-                        aria-label="Open drawer"
+                        aria-label="Abrir menu lateral"
                         edge="start"
                         onClick={handleDrawerToggle}
                         className={classes.menuButton}
                         size="large">
-                        <MenuIcon/>
+                        <MenuIcon />
                     </IconButton>
 
                     <Hidden lgDown>
@@ -116,7 +114,7 @@ export function FireCMSAppBar({
                         <Breadcrumbs
                             separator={<NavigateNextIcon
                                 htmlColor={"rgb(0,0,0,0.87)"}
-                                fontSize="small"/>}
+                                fontSize="small" />}
                             aria-label="breadcrumb">
                             {breadcrumbs.map((entry, index) => (
                                 <Link
@@ -135,15 +133,14 @@ export function FireCMSAppBar({
                         </Breadcrumbs>
                     </Box>
 
-                    <Box flexGrow={1}/>
+                    <Box flexGrow={1} />
 
                     {toolbarExtraWidget &&
-                    <ErrorBoundary>
-                        {
-                            toolbarExtraWidget
-                        }
-                    </ErrorBoundary>}
-
+                        <ErrorBoundary>
+                            {
+                                toolbarExtraWidget
+                            }
+                        </ErrorBoundary>}
 
                     <Box p={1} mr={1}>
                         <IconButton
@@ -153,25 +150,25 @@ export function FireCMSAppBar({
                             onClick={() => toggleMode()}
                             size="large">
                             {mode === "dark"
-                                ? <Brightness3Icon/>
-                                : <Brightness5Icon/>}
+                                ? <Brightness3Icon />
+                                : <Brightness5Icon />}
                         </IconButton>
                     </Box>
 
                     <Box p={1} mr={1}>
                         {authController.user && authController.user.photoURL
                             ? <Avatar
-                                src={authController.user.photoURL}/>
+                                src={authController.user.photoURL} />
                             : <Avatar>{initial}</Avatar>
                         }
                     </Box>
 
-                    <Button variant="text"
-                            color="inherit"
-                            onClick={authController.signOut}>
+                    <Button
+                        variant="outlined"
+                        color="inherit"
+                        onClick={authController.signOut}>
                         Log Out
                     </Button>
-
                 </Toolbar>
             </AppBar>
         </Slide>

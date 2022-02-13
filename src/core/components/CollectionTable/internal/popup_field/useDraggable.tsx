@@ -9,12 +9,12 @@ interface DraggableProps {
 }
 
 export function useDraggable({
-                                 containerRef,
-                                 ref,
-                                 x,
-                                 y,
-                                 onMove
-                             }: DraggableProps) {
+    containerRef,
+    ref,
+    x,
+    y,
+    onMove
+}: DraggableProps) {
 
 
     let relX = 0;

@@ -1,17 +1,17 @@
-import React, { ReactElement } from "react";
 import {
     PreviewComponent,
     PreviewComponentProps,
     Property
 } from "@camberi/firecms";
-import { CustomShapedArrayProps } from "./CustomShapedArrayProps";
 import { Box } from "@mui/material";
+import React, { ReactElement } from "react";
+import { CustomShapedArrayProps } from "./CustomShapedArrayProps";
 
 export default function CustomShapedArrayPreview({
-                                                     value,
-                                                     size,
-                                                     customProps
-                                                 }: PreviewComponentProps<any[], CustomShapedArrayProps>)
+    value,
+    size,
+    customProps
+}: PreviewComponentProps<any[], CustomShapedArrayProps>)
     : ReactElement {
 
     if (!customProps)
@@ -25,7 +25,7 @@ export default function CustomShapedArrayPreview({
                 <PreviewComponent
                     property={property}
                     value={value[index]}
-                    size={size}/>
+                    size={size} />
             </Box>
         ))}
     </div>;

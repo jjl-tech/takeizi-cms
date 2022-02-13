@@ -1,12 +1,14 @@
+import AssignmentIcon from "@mui/icons-material/Assignment";
+import { alpha, Box, Theme, Typography } from "@mui/material";
+import createStyles from "@mui/styles/createStyles";
+import makeStyles from "@mui/styles/makeStyles";
+import clsx from "clsx";
 import React, { useCallback, useEffect, useRef } from "react";
 import BaseTable, { Column, ColumnShape } from "react-base-table";
 import Measure, { ContentRect } from "react-measure";
-import { alpha, Box, Theme, Typography } from "@mui/material";
-import AssignmentIcon from "@mui/icons-material/Assignment";
-import clsx from "clsx";
-
 import { ErrorBoundary } from "../../internal/ErrorBoundary";
 import { CircularProgressCenter } from "../CircularProgressCenter";
+import { getRowHeight } from "./common";
 import { baseTableCss } from "./styles";
 import { TableHeader } from "./TableHeader";
 import {
@@ -15,10 +17,8 @@ import {
     TableProps,
     TableWhereFilterOp
 } from "./TableProps";
-import createStyles from "@mui/styles/createStyles";
-import makeStyles from "@mui/styles/makeStyles";
 
-import { getRowHeight } from "./common";
+
 
 const PIXEL_NEXT_PAGE_OFFSET = 1200;
 
@@ -261,7 +261,7 @@ export function Table<T>({
 
     function buildEmptyView() {
         if (loading)
-            return <CircularProgressCenter/>;
+            return <CircularProgressCenter size={50}/>;
         return (
             <Box display="flex"
                  flexDirection={"column"}

@@ -1,26 +1,23 @@
-import React from "react";
+import ClearIcon from "@mui/icons-material/Clear";
 import {
     alpha,
     Box,
     CircularProgress,
-    darken,
-    Hidden,
-    IconButton,
+    darken, IconButton,
     InputBase,
     MenuItem,
     Select,
     Theme,
-    Tooltip,
-    useMediaQuery,
+    Tooltip, useMediaQuery,
     useTheme
 } from "@mui/material";
-
 import createStyles from "@mui/styles/createStyles";
 import makeStyles from "@mui/styles/makeStyles";
-
+import React from "react";
 import { CollectionSize } from "../../../../models";
 import { SearchBar } from "./SearchBar";
-import ClearIcon from "@mui/icons-material/Clear";
+
+
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -107,15 +104,15 @@ export function CollectionTableToolbar<M extends { [Key: string]: any }>(props: 
 
     const filterView = props.filterIsSet &&
         <Box display={"flex"}
-             alignItems="center">
+            alignItems="center">
 
-            <Tooltip title="Clear filter">
+            <Tooltip title="Limpar filtro">
                 <IconButton
                     style={{ height: "fit-content" }}
                     aria-label="filter clear"
                     onClick={props.clearFilter}
                     size="large">
-                    <ClearIcon/>
+                    <ClearIcon />
                 </IconButton>
             </Tooltip>
 
@@ -141,7 +138,7 @@ export function CollectionTableToolbar<M extends { [Key: string]: any }>(props: 
             input={<InputBase classes={{
                 root: classes.selectRoot,
                 input: classes.input
-            }}/>}
+            }} />}
             renderValue={(value: any) => value.toUpperCase()}
         >
             {["xs", "s", "m", "l", "xl"].map((value) => (
@@ -160,41 +157,25 @@ export function CollectionTableToolbar<M extends { [Key: string]: any }>(props: 
         <div
             className={classes.toolbar}
         >
-
             <Box display={"flex"}
-                 alignItems="center">
-
-                {props.title && <Hidden lgDown>
-                    <Box mr={2}>
-                        {props.title}
-                    </Box>
-                </Hidden>}
-
+                alignItems="center">
                 {sizeSelect}
-
                 {filterView}
-
-
             </Box>
 
-
             <div className={classes.actions}>
-
                 {largeLayout && <Box width={22}>
                     {props.loading &&
-                    <CircularProgress size={16} thickness={8}/>}
+                        <CircularProgress size={16} thickness={8} />}
                 </Box>}
 
                 {props.onTextSearch &&
-                <SearchBar
-                    key={"search-bar"}
-                    onTextSearch={props.onTextSearch}/>
+                    <SearchBar
+                        key={"search-bar"}
+                        onTextSearch={props.onTextSearch} />
                 }
-
                 {props.actions}
-
             </div>
-
         </div>
     );
 }

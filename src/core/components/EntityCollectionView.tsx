@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { Add, Delete } from "@mui/icons-material";
 import {
     Box,
     Button,
@@ -9,8 +9,13 @@ import {
     useMediaQuery,
     useTheme
 } from "@mui/material";
-import { Add, Delete } from "@mui/icons-material";
-
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import {
+    useAuthController,
+    useFireCMSContext,
+    useNavigation,
+    useSideEntityController
+} from "../../hooks";
 import {
     AnyProperty,
     CollectionSize,
@@ -19,26 +24,18 @@ import {
     PartialEntityCollection,
     SelectionController
 } from "../../models";
+import { Markdown } from "../../preview";
+import { canCreate, canDelete, canEdit } from "../util/permissions";
 import { CollectionTable, OnColumnResizeParams } from "./CollectionTable";
-
 import { CollectionRowActions } from "./CollectionTable/internal/CollectionRowActions";
 import { DeleteEntityDialog } from "./CollectionTable/internal/DeleteEntityDialog";
 import { ExportButton } from "./CollectionTable/internal/ExportButton";
 
-import { canCreate, canDelete, canEdit } from "../util/permissions";
-import { Markdown } from "../../preview";
-import {
-    useAuthController,
-    useFireCMSContext,
-    useNavigation,
-    useSideEntityController
-} from "../../hooks";
 
 /**
  * @category Components
  */
 export interface EntityCollectionViewProps<M extends { [Key: string]: any }> {
-
     /**
      * Absolute path this collection view points to
      */
@@ -48,12 +45,10 @@ export interface EntityCollectionViewProps<M extends { [Key: string]: any }> {
      * Entity collection props
      */
     collection: EntityCollection<M>;
-
 }
 
 
 export function useSelectionController<M = any>(): SelectionController {
-
     const [selectedEntities, setSelectedEntities] = useState<Entity<M>[]>([]);
 
     const toggleEntitySelection = useCallback((entity: Entity<M>) => {
@@ -101,9 +96,9 @@ export function useSelectionController<M = any>(): SelectionController {
  * @category Components
  */
 export function EntityCollectionView<M extends { [Key: string]: any }>({
-                                                                           path,
-                                                                           collection: baseCollection
-                                                                       }: EntityCollectionViewProps<M>
+    path,
+    collection: baseCollection
+}: EntityCollectionViewProps<M>
 ) {
 
     const sideEntityController = useSideEntityController();
@@ -189,9 +184,9 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
     }, [collection.inlineEditing, collection.permissions, path]);
 
     const onColumnResize = useCallback(({
-                                            width,
-                                            key
-                                        }: OnColumnResizeParams) => {
+        width,
+        key
+    }: OnColumnResizeParams) => {
         // Only for property columns
         if (!collection.schema.properties[key]) return;
         const property: Partial<AnyProperty> = { columnWidth: width };
@@ -246,38 +241,38 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
             </Typography>
 
             {collection.description &&
-            <Popover
-                id={"info-dialog"}
-                open={open}
-                anchorEl={anchorEl}
-                elevation={1}
-                onClose={() => {
-                    setAnchorEl(null);
-                }}
-                anchorOrigin={{
-                    vertical: "bottom",
-                    horizontal: "center"
-                }}
-                transformOrigin={{
-                    vertical: "top",
-                    horizontal: "center"
-                }}
-            >
+                <Popover
+                    id={"info-dialog"}
+                    open={open}
+                    anchorEl={anchorEl}
+                    elevation={1}
+                    onClose={() => {
+                        setAnchorEl(null);
+                    }}
+                    anchorOrigin={{
+                        vertical: "bottom",
+                        horizontal: "center"
+                    }}
+                    transformOrigin={{
+                        vertical: "top",
+                        horizontal: "center"
+                    }}
+                >
 
-                <Box m={2}>
-                    <Markdown source={collection.description}/>
-                </Box>
+                    <Box m={2}>
+                        <Markdown source={collection.description} />
+                    </Box>
 
-            </Popover>
+                </Popover>
             }
 
         </div>
     ), [collection.description, collection.name, path, open, anchorEl]);
 
     const tableRowActionsBuilder = useCallback(({
-                                                    entity,
-                                                    size
-                                                }: { entity: Entity<any>, size: CollectionSize }) => {
+        entity,
+        size
+    }: { entity: Entity<any>, size: CollectionSize }) => {
 
         const isSelected = isEntitySelected(entity);
 
@@ -334,11 +329,11 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
         const addButton = canCreate(collection.permissions, authController, path, context) && onNewClick && (largeLayout
             ? <Button
                 onClick={onNewClick}
-                startIcon={<Add/>}
+                startIcon={<Add />}
                 size="large"
                 variant="contained"
                 color="primary">
-                Add {collection.schema.name}
+                Adicionar {collection.schema.name}
             </Button>
             : <Button
                 onClick={onNewClick}
@@ -346,7 +341,7 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
                 variant="contained"
                 color="primary"
             >
-                <Add/>
+                <Add />
             </Button>);
 
         const multipleDeleteEnabled = selectedEntities.every((entity) => canDelete(collection.permissions, entity, authController, path, context));
@@ -357,25 +352,25 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
         const multipleDeleteButton = selectionEnabled &&
 
             <Tooltip
-                title={multipleDeleteEnabled ? "Multiple delete" : "You have selected one entity you cannot delete"}>
+                title={multipleDeleteEnabled ? "Deletar" : "Você não possui permissão para excluir este dado"}>
                 <span>
                     {largeLayout && <Button
                         disabled={!(selectedEntities?.length) || !multipleDeleteEnabled}
-                        startIcon={<Delete/>}
+                        startIcon={<Delete />}
                         onClick={onMultipleDeleteClick}
-                        color={"primary"}
+                        color={"error"}
                     >
                         <p style={{ minWidth: 24 }}>({selectedEntities?.length})</p>
                     </Button>}
 
                     {!largeLayout &&
-                    <IconButton
-                        color={"primary"}
-                        disabled={!(selectedEntities?.length) || !multipleDeleteEnabled}
-                        onClick={onMultipleDeleteClick}
-                        size="large">
-                        <Delete/>
-                    </IconButton>}
+                        <IconButton
+                            color={"error"}
+                            disabled={!(selectedEntities?.length) || !multipleDeleteEnabled}
+                            onClick={onMultipleDeleteClick}
+                            size="large">
+                            <Delete />
+                        </IconButton>}
                 </span>
             </Tooltip>;
 
@@ -390,9 +385,9 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
 
         const exportButton = exportable &&
             <ExportButton schema={collection.schema}
-                          schemaResolver={schemaResolver}
-                          exportConfig={typeof collection.exportable === "object" ? collection.exportable : undefined}
-                          path={path}/>;
+                schemaResolver={schemaResolver}
+                exportConfig={typeof collection.exportable === "object" ? collection.exportable : undefined}
+                path={path} />;
 
         return (
             <>
@@ -423,14 +418,14 @@ export function EntityCollectionView<M extends { [Key: string]: any }>({
             />
 
             {deleteEntityClicked && <DeleteEntityDialog entityOrEntitiesToDelete={deleteEntityClicked}
-                                 path={path}
-                                 schema={collection.schema}
-                                 schemaResolver={schemaResolver}
-                                 callbacks={collection.callbacks}
-                                 open={!!deleteEntityClicked}
-                                 onEntityDelete={internalOnEntityDelete}
-                                 onMultipleEntitiesDelete={internalOnMultipleEntitiesDelete}
-                                 onClose={() => setDeleteEntityClicked(undefined)}/>}
+                path={path}
+                schema={collection.schema}
+                schemaResolver={schemaResolver}
+                callbacks={collection.callbacks}
+                open={!!deleteEntityClicked}
+                onEntityDelete={internalOnEntityDelete}
+                onMultipleEntitiesDelete={internalOnMultipleEntitiesDelete}
+                onClose={() => setDeleteEntityClicked(undefined)} />}
         </>
     );
 }

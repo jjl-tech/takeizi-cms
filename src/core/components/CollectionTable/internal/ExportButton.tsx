@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef } from "react";
+import GetAppIcon from "@mui/icons-material/GetApp";
 import {
     Alert,
     Button,
@@ -11,16 +11,16 @@ import {
     IconButton,
     Tooltip
 } from "@mui/material";
-
-import GetAppIcon from "@mui/icons-material/GetApp";
+import React, { useCallback, useEffect, useRef } from "react";
+import { useDataSource, useFireCMSContext } from "../../../../hooks";
 import {
     Entity,
     EntitySchema,
     EntitySchemaResolver,
     ExportConfig
 } from "../../../../models";
-import { useDataSource, useFireCMSContext } from "../../../../hooks";
 import { downloadCSV } from "../../../util/csv";
+
 
 interface ExportButtonProps<M extends { [Key: string]: any }, UserType> {
     schema: EntitySchema<M>;
@@ -32,11 +32,11 @@ interface ExportButtonProps<M extends { [Key: string]: any }, UserType> {
 const INITIAL_DOCUMENTS_LIMIT = 200;
 
 export function ExportButton<M extends { [Key: string]: any }, UserType>({
-                                                                             schema,
-                                                                             schemaResolver,
-                                                                             path,
-                                                                             exportConfig
-                                                                         }: ExportButtonProps<M, UserType>
+    schema,
+    schemaResolver,
+    path,
+    exportConfig
+}: ExportButtonProps<M, UserType>
 ) {
 
     const dataSource = useDataSource();
@@ -65,11 +65,11 @@ export function ExportButton<M extends { [Key: string]: any }, UserType>({
     }, [setOpen]);
 
     const doDownload = useCallback((data: Entity<M>[] | undefined,
-                                    additionalData: Record<string, any>[] | undefined,
-                                    schema: EntitySchema<M>,
-                                    schemaResolver: EntitySchemaResolver<M>,
-                                    path: string,
-                                    exportConfig: ExportConfig | undefined) => {
+        additionalData: Record<string, any>[] | undefined,
+        schema: EntitySchema<M>,
+        schemaResolver: EntitySchemaResolver<M>,
+        path: string,
+        exportConfig: ExportConfig | undefined) => {
         if (!data)
             throw Error("Trying to perform export without loading data first");
 
@@ -151,11 +151,10 @@ export function ExportButton<M extends { [Key: string]: any }, UserType>({
     }, [needsToAcceptFetchAllData, doDownload, schema, schemaResolver, path, exportConfig, handleClose]);
 
     return <>
-
-        <Tooltip title={"Export"}>
+        <Tooltip title={"Exportar"}>
             <IconButton color={"primary"} onClick={handleClickOpen}
-                        size="large">
-                <GetAppIcon/>
+                size="large">
+                <GetAppIcon />
             </IconButton>
         </Tooltip>
 
@@ -163,50 +162,45 @@ export function ExportButton<M extends { [Key: string]: any }, UserType>({
             open={open}
             onClose={handleClose}
         >
-            <DialogTitle>Export data</DialogTitle>
+            <DialogTitle>Exportar {path}</DialogTitle>
 
             <DialogContent>
                 <DialogContentText>
 
-                    <div>Download the the content of this table as a CSV
-                    </div>
-                    <br/>
+                    <div>Download dos dados da tabela {path} em CSV</div>
+                    <br />
 
                     {needsToAcceptFetchAllData &&
-                    <Alert elevation={1}
-                              variant="filled"
-                              severity={"warning"}>
-                        <div>
-                            This collections has a large number
-                            of documents (more than {INITIAL_DOCUMENTS_LIMIT}).
-                        </div>
-                        <div>
-                            Would you like to proceed?
-                        </div>
-
-                    </Alert>}
+                        <Alert elevation={1}
+                            variant="filled"
+                            severity={"warning"}>
+                            <div>
+                                Esta tabela possui um grande número de dados (mais de{INITIAL_DOCUMENTS_LIMIT}).
+                            </div>
+                            <div>
+                                Você quer progressuir?
+                            </div>
+                        </Alert>}
 
                 </DialogContentText>
             </DialogContent>
 
             <DialogActions>
+                {dataLoading && <CircularProgress size={16} thickness={8} />}
 
-                {dataLoading && <CircularProgress size={16} thickness={8}/>}
-
-                <Button color="primary" onClick={handleClose}>
-                    Cancel
+                <Button color="error" onClick={handleClose}>
+                    Cancelar
                 </Button>
 
-                <Button color="primary"
-                        disabled={dataLoading}
-                        onClick={onOkClicked}>
+                <Button
+                    color="success"
+                    variant="outlined"
+                    disabled={dataLoading}
+                    onClick={onOkClicked}>
                     Download
                 </Button>
-
             </DialogActions>
-
         </Dialog>
-
     </>;
 }
 

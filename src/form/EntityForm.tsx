@@ -1,7 +1,16 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Box, Button, Container, Grid, Theme, Typography } from "@mui/material";
 import createStyles from "@mui/styles/createStyles";
 import makeStyles from "@mui/styles/makeStyles";
+import { Form, Formik, FormikHelpers } from "formik";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import isEqual from "react-fast-compare";
+import {
+    computeSchema,
+    initWithProperties,
+    isHidden,
+    isReadOnly
+} from "../core/utils";
+import { useDataSource } from "../hooks";
 import {
     CMSFormFieldProps,
     Entity,
@@ -14,19 +23,10 @@ import {
     Property,
     ResolvedEntitySchema
 } from "../models";
-import { Form, Formik, FormikHelpers } from "formik";
+import { CustomIdField } from "./components/CustomIdField";
+import { ErrorFocus } from "./components/ErrorFocus";
 import { buildPropertyField } from "./form_factory";
 import { CustomFieldValidator, getYupEntitySchema } from "./validation";
-import isEqual from "react-fast-compare";
-import { ErrorFocus } from "./components/ErrorFocus";
-import {
-    computeSchema,
-    initWithProperties,
-    isHidden,
-    isReadOnly
-} from "../core/utils";
-import { CustomIdField } from "./components/CustomIdField";
-import { useDataSource } from "../hooks";
 
 export const useStyles = makeStyles((theme: Theme) => createStyles({
     stickyButtons: {
@@ -133,15 +133,15 @@ export interface EntityFormProps<M> {
  * @category Components
  */
 export function EntityForm<M>({
-                                  status,
-                                  path,
-                                  schemaOrResolver,
-                                  entity,
-                                  onEntitySave,
-                                  onDiscard,
-                                  onModified,
-                                  onValuesChanged
-                              }: EntityFormProps<M>) {
+    status,
+    path,
+    schemaOrResolver,
+    entity,
+    onEntitySave,
+    onDiscard,
+    onModified,
+    onValuesChanged
+}: EntityFormProps<M>) {
 
     const classes = useStyles();
     const dataSource = useDataSource();
@@ -258,10 +258,10 @@ export function EntityForm<M>({
 
 
     const uniqueFieldValidator: CustomFieldValidator = useCallback(({
-                                                                        name,
-                                                                        value,
-                                                                        property
-                                                                    }) => dataSource.checkUniqueField(path, name, value, property, entityId),
+        name,
+        value,
+        property
+    }) => dataSource.checkUniqueField(path, name, value, property, entityId),
         [dataSource, path, entityId]);
 
     const validationSchema = useMemo(() => getYupEntitySchema(
@@ -278,58 +278,58 @@ export function EntityForm<M>({
             onReset={() => onDiscard && onDiscard()}
         >
             {({
-                  values,
-                  touched,
-                  setFieldValue,
-                  handleSubmit,
-                  isSubmitting,
-                  dirty
-              }) => {
+                values,
+                touched,
+                setFieldValue,
+                handleSubmit,
+                isSubmitting,
+                dirty
+            }) => {
 
                 return <FormInternal baseDataSourceValues={baseDataSourceValues}
-                                     values={values} onModified={onModified}
-                                     setInternalValue={setInternalValue}
-                                     onValuesChanged={onValuesChanged}
-                                     underlyingChanges={underlyingChanges}
-                                     entityId={entityId}
-                                     entity={entity}
-                                     touched={touched}
-                                     setFieldValue={setFieldValue}
-                                     schema={schema}
-                                     isSubmitting={isSubmitting}
-                                     classes={classes}
-                                     formRef={formRef}
-                                     status={status}
-                                     setCustomId={setCustomId}
-                                     customIdError={customIdError}
-                                     handleSubmit={handleSubmit}
-                                     savingError={savingError}/>;
+                    values={values} onModified={onModified}
+                    setInternalValue={setInternalValue}
+                    onValuesChanged={onValuesChanged}
+                    underlyingChanges={underlyingChanges}
+                    entityId={entityId}
+                    entity={entity}
+                    touched={touched}
+                    setFieldValue={setFieldValue}
+                    schema={schema}
+                    isSubmitting={isSubmitting}
+                    classes={classes}
+                    formRef={formRef}
+                    status={status}
+                    setCustomId={setCustomId}
+                    customIdError={customIdError}
+                    handleSubmit={handleSubmit}
+                    savingError={savingError} />;
             }}
         </Formik>
     );
 }
 
 function FormInternal<M>({
-                             baseDataSourceValues,
-                             values,
-                             onModified,
-                             setInternalValue,
-                             onValuesChanged,
-                             underlyingChanges,
-                             entity,
-                             touched,
-                             setFieldValue,
-                             schema,
-                             entityId,
-                             isSubmitting,
-                             classes,
-                             formRef,
-                             status,
-                             setCustomId,
-                             customIdError,
-                             handleSubmit,
-                             savingError
-                         }: {
+    baseDataSourceValues,
+    values,
+    onModified,
+    setInternalValue,
+    onValuesChanged,
+    underlyingChanges,
+    entity,
+    touched,
+    setFieldValue,
+    schema,
+    entityId,
+    isSubmitting,
+    classes,
+    formRef,
+    status,
+    setCustomId,
+    customIdError,
+    handleSubmit,
+    savingError
+}: {
     baseDataSourceValues: Partial<M>,
     values: any,
     onModified: ((modified: boolean) => void) | undefined,
@@ -406,9 +406,9 @@ function FormInternal<M>({
                     };
                     return (
                         <Grid item
-                              xs={12}
-                              id={`form_field_${key}`}
-                              key={`field_${schema.name}_${key}`}>
+                            xs={12}
+                            id={`form_field_${key}`}
+                            key={`field_${schema.name}_${key}`}>
                             {buildPropertyField(cmsFormFieldProps)}
                         </Grid>
                     );
@@ -419,18 +419,18 @@ function FormInternal<M>({
 
     return (
         <Container maxWidth={"sm"}
-                   className={classes.container}
-                   ref={formRef}>
+            className={classes.container}
+            ref={formRef}>
 
             <CustomIdField schema={schema as EntitySchema}
-                           status={status}
-                           onChange={setCustomId}
-                           error={customIdError}
-                           entity={entity}/>
+                status={status}
+                onChange={setCustomId}
+                error={customIdError}
+                entity={entity} />
 
             <Form className={classes.form}
-                  onSubmit={handleSubmit}
-                  noValidate>
+                onSubmit={handleSubmit}
+                noValidate>
 
                 <Box pt={3}>
                     {formFields}
@@ -439,21 +439,16 @@ function FormInternal<M>({
                 <div className={classes.stickyButtons}>
 
                     {savingError &&
-                    <Box textAlign="right">
-                        <Typography color={"error"}>
-                            {savingError.message}
-                        </Typography>
-                    </Box>}
+                        <Box textAlign="right">
+                            <Typography color={"error"}>
+                                {savingError.message}
+                            </Typography>
+                        </Box>}
 
                     {buildButtons(classes, isSubmitting, modified, status)}
-
                 </div>
-
             </Form>
-
-
-            <ErrorFocus containerRef={formRef}/>
-
+            <ErrorFocus containerRef={formRef} />
         </Container>
     );
 }
@@ -462,17 +457,16 @@ function buildButtons(classes: any, isSubmitting: boolean, modified: boolean, st
     const disabled = isSubmitting || (!modified && status === "existing");
     return (
         <Box textAlign="right">
-
             {status === "existing" &&
-            <Button
-                variant="text"
-                color="primary"
-                disabled={disabled}
-                className={classes.button}
-                type="reset"
-            >
-                Discard
-            </Button>}
+                <Button
+                    variant="text"
+                    color="primary"
+                    disabled={disabled}
+                    className={classes.button}
+                    type="reset"
+                >
+                    Descartar
+                </Button>}
 
             <Button
                 variant="contained"
@@ -481,11 +475,10 @@ function buildButtons(classes: any, isSubmitting: boolean, modified: boolean, st
                 disabled={disabled}
                 className={classes.button}
             >
-                {status === "existing" && "Save"}
-                {status === "copy" && "Create copy"}
-                {status === "new" && "Create"}
+                {status === "existing" && "Salvar"}
+                {status === "copy" && "Salvar cópia"}
+                {status === "new" && "Salvar"}
             </Button>
-
         </Box>
     );
 }

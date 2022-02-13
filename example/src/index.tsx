@@ -1,10 +1,11 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import { RabeloApp } from "./MyApp";
 
-import SampleApp from "./SampleApp/SampleApp";
 // import { CustomCMSApp } from "./CustomCMSApp";
 
 ReactDOM.render(
-    <SampleApp/>,
+    // <SampleApp/>,
+    <RabeloApp />,
     document.getElementById("root")
 );

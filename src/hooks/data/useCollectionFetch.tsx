@@ -97,7 +97,6 @@ export function useCollectionFetch<M>(
     }, [initialEntities]);
 
     useEffect(() => {
-
         setDataLoading(true);
 
         const onEntitiesUpdate = (entities: Entity<M>[]) => {

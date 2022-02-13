@@ -1,10 +1,10 @@
-import React from "react";
-import clsx from "clsx";
 import ErrorIcon from "@mui/icons-material/Error";
 import { Theme, Tooltip } from "@mui/material";
-
 import createStyles from "@mui/styles/createStyles";
 import makeStyles from "@mui/styles/makeStyles";
+import clsx from "clsx";
+import React from "react";
+
 
 export const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -38,14 +38,14 @@ export interface ErrorViewProps {
  * @category Components
  */
 export function ErrorView({
-                              error,
-                              tooltip
-                          }: ErrorViewProps): React.ReactElement {
+    error,
+    tooltip
+}: ErrorViewProps): React.ReactElement {
     const classes = useStyles();
     const body = (
         <div
             className={clsx(classes.flexCenter, classes.smallMargin)}>
-            <ErrorIcon fontSize={"small"} color={"error"}/>
+            <ErrorIcon fontSize={"small"} color={"error"} />
             <div className={classes.text}>{error}</div>
         </div>
     );

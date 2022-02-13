@@ -1,4 +1,5 @@
-import React from "react";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import PlaylistPlayIcon from "@mui/icons-material/PlaylistPlay";
 import {
     Box,
     CardActionArea,
@@ -11,19 +12,18 @@ import {
     Theme,
     Typography
 } from "@mui/material";
-
 import createStyles from "@mui/styles/createStyles";
 import makeStyles from "@mui/styles/makeStyles";
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import PlaylistPlayIcon from "@mui/icons-material/PlaylistPlay";
+import React from "react";
 import { Link as ReactLink } from "react-router-dom";
-
+import { useNavigation } from "../../hooks";
+import { Markdown } from "../../preview";
 import {
     computeTopNavigation,
     TopNavigationEntry
 } from "../util/navigation_utils";
-import { Markdown } from "../../preview";
-import { useNavigation } from "../../hooks";
+
+
 
 export const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -66,9 +66,9 @@ export function FireCMSHomePage() {
     function buildNavigationCard(entry: TopNavigationEntry) {
         return (
             <Grid item xs={12}
-                  sm={6}
-                  md={4}
-                  key={`nav_${entry.group}_${entry.name}`}>
+                sm={6}
+                md={4}
+                key={`nav_${entry.group}_${entry.name}`}>
                 <Paper variant={"outlined"}>
 
                     <CardActionArea
@@ -78,22 +78,22 @@ export function FireCMSHomePage() {
                         <CardContent
                             className={classes.flexGrow}>
 
-                            <PlaylistPlayIcon color={"disabled"}/>
+                            <PlaylistPlayIcon color={"disabled"} />
                             <Typography gutterBottom variant="h5"
-                                        component="h2">
+                                component="h2">
                                 {entry.name}
                             </Typography>
 
                             {entry.description && <Typography variant="body2"
-                                                              color="textSecondary"
-                                                              component="div">
-                                <Markdown source={entry.description}/>
+                                color="textSecondary"
+                                component="div">
+                                <Markdown source={entry.description} />
                             </Typography>}
                         </CardContent>
 
                         <CardActions style={{ alignSelf: "flex-end" }}>
                             <Box p={1}>
-                                <ArrowForwardIcon color="primary"/>
+                                <ArrowForwardIcon color="primary" />
                             </Box>
                         </CardActions>
 
@@ -109,10 +109,10 @@ export function FireCMSHomePage() {
                 <Box mt={6} mb={6} key={`group_${index}`}>
                     {allGroups.length > 0 && <>
                         <Typography color={"textSecondary"}
-                                    className={"weight-500"}>
-                            {group?.toUpperCase() ?? "Collections".toUpperCase()}
+                            className={"weight-500"}>
+                            {group?.toUpperCase() ?? "Coleções".toUpperCase()}
                         </Typography>
-                        <Divider/>
+                        <Divider />
                     </>}
 
                     <Box mt={2}>

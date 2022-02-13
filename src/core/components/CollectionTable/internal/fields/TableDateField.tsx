@@ -1,23 +1,23 @@
-import React, { useCallback } from "react";
+import DateTimePicker from "@mui/lab/DateTimePicker";
 import {
     Box,
     TextField as MuiTextField,
     Theme,
     Typography
 } from "@mui/material";
+import createStyles from "@mui/styles/createStyles";
+import makeStyles from "@mui/styles/makeStyles";
+import React, { useCallback } from "react";
 import { TimestampProperty } from "../../../../../models";
-import DateTimePicker from "@mui/lab/DateTimePicker";
 import { EmptyValue, TimestampPreview } from "../../../../../preview";
 
 
-import createStyles from "@mui/styles/createStyles";
-import makeStyles from "@mui/styles/makeStyles";
 
 export const useInputStyles = makeStyles<Theme>(theme => createStyles({
-        hidden: {
-            display: "none"
-        }
-    })
+    hidden: {
+        display: "none"
+    }
+})
 );
 
 export function TableDateField(props: {
@@ -56,12 +56,12 @@ export function TableDateField(props: {
 
             <Box flexGrow={1}>
                 {internalValue &&
-                <Typography variant={"body2"}>
-                    <TimestampPreview value={internalValue}
-                                      property={property}
-                                      size={"regular"}/>
-                </Typography>}
-                {!internalValue && <EmptyValue/>}
+                    <Typography variant={"body2"}>
+                        <TimestampPreview value={internalValue}
+                            property={property}
+                            size={"regular"} />
+                    </Typography>}
+                {!internalValue && <EmptyValue />}
             </Box>
 
             <Box width={40}>

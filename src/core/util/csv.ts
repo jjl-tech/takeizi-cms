@@ -14,10 +14,10 @@ interface Header {
 }
 
 export function downloadCSV<M>(data: Entity<M>[],
-                               additionalData: Record<string, any>[] | undefined,
-                               schema: ResolvedEntitySchema<M>,
-                               path: string,
-                               exportConfig: ExportConfig | undefined) {
+    additionalData: Record<string, any>[] | undefined,
+    schema: ResolvedEntitySchema<M>,
+    path: string,
+    exportConfig: ExportConfig | undefined) {
     const properties = schema.properties;
     const headers = getExportHeaders(properties, path, exportConfig);
     const exportableData = getExportableData(data, additionalData, properties, headers);
@@ -27,9 +27,9 @@ export function downloadCSV<M>(data: Entity<M>[],
 }
 
 export function getExportableData(data: any[],
-                                  additionalData: Record<string, any>[] | undefined,
-                                  properties: Properties,
-                                  headers: Header[]
+    additionalData: Record<string, any>[] | undefined,
+    properties: Properties,
+    headers: Header[]
 ) {
 
     const mergedData: any[] = data.map(e => ({ id: e.id, ...processCSVValues(e.values as any, properties) }));
@@ -45,8 +45,8 @@ export function getExportableData(data: any[],
 
 
 function getExportHeaders<M extends { [Key: string]: any }, UserType>(properties: Properties<M>,
-                                                                      path: string,
-                                                                      exportConfig?: ExportConfig<UserType>): Header[] {
+    path: string,
+    exportConfig?: ExportConfig<UserType>): Header[] {
     const headers = [
         { label: "id", key: "id" },
         ...Object.entries(properties)
@@ -82,7 +82,7 @@ function getHeaders(property: Property, propertyKey: string, prefix: string = ""
 }
 
 function processCSVValue(inputValue: any,
-                         property: Property): any {
+    property: Property): any {
 
     let value;
     if (property.dataType === "map" && property.properties) {
@@ -110,7 +110,7 @@ function processCSVValue(inputValue: any,
 }
 
 function processCSVValues<M extends { [Key: string]: any }>
-(inputValues: Record<keyof M, any>, properties: Properties<M>): Record<keyof M, any> {
+    (inputValues: Record<keyof M, any>, properties: Properties<M>): Record<keyof M, any> {
     const updatedValues = Object.entries(properties)
         .map(([key, property]) => {
             const inputValue = inputValues && (inputValues as any)[key];

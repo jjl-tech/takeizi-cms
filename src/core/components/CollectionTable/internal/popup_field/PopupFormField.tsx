@@ -1,3 +1,10 @@
+import { Portal } from "@mui/base";
+import ClearIcon from "@mui/icons-material/Clear";
+import { Button, IconButton, Theme, Typography } from "@mui/material";
+import createStyles from "@mui/styles/createStyles";
+import makeStyles from "@mui/styles/makeStyles";
+import clsx from "clsx";
+import { Form, Formik, FormikProps } from "formik";
 import React, {
     useCallback,
     useEffect,
@@ -5,16 +12,12 @@ import React, {
     useMemo,
     useState
 } from "react";
-
-import { Button, IconButton, Theme, Typography } from "@mui/material";
-import { Portal } from "@mui/base";
-
-import createStyles from "@mui/styles/createStyles";
-import makeStyles from "@mui/styles/makeStyles";
-import ClearIcon from "@mui/icons-material/Clear";
-
 import isEqual from "react-fast-compare";
-
+import { buildPropertyField } from "../../../../../form";
+import {
+    CustomFieldValidator,
+    getYupEntitySchema
+} from "../../../../../form/validation";
 import {
     Entity,
     EntitySchemaResolver,
@@ -23,19 +26,16 @@ import {
     Properties,
     Property
 } from "../../../../../models";
-import { Form, Formik, FormikProps } from "formik";
-import { useDraggable } from "./useDraggable";
-import {
-    CustomFieldValidator,
-    getYupEntitySchema
-} from "../../../../../form/validation";
-import { useWindowSize } from "./useWindowSize";
 import { computeSchema, isReadOnly } from "../../../../utils";
-import { buildPropertyField } from "../../../../../form";
-import clsx from "clsx";
-import { ElementResizeListener } from "./ElementResizeListener";
-import { OnCellValueChangeParams } from "../../column_builder";
 import { ErrorView } from "../../../ErrorView";
+import { OnCellValueChangeParams } from "../../column_builder";
+import { ElementResizeListener } from "./ElementResizeListener";
+import { useDraggable } from "./useDraggable";
+import { useWindowSize } from "./useWindowSize";
+
+
+
+
 
 export const useStyles = makeStyles((theme: Theme) => createStyles({
     form: {
@@ -93,19 +93,19 @@ interface PopupFormFieldProps<M extends { [Key: string]: any }> {
 }
 
 export function PopupFormField<M extends { [Key: string]: any }>({
-                                                                     tableKey,
-                                                                     entity,
-                                                                     customFieldValidator,
-                                                                     name,
-                                                                     schemaResolver,
-                                                                     path,
-                                                                     cellRect,
-                                                                     setPreventOutsideClick,
-                                                                     open,
-                                                                     onClose,
-                                                                     columnIndex,
-                                                                     onCellValueChange
-                                                                 }: PopupFormFieldProps<M>) {
+    tableKey,
+    entity,
+    customFieldValidator,
+    name,
+    schemaResolver,
+    path,
+    cellRect,
+    setPreventOutsideClick,
+    open,
+    onClose,
+    columnIndex,
+    onCellValueChange
+}: PopupFormFieldProps<M>) {
 
     const [savingError, setSavingError] = React.useState<any>();
     const [popupLocation, setPopupLocation] = useState<{ x: number, y: number }>();
@@ -149,9 +149,9 @@ export function PopupFormField<M extends { [Key: string]: any }>({
     }, [cellRect, windowSize.height, windowSize.width]);
 
     const normalizePosition = useCallback(({
-                                               x,
-                                               y
-                                           }: { x: number, y: number }) => {
+        x,
+        y
+    }: { x: number, y: number }) => {
         if (!draggableBoundingRect)
             throw Error("normalizePosition called before draggableBoundingRect is set");
 
@@ -253,16 +253,16 @@ export function PopupFormField<M extends { [Key: string]: any }>({
                 }}
             >
                 {({
-                      handleChange,
-                      values,
-                      errors,
-                      touched,
-                      dirty,
-                      setFieldValue,
-                      setFieldTouched,
-                      handleSubmit,
-                      isSubmitting
-                  }: FormikProps<EntityValues<M>>) => {
+                    handleChange,
+                    values,
+                    errors,
+                    touched,
+                    dirty,
+                    setFieldValue,
+                    setFieldTouched,
+                    handleSubmit,
+                    isSubmitting
+                }: FormikProps<EntityValues<M>>) => {
 
                     if (!isEqual(values, internalValue)) {
                         setInternalValue(values);
@@ -270,7 +270,7 @@ export function PopupFormField<M extends { [Key: string]: any }>({
 
                     if (!entity)
                         return <ErrorView
-                            error={"PopupFormField misconfiguration"}/>;
+                            error={"PopupFormField misconfiguration"} />;
 
                     if (!schemaResolver)
                         return <></>;
@@ -325,9 +325,9 @@ export function PopupFormField<M extends { [Key: string]: any }>({
             </Formik>
 
             {savingError &&
-            <Typography color={"error"}>
-                {savingError.message}
-            </Typography>
+                <Typography color={"error"}>
+                    {savingError.message}
+                </Typography>
             }
 
         </div>
@@ -341,10 +341,10 @@ export function PopupFormField<M extends { [Key: string]: any }>({
             )}
             ref={containerRef}>
 
-            <ElementResizeListener onResize={adaptResize}/>
+            <ElementResizeListener onResize={adaptResize} />
 
             <div className={classes.popupInner}
-                 ref={ref}>
+                ref={ref}>
 
                 {form}
 
@@ -361,7 +361,7 @@ export function PopupFormField<M extends { [Key: string]: any }>({
                         onClose();
                     }}>
                     <ClearIcon style={{ color: "white" }}
-                               fontSize={"small"}/>
+                        fontSize={"small"} />
                 </IconButton>
             </div>
 

@@ -1,6 +1,6 @@
+import { FirebaseApp, initializeApp } from "firebase/app";
 import React, { useCallback, useEffect } from "react";
 
-import { FirebaseApp, initializeApp } from "firebase/app";
 
 /**
  * @category Firebase
@@ -52,19 +52,15 @@ export function useInitialiseFirebase({ firebaseConfig, onFirebaseInit }: {
     }, [onFirebaseInit]);
 
     useEffect(() => {
-
         setFirebaseConfigLoading(true);
 
         if (firebaseConfig) {
-            console.log("Using specified config", firebaseConfig);
             initFirebase(firebaseConfig);
         } else if (process.env.NODE_ENV === "production") {
             fetch("/__/firebase/init.json")
                 .then(async response => {
-                    console.debug("Firebase init response", response.status);
                     if (response && response.status < 300) {
                         const config = await response.json();
-                        console.log("Using configuration fetched from Firebase Hosting", config);
                         initFirebase(config);
                     }
                 })

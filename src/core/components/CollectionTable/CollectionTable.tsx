@@ -1,8 +1,14 @@
-import React, { useCallback, useMemo } from "react";
 import { Button, Paper, Theme, useMediaQuery, useTheme } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import createStyles from "@mui/styles/createStyles";
-
+import React, { useCallback, useMemo } from "react";
+import {
+    saveEntityWithCallbacks,
+    useCollectionFetch,
+    useDataSource,
+    useFireCMSContext,
+    useSideEntityController
+} from "../../../hooks";
 import {
     AdditionalColumnDelegate,
     CollectionSize,
@@ -13,24 +19,18 @@ import {
     User,
     WhereFilterOp
 } from "../../../models";
-import { getSubcollectionColumnId, useColumnIds } from "./internal/common";
-import { CollectionTableToolbar } from "./internal/CollectionTableToolbar";
-import { CollectionRowActions } from "./internal/CollectionRowActions";
-import { CollectionTableProps } from "./CollectionTableProps";
-import {
-    saveEntityWithCallbacks,
-    useCollectionFetch,
-    useDataSource,
-    useFireCMSContext,
-    useSideEntityController
-} from "../../../hooks";
 import { Table } from "../../index";
+import { CollectionTableProps } from "./CollectionTableProps";
 import {
     checkInlineEditing,
     OnCellValueChange,
     UniqueFieldValidator,
     useBuildColumnsFromSchema
 } from "./column_builder";
+import { CollectionRowActions } from "./internal/CollectionRowActions";
+import { CollectionTableToolbar } from "./internal/CollectionTableToolbar";
+import { getSubcollectionColumnId, useColumnIds } from "./internal/common";
+
 
 const DEFAULT_PAGE_SIZE = 50;
 
@@ -84,20 +84,20 @@ function areEqual(prevProps: CollectionTableProps<any, any>, nextProps: Collecti
 export function CollectionTableInternal<M extends { [Key: string]: any },
     AdditionalKey extends string = string,
     UserType = User>
-({
-     path,
-     collection,
-     schemaResolver,
-     inlineEditing,
-     toolbarActionsBuilder,
-     title,
-     tableRowActionsBuilder,
-     entitiesDisplayedFirst,
-     onEntityClick,
-     onColumnResize,
-     onSizeChanged,
-     hoverRow = true
- }: CollectionTableProps<M, AdditionalKey>) {
+    ({
+        path,
+        collection,
+        schemaResolver,
+        inlineEditing,
+        toolbarActionsBuilder,
+        title,
+        tableRowActionsBuilder,
+        entitiesDisplayedFirst,
+        onEntityClick,
+        onColumnResize,
+        onSizeChanged,
+        hoverRow = true
+    }: CollectionTableProps<M, AdditionalKey>) {
 
     const context = useFireCMSContext();
     const dataSource = useDataSource();
@@ -133,19 +133,19 @@ export function CollectionTableInternal<M extends { [Key: string]: any },
                 dependencies: [],
                 builder: ({ entity }) => (
                     <Button color={"primary"}
-                            onClick={(event) => {
-                                event.stopPropagation();
-                                sideEntityController.open({
-                                    path,
-                                    entityId: entity.id,
-                                    selectedSubpath: subcollection.path,
-                                    permissions: collection.permissions,
-                                    schema: schemaResolver,
-                                    subcollections: collection.subcollections,
-                                    callbacks: collection.callbacks,
-                                    overrideSchemaRegistry: false
-                                });
-                            }}>
+                        onClick={(event) => {
+                            event.stopPropagation();
+                            sideEntityController.open({
+                                path,
+                                entityId: entity.id,
+                                selectedSubpath: subcollection.path,
+                                permissions: collection.permissions,
+                                schema: schemaResolver,
+                                subcollections: collection.subcollections,
+                                callbacks: collection.callbacks,
+                                overrideSchemaRegistry: false
+                            });
+                        }}>
                         {subcollection.name}
                     </Button>
                 )
@@ -159,21 +159,21 @@ export function CollectionTableInternal<M extends { [Key: string]: any },
 
     const uniqueFieldValidator: UniqueFieldValidator = useCallback(
         ({
-             name,
-             value,
-             property,
-             entityId
-         }) => dataSource.checkUniqueField(path, name, value, property, entityId),
+            name,
+            value,
+            property,
+            entityId
+        }) => dataSource.checkUniqueField(path, name, value, property, entityId),
         [path, dataSource]);
 
 
     const onCellChanged: OnCellValueChange<any, M> = useCallback(({
-                                                                      value,
-                                                                      name,
-                                                                      setSaved,
-                                                                      setError,
-                                                                      entity
-                                                                  }) => {
+        value,
+        name,
+        setSaved,
+        setError,
+        entity
+    }) => {
         const saveProps: SaveEntityProps<M> = {
             path,
             entityId: entity.id,
@@ -252,7 +252,7 @@ export function CollectionTableInternal<M extends { [Key: string]: any },
         if (tableRowActionsBuilder)
             return tableRowActionsBuilder({ entity: entry, size });
         else
-            return <CollectionRowActions entity={entry} size={size}/>;
+            return <CollectionRowActions entity={entry} size={size} />;
 
     }, [tableRowActionsBuilder]);
 
@@ -274,13 +274,13 @@ export function CollectionTableInternal<M extends { [Key: string]: any },
         <Paper className={classes.root}>
 
             <CollectionTableToolbar filterIsSet={filterIsSet}
-                                    onTextSearch={textSearchEnabled ? onTextSearch : undefined}
-                                    clearFilter={clearFilter}
-                                    actions={actions}
-                                    size={size}
-                                    onSizeChanged={updateSize}
-                                    title={title}
-                                    loading={dataLoading}/>
+                onTextSearch={textSearchEnabled ? onTextSearch : undefined}
+                clearFilter={clearFilter}
+                actions={actions}
+                size={size}
+                onSizeChanged={updateSize}
+                title={title}
+                loading={dataLoading} />
 
             <Table
                 data={data}
@@ -304,8 +304,6 @@ export function CollectionTableInternal<M extends { [Key: string]: any },
             />
 
             {popupFormField}
-
-
         </Paper>
     );
 

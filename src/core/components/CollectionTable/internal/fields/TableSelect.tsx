@@ -1,27 +1,27 @@
+import { Checkbox, ListItemText, MenuItem, Select, Theme } from "@mui/material";
+import createStyles from "@mui/styles/createStyles";
+import makeStyles from "@mui/styles/makeStyles";
+import React, { useEffect, useState } from "react";
 import { EnumValues } from "../../../../../models";
 import { ArrayEnumPreview } from "../../../../../preview";
-import React, { useEffect, useState } from "react";
-import { Checkbox, ListItemText, MenuItem, Select, Theme } from "@mui/material";
+import { EnumValuesChip } from "../../../../../preview/components/CustomChip";
 import {
     enumToObjectEntries,
     isEnumValueDisabled
 } from "../../../../util/enums";
-import { EnumValuesChip } from "../../../../../preview/components/CustomChip";
 
 
-import createStyles from "@mui/styles/createStyles";
-import makeStyles from "@mui/styles/makeStyles";
 
 export const useInputStyles = makeStyles<Theme>(theme => createStyles({
-        select: {
-            height: "100%"
-        },
-        selectRoot: {
-            display: "flex",
-            alignItems: "center",
-            height: "100%"
-        }
-    })
+    select: {
+        height: "100%"
+    },
+    selectRoot: {
+        display: "flex",
+        alignItems: "center",
+        height: "100%"
+    }
+})
 );
 
 export function TableSelect(props: {
@@ -119,14 +119,14 @@ export function TableSelect(props: {
             renderValue={(enumKey: any) => {
                 if (multiple && Array.isArray(enumKey)) {
                     return <ArrayEnumPreview value={enumKey}
-                                             name={name}
-                                             enumValues={enumValues}
-                                             size={small ? "small" : "regular"}/>;
+                        name={name}
+                        enumValues={enumValues}
+                        size={small ? "small" : "regular"} />;
                 } else {
                     return <EnumValuesChip
                         enumKey={enumKey}
                         enumValues={enumValues}
-                        small={small}/>;
+                        small={small} />;
                 }
             }
             }>
@@ -136,23 +136,23 @@ export function TableSelect(props: {
                 const chip = <EnumValuesChip
                     enumKey={key}
                     enumValues={enumValues}
-                    small={true}/>;
+                    small={true} />;
                 if (multiple) {
                     return (
                         <MenuItem key={`select-${name}-${key}`}
-                                  value={key}
-                                  disabled={isEnumValueDisabled(labelOrConfig)}
-                                  dense={true}>
+                            value={key}
+                            disabled={isEnumValueDisabled(labelOrConfig)}
+                            dense={true}>
                             <Checkbox
-                                checked={Array.isArray(internalValue) && (internalValue as any[]).map(v => v.toString()).includes(key.toString())}/>
-                            <ListItemText primary={chip}/>
+                                checked={Array.isArray(internalValue) && (internalValue as any[]).map(v => v.toString()).includes(key.toString())} />
+                            <ListItemText primary={chip} />
                         </MenuItem>
                     );
                 } else {
                     return (
                         <MenuItem key={`select-${name}-${key}`} value={key}
-                                  disabled={isEnumValueDisabled(labelOrConfig)}
-                                  dense={true}>
+                            disabled={isEnumValueDisabled(labelOrConfig)}
+                            dense={true}>
                             {chip}
                         </MenuItem>
                     );

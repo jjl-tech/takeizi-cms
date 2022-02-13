@@ -1,19 +1,18 @@
-import React, { useCallback } from "react";
-import { Blocker, Transition } from "history";
-import { UNSAFE_NavigationContext, useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import { Blocker, Transition } from "history";
+import React, { useCallback } from "react";
+import { UNSAFE_NavigationContext, useNavigate } from "react-router-dom";
 
-export function useNavigationUnsavedChangesDialog(when: boolean, onSuccess: () => void):
-    {
-        navigationWasBlocked: boolean,
-        handleCancel: () => void,
-        handleOk: () => void
-    } {
+export function useNavigationUnsavedChangesDialog(when: boolean, onSuccess: () => void): {
+    navigationWasBlocked: boolean,
+    handleCancel: () => void,
+    handleOk: () => void
+} {
 
     const [nextLocation, setNextLocation] = React.useState<any | undefined>();
     const { navigator } = React.useContext(UNSAFE_NavigationContext);
@@ -72,11 +71,11 @@ export interface UnsavedChangesDialogProps {
 }
 
 export function UnsavedChangesDialog({
-                                         open,
-                                         handleOk,
-                                         handleCancel,
-                                         schemaName
-                                     }: UnsavedChangesDialogProps) {
+    open,
+    handleOk,
+    handleCancel,
+    schemaName
+}: UnsavedChangesDialogProps) {
 
     return (
         <Dialog
@@ -86,19 +85,19 @@ export function UnsavedChangesDialog({
             aria-describedby="alert-dialog-description"
         >
             <DialogTitle id="alert-dialog-title">
-                {"Unsaved changes"}
+                {"Alterações não salvas"}
             </DialogTitle>
             <DialogContent>
                 <DialogContentText id="alert-dialog-description">
-                    You have unsaved changes in this <b>{schemaName}</b>.
+                    Você tem alterações não salvas em <b>{schemaName}</b>.
                 </DialogContentText>
                 <DialogContentText id="alert-dialog-description">
-                    Are you sure you want to leave this page?
+                    Tem certeza que deseja sair?
                 </DialogContentText>
             </DialogContent>
             <DialogActions>
-                <Button onClick={handleCancel} autoFocus> Cancel </Button>
-                <Button onClick={handleOk}> Ok </Button>
+                <Button onClick={handleCancel} autoFocus>Cancelar</Button>
+                <Button variant="outlined" onClick={handleOk}>Sim, sair</Button>
             </DialogActions>
         </Dialog>
     );

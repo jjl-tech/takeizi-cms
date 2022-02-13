@@ -61,9 +61,9 @@ export interface CollectionTableProps<M extends { [Key: string]: any }, Addition
      * @param size
      */
     tableRowActionsBuilder?: ({
-                                  entity,
-                                  size
-                              }: { entity: Entity<M>, size: CollectionSize }) => React.ReactNode;
+        entity,
+        size
+    }: { entity: Entity<M>, size: CollectionSize }) => React.ReactNode;
 
     /**
      * Callback when anywhere on the table is clicked

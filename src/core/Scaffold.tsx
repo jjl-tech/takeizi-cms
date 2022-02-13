@@ -1,11 +1,11 @@
-import React, { PropsWithChildren } from "react";
-
 import { Drawer as MuiDrawer, Theme } from "@mui/material";
 import { createStyles, makeStyles } from "@mui/styles";
-import { Drawer as FireCMSDrawer, DrawerProps } from "./Drawer";
-import { FireCMSAppBar } from "./internal/FireCMSAppBar";
+import React, { PropsWithChildren } from "react";
 import { useNavigation } from "../hooks";
 import { CircularProgressCenter } from "./components";
+import { Drawer as FireCMSDrawer, DrawerProps } from "./Drawer";
+import { FireCMSAppBar } from "./internal/FireCMSAppBar";
+
 
 
 /**
@@ -103,7 +103,7 @@ export function Scaffold(props: PropsWithChildren<ScaffoldProps>) {
                         keepMounted: true
                     }}
                 >
-                    {!navigationContext.navigation ? <CircularProgressCenter/> : <UsedDrawer logo={logo} closeDrawer={closeDrawer}/>}
+                    {!navigationContext.navigation ? <CircularProgressCenter /> : <UsedDrawer logo={logo} closeDrawer={closeDrawer} />}
 
                 </MuiDrawer>
             </nav>
@@ -111,8 +111,8 @@ export function Scaffold(props: PropsWithChildren<ScaffoldProps>) {
             <div className={classes.main}>
 
                 <FireCMSAppBar title={name}
-                               handleDrawerToggle={handleDrawerToggle}
-                               toolbarExtraWidget={toolbarExtraWidget}/>
+                    handleDrawerToggle={handleDrawerToggle}
+                    toolbarExtraWidget={toolbarExtraWidget} />
                 <main
                     className={classes.content}>
                     {children}

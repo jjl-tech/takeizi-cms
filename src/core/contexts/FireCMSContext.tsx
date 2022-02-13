@@ -17,9 +17,9 @@ export const FireCMSContextInstance = React.createContext<FireCMSContext>({
  * @category Core
  */
 export const FireCMSContextProvider: React.FC<React.PropsWithChildren<FireCMSContext>> = ({
-                                                                                              children,
-                                                                                              ...context
-                                                                                          }) => {
+    children,
+    ...context
+}) => {
 
     return (
         <FireCMSContextInstance.Provider

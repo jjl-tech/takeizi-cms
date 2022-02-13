@@ -1,11 +1,12 @@
+import EditIcon from "@mui/icons-material/Edit";
+import { Box, IconButton, Skeleton, Theme, Typography } from "@mui/material";
+import makeStyles from "@mui/styles/makeStyles";
+import clsx from "clsx";
 import * as React from "react";
 import { useCallback, useEffect, useMemo, useState } from "react";
-
-import { Box, IconButton, Skeleton, Theme, Typography } from "@mui/material";
-
-import EditIcon from "@mui/icons-material/Edit";
-import makeStyles from "@mui/styles/makeStyles";
-
+import { useDropzone } from "react-dropzone";
+import isEqual from "react-fast-compare";
+import { useSnackbarController, useStorageSource } from "../../../../../hooks";
 import {
     ArrayProperty,
     EntityValues,
@@ -13,16 +14,15 @@ import {
     StorageMeta,
     StringProperty
 } from "../../../../../models";
-import { useDropzone } from "react-dropzone";
 import { PreviewComponent, PreviewSize } from "../../../../../preview";
-import isEqual from "react-fast-compare";
+import { getThumbnailMeasure } from "../../../../../preview/util";
 import { ErrorBoundary } from "../../../../internal/ErrorBoundary";
 
-import clsx from "clsx";
-import { useSnackbarController, useStorageSource } from "../../../../../hooks";
-import { getThumbnailMeasure } from "../../../../../preview/util";
 
-export const useStyles = makeStyles<Theme, {hasValue:boolean}>((theme: Theme) => ({
+
+
+
+export const useStyles = makeStyles<Theme, { hasValue: boolean }>((theme: Theme) => ({
     dropZone: {
         position: "relative",
         height: "100%",
@@ -105,10 +105,10 @@ export function TableStorageUpload(props: {
     const multipleFilesSupported = property.dataType === "array";
 
     const storageMeta: StorageMeta | undefined = property.dataType === "string"
-? property.config?.storageMeta
+        ? property.config?.storageMeta
         : property.dataType === "array" &&
-        (property.of as Property).dataType === "string"
-? (property.of as StringProperty).config?.storageMeta
+            (property.of as Property).dataType === "string"
+            ? (property.of as StringProperty).config?.storageMeta
             : undefined;
 
     if (!storageMeta)
@@ -174,7 +174,7 @@ export function TableStorageUpload(props: {
             storagePathBuilder={storagePathBuilder}
             storageMeta={storageMeta}
             multipleFilesSupported={multipleFilesSupported}
-            previewSize={previewSize}/>
+            previewSize={previewSize} />
 
     );
 }
@@ -209,18 +209,18 @@ interface StorageUploadProps {
 }
 
 function StorageUpload({
-                           property,
-                           name,
-                           value,
-                           onChange,
-                           multipleFilesSupported,
-                           previewSize: previewSizeInput,
-                           disabled,
-                           autoFocus,
-                           storageMeta,
-                           fileNameBuilder,
-                                  storagePathBuilder
-                              }: StorageUploadProps) {
+    property,
+    name,
+    value,
+    onChange,
+    multipleFilesSupported,
+    previewSize: previewSizeInput,
+    disabled,
+    autoFocus,
+    storageMeta,
+    fileNameBuilder,
+    storagePathBuilder
+}: StorageUploadProps) {
 
     const storage = useStorageSource();
     const [onHover, setOnHover] = useState(false);
@@ -248,13 +248,13 @@ function StorageUpload({
             : (multipleFilesSupported
                 ? value as string[]
                 : [value as string]).map(entry => (
-                {
-                    id: getRandomId(),
-                    storagePathOrDownloadUrl: entry,
-                    metadata: metadata,
-                    size: previewSize
-                }
-            ));
+                    {
+                        id: getRandomId(),
+                        storagePathOrDownloadUrl: entry,
+                        metadata: metadata,
+                        size: previewSize
+                    }
+                ));
 
     const initialValue = React.useRef<string | string[] | null>(value);
     const [internalValue, setInternalValue] = React.useState<StorageFieldItem[]>(internalInitialValue);
@@ -285,12 +285,12 @@ function StorageUpload({
         let newInternalValue: StorageFieldItem[];
         if (multipleFilesSupported) {
             newInternalValue = [...internalValue,
-                ...(acceptedFiles.map(file => ({
-                    id: getRandomId(),
-                    file,
-                    fileName: fileNameBuilder(file),
-                    metadata
-                } as StorageFieldItem)))];
+            ...(acceptedFiles.map(file => ({
+                id: getRandomId(),
+                file,
+                fileName: fileNameBuilder(file),
+                metadata
+            } as StorageFieldItem)))];
         } else {
             newInternalValue = [{
                 id: getRandomId(),
@@ -306,8 +306,8 @@ function StorageUpload({
     };
 
     const onFileUploadComplete = async (uploadedPath: string,
-                                        entry: StorageFieldItem,
-                                        metadata?: any) => {
+        entry: StorageFieldItem,
+        metadata?: any) => {
 
         let uploadPathOrDownloadUrl = uploadedPath;
         if (storageMeta.storeUrl) {
@@ -356,19 +356,19 @@ function StorageUpload({
         isDragAccept,
         isDragReject
     } = useDropzone({
-            accept: storageMeta.acceptedFiles,
-            disabled: disabled,
-            noClick: true,
-            noKeyboard: true,
-            onDrop: onExternalDrop
-        }
+        accept: storageMeta.acceptedFiles,
+        disabled: disabled,
+        noClick: true,
+        noKeyboard: true,
+        onDrop: onExternalDrop
+    }
     );
 
     const { ...rootProps } = getRootProps();
 
     const helpText = multipleFilesSupported
-        ? "Drag 'n' drop some files here, or click here to edit"
-        : "Drag 'n' drop a file here, or click here edit";
+        ? "Arraste ou clique aqui para editar"
+        : "Arraste ou clique aqui para editar";
 
     const renderProperty = multipleFilesSupported
         ? (property as ArrayProperty<string[]>).of as StringProperty
@@ -377,14 +377,14 @@ function StorageUpload({
     return (
         <Box {...rootProps}
 
-             onMouseEnter={() => setOnHover(true)}
-             onMouseMove={() => setOnHover(true)}
-             onMouseLeave={() => setOnHover(false)}
-             className={clsx(classes.dropZone, {
-                 [classes.activeDrop]: isDragActive,
-                 [classes.rejectDrop]: isDragReject,
-                 [classes.acceptDrop]: isDragAccept
-             })}
+            onMouseEnter={() => setOnHover(true)}
+            onMouseMove={() => setOnHover(true)}
+            onMouseLeave={() => setOnHover(false)}
+            className={clsx(classes.dropZone, {
+                [classes.activeDrop]: isDragActive,
+                [classes.rejectDrop]: isDragReject,
+                [classes.acceptDrop]: isDragAccept
+            })}
         >
 
             <input autoFocus={autoFocus} {...getInputProps()} />
@@ -399,7 +399,7 @@ function StorageUpload({
                             disabled={disabled}
                             value={entry.storagePathOrDownloadUrl}
                             onClear={onClear}
-                            size={previewSize}/>
+                            size={previewSize} />
                     );
                 } else if (entry.file) {
                     child = (
@@ -436,22 +436,22 @@ function StorageUpload({
             </Box>}
 
             {onHover &&
-            <IconButton
-                color={"inherit"}
-                size={"small"}
-                onClick={open}
-                sx={{
-                    position: "absolute",
-                    bottom: 2,
-                    right: 2
-                }}>
-                <EditIcon sx={{
-                    width: 16,
-                    height: 16,
-                    fill: "#666"
-                }
-                }/>
-            </IconButton>
+                <IconButton
+                    color={"inherit"}
+                    size={"small"}
+                    onClick={open}
+                    sx={{
+                        position: "absolute",
+                        bottom: 2,
+                        right: 2
+                    }}>
+                    <EditIcon sx={{
+                        width: 16,
+                        height: 16,
+                        fill: "#666"
+                    }
+                    } />
+                </IconButton>
             }
 
 
@@ -466,18 +466,18 @@ interface StorageUploadItemProps {
     metadata?: any,
     entry: StorageFieldItem,
     onFileUploadComplete: (value: string,
-                           entry: StorageFieldItem,
-                           metadata?: any) => Promise<void>;
+        entry: StorageFieldItem,
+        metadata?: any) => Promise<void>;
     size: PreviewSize;
 }
 
 export function StorageUploadProgress({
-                                          storagePath,
-                                          entry,
-                                          metadata,
-                                          onFileUploadComplete,
-                                          size
-                                      }: StorageUploadItemProps) {
+    storagePath,
+    entry,
+    metadata,
+    onFileUploadComplete,
+    size
+}: StorageUploadItemProps) {
 
     const storage = useStorageSource();
 
@@ -494,7 +494,6 @@ export function StorageUploadProgress({
 
         storage.uploadFile({ file, fileName, path: storagePath, metadata })
             .then(async ({ path }) => {
-                console.debug("Upload successful");
                 await onFileUploadComplete(path, entry, metadata);
                 if (mounted.current)
                     setLoading(false);
@@ -507,7 +506,7 @@ export function StorageUploadProgress({
                 }
                 snackbarContext.open({
                     type: "error",
-                    title: "Error uploading file",
+                    title: "Erro ao efetuar upload",
                     message: e.message
                 });
             });
@@ -534,9 +533,9 @@ export function StorageUploadProgress({
             {loading && <Skeleton variant="rectangular" sx={{
                 width: imageSize,
                 height: imageSize
-            }}/>}
+            }} />}
 
-            {error && <p>Error uploading file: {error}</p>}
+            {error && <p>Erro ao efetuar upload: {error}</p>}
 
         </Box>
 
@@ -553,10 +552,10 @@ interface StorageItemPreviewProps {
 }
 
 export function StorageItemPreview({
-                                       property,
-                                       value,
-                                       size
-                                   }: StorageItemPreviewProps) {
+    property,
+    value,
+    size
+}: StorageItemPreviewProps) {
 
     return (
         <Box
@@ -565,13 +564,12 @@ export function StorageItemPreview({
         >
 
             {value &&
-            <ErrorBoundary>
-                <PreviewComponent value={value}
-                                  property={property}
-                                  size={size}/>
-            </ErrorBoundary>
+                <ErrorBoundary>
+                    <PreviewComponent value={value}
+                        property={property}
+                        size={size} />
+                </ErrorBoundary>
             }
-
         </Box>
     );
 

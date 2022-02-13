@@ -209,7 +209,6 @@ function SampleApp() {
             'password',
         ]}
         textSearchController={textSearchController}
-        allowSkipLogin={true}
         logo={logo}
         navigation={navigation}
         schemaOverrideHandler={customSchemaOverrideHandler}

@@ -1,11 +1,4 @@
-import React, {
-    lazy,
-    Suspense,
-    useCallback,
-    useEffect,
-    useMemo,
-    useState
-} from "react";
+import CloseIcon from "@mui/icons-material/Close";
 import {
     Box,
     CircularProgress,
@@ -19,8 +12,24 @@ import {
 } from "@mui/material";
 import createStyles from "@mui/styles/createStyles";
 import makeStyles from "@mui/styles/makeStyles";
-import CloseIcon from "@mui/icons-material/Close";
 import clsx from "clsx";
+import React, {
+    lazy,
+    Suspense,
+    useCallback,
+    useEffect,
+    useMemo,
+    useState
+} from "react";
+import {
+    saveEntityWithCallbacks,
+    useAuthController,
+    useDataSource,
+    useEntityFetch,
+    useFireCMSContext,
+    useSideEntityController,
+    useSnackbarController
+} from "../../hooks";
 import {
     Entity,
     EntityCallbacks,
@@ -34,20 +43,11 @@ import {
 } from "../../models";
 import { CircularProgressCenter } from "../components";
 import { removeInitialAndTrailingSlashes } from "../util/navigation_utils";
-
-import { CONTAINER_FULL_WIDTH, CONTAINER_WIDTH, TAB_WIDTH } from "./common";
-import { ErrorBoundary } from "./ErrorBoundary";
-import {
-    saveEntityWithCallbacks,
-    useAuthController,
-    useDataSource,
-    useEntityFetch,
-    useFireCMSContext,
-    useSideEntityController,
-    useSnackbarController
-} from "../../hooks";
 import { canEdit } from "../util/permissions";
 import { computeSchema } from "../utils";
+import { CONTAINER_FULL_WIDTH, CONTAINER_WIDTH, TAB_WIDTH } from "./common";
+import { ErrorBoundary } from "./ErrorBoundary";
+
 
 const EntityCollectionView = lazy(() => import("../components/EntityCollectionView")) as any;
 const EntityForm = lazy(() => import("../../form/EntityForm")) as any;
@@ -182,7 +182,7 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
         function beforeunload(e: any) {
             if (modifiedValues) {
                 e.preventDefault();
-                e.returnValue = `You have unsaved changes in this ${resolvedSchema.name}. Are you sure you want to leave this page?`;
+                e.returnValue = "Você tem alterações não salvas nesta página. Tem certeza que deseja sair?";
             }
         }
 
@@ -315,7 +315,7 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
 
     const body = !readOnly
 ? (
-            <Suspense fallback={<CircularProgressCenter/>}>
+            <Suspense fallback={<CircularProgressCenter size={50}/>}>
                 <EntityForm
                     key={`form_${path}_${entity?.id ?? "new"}`}
                     status={status}
@@ -329,7 +329,7 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
             </Suspense>
     )
 : (
-        <Suspense fallback={<CircularProgressCenter/>}>
+        <Suspense fallback={<CircularProgressCenter size={50}/>}>
             <EntityPreview
                 entity={entity}
                 path={path}

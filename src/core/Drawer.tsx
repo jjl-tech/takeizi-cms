@@ -1,4 +1,3 @@
-import React, { useCallback, useMemo } from "react";
 import {
     Box,
     Divider,
@@ -10,14 +9,15 @@ import {
 } from "@mui/material";
 import createStyles from "@mui/styles/createStyles";
 import makeStyles from "@mui/styles/makeStyles";
+import React, { useCallback, useMemo } from "react";
 import { NavLink } from "react-router-dom";
+import { useNavigation } from "../hooks";
+import { FireCMSLogo } from "./components/FireCMSLogo";
 import {
     computeTopNavigation,
     TopNavigationEntry,
     TopNavigationResult
 } from "./util/navigation_utils";
-import { useNavigation } from "../hooks";
-import { FireCMSLogo } from "./components/FireCMSLogo";
 
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -43,9 +43,9 @@ export interface DrawerProps {
  * @category Core
  */
 export function Drawer({
-                           logo,
-                           closeDrawer
-                       }: DrawerProps) {
+    logo,
+    closeDrawer
+}: DrawerProps) {
 
     const classes = useStyles();
 
@@ -68,7 +68,7 @@ export function Drawer({
             // @ts-ignore
             style={({ isActive }) => ({
                 fontWeight: isActive ? "600" : "500",
-                background: isActive ? "rgba(128,128,128,0.1)" : "inherit"
+                background: isActive ? "rgba(128,128,128,0.3)" : "inherit"
             })}
             to={entry.url}
         >
@@ -85,11 +85,11 @@ export function Drawer({
     let logoComponent;
     if (logo) {
         logoComponent = <img className={classes.logo}
-                             src={logo}
-                             alt={"Logo"}/>;
+            src={logo}
+            alt={"Logo"} />;
     } else {
         logoComponent = <div className={classes.logo}>
-            <FireCMSLogo/>
+            <FireCMSLogo />
         </div>;
     }
 
@@ -110,11 +110,11 @@ export function Drawer({
             {groups.map((group) => (
                 <React.Fragment
                     key={`drawer_group_${group}`}>
-                    <Divider key={`divider_${group}`}/>
+                    <Divider key={`divider_${group}`} />
                     <Box pt={2} pl={2} pr={2} pb={0.5}>
                         <Typography variant={"caption"}
-                                    color={"textSecondary"}
-                                    className={"weight-500"}>
+                            color={"textSecondary"}
+                            className={"weight-500"}>
                             {group.toUpperCase()}
                         </Typography>
                     </Box>
@@ -125,7 +125,7 @@ export function Drawer({
             ))}
 
             {ungroupedNavigationViews.length > 0 &&
-            <Divider key={"divider_ungrouped"}/>}
+                <Divider key={"divider_ungrouped"} />}
 
             {ungroupedNavigationViews.map((view, index) => createNavigationListItem(index, "none", view))}
 

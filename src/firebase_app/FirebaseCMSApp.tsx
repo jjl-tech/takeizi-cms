@@ -19,8 +19,6 @@ import { useInitialiseFirebase } from "./hooks/useInitialiseFirebase";
 import { FirebaseAuthDelegate } from "./models/auth";
 
 
-
-
 const DEFAULT_SIGN_IN_OPTIONS = [
     GoogleAuthProvider.PROVIDER_ID
 ];
