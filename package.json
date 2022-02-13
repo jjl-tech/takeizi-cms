@@ -1,5 +1,5 @@
 {
-    "name": "@takeizi/firecms",
+    "name": "takeizi-cms",
     "version": "0.0.1",
     "description": "Awesome Firebase/Firestore-based headless open-source CMS",
     "author": "jjl-tech",
