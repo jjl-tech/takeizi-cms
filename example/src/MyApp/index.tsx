@@ -131,7 +131,7 @@ export const RabeloApp = () => {
             signInOptions={[
                 {
                     provider: 'password',
-                }
+                },
             ]}
             locale="ptBR"
             logo={Logo}

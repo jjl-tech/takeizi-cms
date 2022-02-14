@@ -1,25 +1,20 @@
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import EmailIcon from "@mui/icons-material/Email";
-import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import {
     Box,
     Button,
     CircularProgress,
     Fade,
-    Grid,
-    IconButton,
-    Slide,
+    Grid, Slide,
     TextField,
-    Theme,
-    Typography
+    Theme
 } from "@mui/material";
+import { useTheme } from "@mui/styles";
 import createStyles from "@mui/styles/createStyles";
 import makeStyles from "@mui/styles/makeStyles";
 import { FirebaseApp } from "firebase/app";
 import React, { useEffect, useRef, useState } from "react";
 import { ErrorView } from "../../core";
 import { FireCMSLogo } from "../../core/components/FireCMSLogo";
-import { useAuthController, useModeState } from "../../hooks";
+import { useAuthController, useModeState, useSnackbarController } from "../../hooks";
 import {
     FirebaseAuthDelegate,
     FirebaseSignInOption,
@@ -34,13 +29,11 @@ import {
     twitterIcon
 } from "./social_icons";
 
-
-
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         logo: {
-            padding: theme.spacing(3),
-            height: 200,
+            // padding: theme.spacing(3),
+            height: 120,
             objectFit: "contain"
         }
     })
@@ -73,6 +66,8 @@ export function FirebaseLoginView({
     const classes = useStyles();
     const authController = useAuthController();
     const modeState = useModeState();
+    const theme = useTheme();
+    const snackBarContext = useSnackbarController();
 
     const [passwordLoginSelected, setPasswordLoginSelected] = useState(false);
 
@@ -83,38 +78,27 @@ export function FirebaseLoginView({
     })
 
     function buildErrorView() {
-        let errorView: any;
-        const ignoredCodes = ["auth/popup-closed-by-user", "auth/cancelled-popup-request"];
         if (authDelegate.authError) {
-            if (authDelegate.authError.code === "auth/operation-not-allowed") {
-                errorView =
-                    <>
-                        <Box p={1}>
-                            <ErrorView
-                                error={"You need to enable the corresponding login provider in your Firebase project"} />
-                        </Box>
+            const codeError = authDelegate.authError?.code;
 
-                        {firebaseApp &&
-                            <Box p={1}>
-                                <a href={`https://console.firebase.google.com/project/${firebaseApp.options.projectId}/authentication/providers`}
-                                    rel="noopener noreferrer"
-                                    target="_blank">
-                                    <Button variant="text"
-                                        color="primary">
-                                        Open Firebase configuration
-                                    </Button>
-                                </a>
-                            </Box>}
-                    </>;
-            } else if (!ignoredCodes.includes(authDelegate.authError.code)) {
-                console.error(authDelegate.authError);
-                errorView =
-                    <Box p={1}>
-                        <ErrorView error={authDelegate.authError.message} />
-                    </Box>;
+            if (codeError.includes("wrong-password") || codeError.includes("email-not-found")) {
+                console.log("authDelegate.authError", authDelegate.authError.code);
+                snackBarContext.open({
+                    message: "E-mail ou senha incorretos",
+                    type: "error"
+                })
+            } else if (codeError.includes("user-not-found")) {
+                snackBarContext.open({
+                    message: "E-mail não cadastrado",
+                    type: "error"
+                })
+            } else {
+                snackBarContext.open({
+                    message: "Erro ao efetuar login, tente novamente",
+                    type: "error"
+                })
             }
         }
-        return errorView;
     }
 
     let logoComponent;
@@ -139,42 +123,71 @@ export function FirebaseLoginView({
         }
     }
 
+    if (authDelegate.authError) {
+        const codeError = authDelegate.authError?.code;
+
+        if (codeError.includes("wrong-password") || codeError.includes("email-not-found")) {
+            console.log("authDelegate.authError", authDelegate.authError.code);
+            snackBarContext.open({
+                message: "E-mail ou senha incorretos",
+                type: "error"
+            })
+        } else if (codeError.includes("user-not-found")) {
+            snackBarContext.open({
+                message: "E-mail não cadastrado",
+                type: "error"
+            })
+        } else {
+            snackBarContext.open({
+                message: "Erro ao efetuar login, tente novamente",
+                type: "error"
+            })
+        }
+    }
+
+
 
     return (
-        <Fade
-            in={true}
-            timeout={500}
-            mountOnEnter
-            unmountOnExit>
-            <Box sx={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
-                minHeight: "100vh",
-                p: 2
-            }}>
+        <>
+            <Fade
+                in={true}
+                timeout={500}
+                mountOnEnter
+                unmountOnExit>
                 <Box sx={{
                     display: "flex",
                     flexDirection: "column",
+                    justifyContent: "center",
                     alignItems: "center",
-                    width: "100%",
-                    maxWidth: 340
+                    minHeight: "100vh",
+                    backgroundColor: "#f6f7f8",
+                    p: 2
                 }}>
+                    <Box sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        width: "100%",
+                        backgroundColor: "#fff",
+                        boxShadow: "0px 0px 10px rgba(0,0,0,0.2)",
+                        borderRadius: "8px",
+                        maxWidth: 500,
+                        p: 5
+                    }}>
 
-                    <Box m={2}>
-                        {logoComponent}
-                    </Box>
+                        <Box m={2}>
+                            {logoComponent}
+                        </Box>
 
-                    {notAllowedMessage &&
-                        <Box p={2}>
-                            <ErrorView
-                                error={notAllowedMessage} />
-                        </Box>}
+                        {notAllowedMessage &&
+                            <Box p={2}>
+                                <ErrorView
+                                    error={notAllowedMessage} />
+                            </Box>}
 
-                    {buildErrorView()}
+                        {/* {buildErrorView()} */}
 
-                    {!passwordLoginSelected && <>
+                        {/* {!passwordLoginSelected && <>
                         {buildOauthLoginButtons(authDelegate, resolvedSignInOptions, modeState.mode)}
 
                         {resolvedSignInOptions.includes("password") &&
@@ -198,16 +211,16 @@ export function FirebaseLoginView({
                             </Box>
                         }
 
-                    </>}
+                    </>} */}
 
-                    {passwordLoginSelected && <LoginForm
-                        authDelegate={authDelegate}
-                        onClose={() => setPasswordLoginSelected(false)}
-                        mode={modeState.mode} />}
-
+                        <LoginForm
+                            authDelegate={authDelegate}
+                            onClose={() => setPasswordLoginSelected(false)}
+                            mode={modeState.mode} />
+                    </Box>
                 </Box>
-            </Box>
-        </Fade>
+            </Fade>
+        </>
     );
 }
 
@@ -266,31 +279,13 @@ function LoginForm({
     const otherProvidersMode = availableProviders && !availableProviders.includes("password") && availableProviders.length > 0;
     const registrationMode = availableProviders && !availableProviders.includes("password");
 
+    const snackBarContext = useSnackbarController();
+
     useEffect(() => {
-        console.log("loginMode", loginMode);
         if ((loginMode || registrationMode) && passwordRef.current) {
             passwordRef.current.focus()
         }
     }, [loginMode, registrationMode]);
-
-    useEffect(() => {
-        if (!document) return;
-        const escFunction = (event: any) => {
-            if (event.keyCode === 27) {
-                onClose();
-            }
-        };
-        document.addEventListener("keydown", escFunction, false);
-        return () => {
-            document.removeEventListener("keydown", escFunction, false);
-        };
-    }, [document]);
-
-    function handleEnterEmail() {
-        if (email) {
-            authDelegate.fetchSignInMethodsForEmail(email).then(setAvailableProviders);
-        }
-    }
 
     function handleEnterPassword() {
         if (email && password) {
@@ -298,29 +293,9 @@ function LoginForm({
         }
     }
 
-    function handleRegistration() {
-        if (email && password) {
-            authDelegate.createUserWithEmailAndPassword(email, password);
-        }
-    }
-
-    const onBackPressed = () => {
-        if (shouldShowEmail) {
-            onClose();
-        } else {
-            setAvailableProviders(undefined);
-        }
-    }
-
     const handleSubmit = (event: any) => {
         event.preventDefault();
-        if (shouldShowEmail) {
-            handleEnterEmail();
-        } else if (loginMode) {
-            handleEnterPassword();
-        } else if (registrationMode) {
-            handleRegistration();
-        }
+        handleEnterPassword();
     }
 
     const label = registrationMode
@@ -328,32 +303,25 @@ function LoginForm({
         : (loginMode ? "Digite sua senha" : "Digite seu e-mail");
     const button = registrationMode ? "Criar usuário" : (loginMode ? "Login" : "Ok");
 
-    if (otherProvidersMode) {
-        return (
-            <Grid container spacing={1}>
-                <Grid item xs={12}>
-                    <IconButton
-                        onClick={onBackPressed}>
-                        <ArrowBackIcon sx={{ width: 20, height: 20 }} />
-                    </IconButton>
-                </Grid>
+    // if (otherProvidersMode) {
+    //     return (
+    //         <Grid container spacing={1}>
+    //             <Grid item xs={12} sx={{ p: 1 }}>
+    //                 <Typography align={"center"} variant={"subtitle2"}>
+    //                     You already have an account
+    //                 </Typography>
+    //                 <Typography align={"center"} variant={"body2"}>
+    //                     You can use one of these
+    //                     methods to login with {email}
+    //                 </Typography>
+    //             </Grid>
 
-                <Grid item xs={12} sx={{ p: 1 }}>
-                    <Typography align={"center"} variant={"subtitle2"}>
-                        You already have an account
-                    </Typography>
-                    <Typography align={"center"} variant={"body2"}>
-                        You can use one of these
-                        methods to login with {email}
-                    </Typography>
-                </Grid>
-
-                <Grid item xs={12}>
-                    {availableProviders && buildOauthLoginButtons(authDelegate, availableProviders, mode)}
-                </Grid>
-            </Grid>
-        );
-    }
+    //             <Grid item xs={12}>
+    //                 {availableProviders && buildOauthLoginButtons(authDelegate, availableProviders, mode)}
+    //             </Grid>
+    //         </Grid>
+    //     );
+    // }
 
     return (
         <Slide
@@ -363,52 +331,66 @@ function LoginForm({
             unmountOnExit>
             <form onSubmit={handleSubmit}>
                 <Grid container spacing={1}>
-                    <Grid item xs={12}>
-                        <IconButton
-                            onClick={onBackPressed}>
-                            <ArrowBackIcon sx={{ width: 20, height: 20 }} />
-                        </IconButton>
-                    </Grid>
-
-                    <Grid item xs={12} sx={{ p: 1 }}>
-                        <Typography align={"center"}
-                            variant={"subtitle2"}>{label}</Typography>
-                    </Grid>
-
-                    <Grid item xs={12}
-                        sx={{ display: shouldShowEmail ? "inherit" : "none" }}>
-                        <TextField placeholder="Email" fullWidth autoFocus
+                    <Grid item flexDirection="column" xs={12}>
+                        <TextField
+                            margin="normal"
+                            fullWidth autoFocus
+                            placeholder="E-mail"
                             value={email}
                             disabled={authDelegate.authLoading}
                             type="email"
-                            onChange={(event) => setEmail(event.target.value)} />
-                    </Grid>
+                            onChange={(event) => setEmail(event.target.value)}
+                        />
 
-                    <Grid item xs={12}
-                        sx={{ display: loginMode || registrationMode ? "inherit" : "none" }}>
-                        <TextField placeholder="Password" fullWidth
+                        <TextField
+                            fullWidth
+                            placeholder="Senha"
                             value={password}
                             disabled={authDelegate.authLoading}
                             inputRef={passwordRef}
                             type="password"
-                            onChange={(event) => setPassword(event.target.value)} />
+                            onChange={(event) => setPassword(event.target.value)}
+                        />
                     </Grid>
 
-                    <Grid item xs={12}>
+                    <Grid item mt={2} xs={12}>
                         <Box sx={{
                             display: "flex",
-                            justifyContent: "end",
+                            justifyContent: "space-between",
                             alignItems: "center",
                             width: "100%"
                         }}>
 
-                            {authDelegate.authLoading &&
-                                <CircularProgress sx={{ p: 1 }} size={16}
-                                    thickness={8} />
-                            }
+                            <Button
+                                style={{ textTransform: "capitalize" }}
+                                onClick={() => {
+                                    if (email) {
+                                        // authDelegate.sendPasswordResetEmail(email);
+                                    }
+                                }}
+                            >
+                                Esqueceu sua senha?
+                            </Button>
 
-                            <Button type="submit">
-                                {button}
+                            <Button
+                                variant="outlined"
+                                sx={{
+                                    height: 45,
+                                    width: 90
+                                }}
+                                size="large"
+                                type="submit"
+                            >
+                                {!authDelegate.authLoading
+                                    ? (
+                                        <span>Login</span>
+                                    )
+                                    : (
+                                        <CircularProgress
+                                            size={20}
+                                            thickness={5}
+                                        />
+                                    )}
                             </Button>
                         </Box>
                     </Grid>

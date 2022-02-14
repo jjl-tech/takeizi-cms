@@ -1,5 +1,5 @@
-import React, { useState } from "react";
 import { Alert, Snackbar } from "@mui/material";
+import React, { useState } from "react";
 import { SnackbarController, SnackbarMessageType } from "../../hooks";
 
 const DEFAULT_STATE = {
@@ -52,13 +52,15 @@ export const SnackbarProvider: React.FC = ({ children }) => {
 
             {children}
 
-            <Snackbar open={isOpen}
-                      autoHideDuration={3000}
-                      onClose={(_) => close()}>
+            <Snackbar
+                open={isOpen}
+                autoHideDuration={3000}
+                anchorOrigin={{ vertical: "top", horizontal: "right" }}
+                onClose={(_) => close()}>
                 <Alert elevation={1}
-                       variant="filled"
-                       onClose={(_) => close()}
-                       severity={type}>
+                    variant="filled"
+                    onClose={(_) => close()}
+                    severity={type}>
 
                     {title && <div>{title}</div>}
                     {message && <div>{message}</div>}

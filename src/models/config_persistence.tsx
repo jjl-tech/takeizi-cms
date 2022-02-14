@@ -1,6 +1,6 @@
-import { AnyProperty } from "./properties";
-import { EntitySchema } from "./entities";
 import { EntityCollection } from "./collections";
+import { EntitySchema } from "./entities";
+import { AnyProperty } from "./properties";
 
 /**
  * Use to resolve the schema properties for specific path, entity id or values.

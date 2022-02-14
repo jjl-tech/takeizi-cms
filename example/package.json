@@ -3,7 +3,7 @@
     "version": "0.1.0",
     "private": true,
     "dependencies": {
-        "@camberi/firecms": "link:..",
+        "takeizi-cms": "link:..",
         "@emotion/react": "link:../node_modules/@emotion/react",
         "@emotion/styled": "link:../node_modules/@emotion/styled",
         "@mui/icons-material": "link:../node_modules/@mui/icons-material",
@@ -16,7 +16,8 @@
         "react-dom": "link:../node_modules/react-dom",
         "react-router": "link:../node_modules/react-router",
         "react-router-dom": "link:../node_modules/react-router-dom",
-        "react-scripts": "link:../node_modules/react-scripts"
+        "react-scripts": "link:../node_modules/react-scripts",
+        "react-toastify": "link:../node_modules/react-toastify"
     },
     "scripts": {
         "dev": "vite",
