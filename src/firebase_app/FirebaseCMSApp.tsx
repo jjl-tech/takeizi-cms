@@ -116,7 +116,6 @@ export function FirebaseCMSApp({
                 {({ context, mode, loading }) => {
 
                     const theme = createCMSDefaultTheme({
-                        mode,
                         primaryColor,
                         secondaryColor,
                         fontFamily
