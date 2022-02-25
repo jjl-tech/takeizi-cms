@@ -1,5 +1,5 @@
-import { pink, red } from "@mui/material/colors";
 import { createTheme, Theme } from "@mui/material";
+import { pink, red } from "@mui/material/colors";
 
 /**
  * Use this function to build the default FireCMS MUI5 theme,
@@ -7,8 +7,7 @@ import { createTheme, Theme } from "@mui/material";
  * @category Hooks and utilities
  */
 export const createCMSDefaultTheme = (
-    { mode, primaryColor, secondaryColor, fontFamily }: {
-        mode: "light" | "dark";
+    { primaryColor, secondaryColor, fontFamily }: {
         primaryColor?: string;
         secondaryColor?: string;
         fontFamily?: string;
@@ -16,9 +15,8 @@ export const createCMSDefaultTheme = (
 
     const original = createTheme({
         palette: {
-            mode: mode,
             background: {
-                default: mode === "dark" ? "#242424" : "#f6f7f8"
+                default: "#f6f7f8"
                 // default: mode === "dark" ? "#242424" : "rgb(240 240 240)"
             },
             primary: {
