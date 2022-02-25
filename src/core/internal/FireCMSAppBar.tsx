@@ -1,6 +1,4 @@
 /* @jsxImportSource @emotion/react */
-import Brightness3Icon from "@mui/icons-material/Brightness3";
-import Brightness5Icon from "@mui/icons-material/Brightness5";
 import MenuIcon from "@mui/icons-material/Menu";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import {
@@ -141,19 +139,6 @@ export function FireCMSAppBar({
                                 toolbarExtraWidget
                             }
                         </ErrorBoundary>}
-
-                    <Box p={1} mr={1}>
-                        <IconButton
-                            color="inherit"
-                            aria-label="Open drawer"
-                            edge="start"
-                            onClick={() => toggleMode()}
-                            size="large">
-                            {mode === "dark"
-                                ? <Brightness3Icon />
-                                : <Brightness5Icon />}
-                        </IconButton>
-                    </Box>
 
                     <Box p={1} mr={1}>
                         {authController.user && authController.user.photoURL
